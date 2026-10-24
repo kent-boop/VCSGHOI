@@ -1,0 +1,731 @@
+#!/usr/bin/env python3
+"""Export EvidenceHOI VET/SETM traces into local plotting-friendly files.
+
+The package is deliberately redundant:
+* tidy CSV tables for plotting/statistics;
+* one NPZ tensor archive per image for exact numerical work;
+* JSON summaries and copied label/prompt metadata;
+* optional source images and raw PyTorch trace records.
+
+It accepts compact final-layer traces and detailed per-layer traces. Missing
+layerwise or dense data is reported explicitly and is never reconstructed.
+"""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import json
+import math
+import shutil
+from collections import OrderedDict
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Mapping, MutableMapping, Optional, Sequence, Tuple
+
+import numpy as np
+import torch
+
+
+VISUAL_ROLE_LABELS = ["A", "H", "O", "C1", "C2", "C3", "C4"]
+TEXT_ROLE_LABELS = ["H", "O", "A", "K", "S", "C"]
+TEXT_PROMPT_FIELDS = [
+    "human_node",
+    "object_node",
+    "ho_edge",
+    "discriminative",
+    "scene_context",
+    "oo_context",
+]
+
+
+def load_json(path: Path) -> Any:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def load_name_map(path: Path) -> Dict[int, str]:
+    raw = load_json(path)
+    if isinstance(raw, list):
+        return {index: str(value) for index, value in enumerate(raw)}
+    if isinstance(raw, dict):
+        return {int(key): str(value) for key, value in raw.items()}
+    raise TypeError(f"Unsupported name map in {path}: {type(raw).__name__}")
+
+
+def scalar(value: Any, default: Any = None) -> Any:
+    if value is None:
+        return default
+    if isinstance(value, torch.Tensor):
+        if value.numel() != 1:
+            return default
+        return value.detach().cpu().item()
+    if isinstance(value, np.generic):
+        return value.item()
+    return value
+
+
+def at(tensor: Any, *indices: int, default: Any = None) -> Any:
+    if not isinstance(tensor, torch.Tensor):
+        return default
+    try:
+        return scalar(tensor[indices], default)
+    except (IndexError, TypeError):
+        return default
+
+
+def bool_at(tensor: Any, *indices: int, default: bool = False) -> bool:
+    return bool(at(tensor, *indices, default=default))
+
+
+def float_at(tensor: Any, *indices: int, default: float = 0.0) -> float:
+    value = at(tensor, *indices, default=default)
+    return float(value) if value is not None else float(default)
+
+
+def int_at(tensor: Any, *indices: int, default: int = -1) -> int:
+    value = at(tensor, *indices, default=default)
+    return int(value) if value is not None else int(default)
+
+
+def json_safe(value: Any) -> Any:
+    if isinstance(value, torch.Tensor):
+        value = value.detach().cpu()
+        return value.item() if value.numel() == 1 else value.tolist()
+    if isinstance(value, np.ndarray):
+        return value.tolist()
+    if isinstance(value, np.generic):
+        return value.item()
+    if isinstance(value, Mapping):
+        return {str(key): json_safe(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [json_safe(item) for item in value]
+    return value
+
+
+def write_csv(path: Path, rows: Sequence[Mapping[str, Any]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if not rows:
+        path.write_text("", encoding="utf-8")
+        return
+    fields: OrderedDict[str, None] = OrderedDict()
+    for row in rows:
+        for key in row:
+            fields.setdefault(str(key), None)
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(fields))
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def flatten_tensors(prefix: str, value: Any, output: MutableMapping[str, np.ndarray]) -> None:
+    if isinstance(value, torch.Tensor):
+        output[prefix] = value.detach().cpu().numpy()
+    elif isinstance(value, Mapping):
+        for key, item in value.items():
+            flatten_tensors(f"{prefix}__{key}" if prefix else str(key), item, output)
+    elif isinstance(value, (list, tuple)):
+        for index, item in enumerate(value):
+            flatten_tensors(f"{prefix}__{index:02d}", item, output)
+
+
+def trace_record_map(trace_dir: Optional[Path]) -> Dict[int, Path]:
+    if trace_dir is None:
+        return {}
+    manifest = trace_dir / "manifest.jsonl"
+    if not manifest.is_file():
+        raise FileNotFoundError(f"Missing merged manifest: {manifest}")
+    mapping: Dict[int, Path] = {}
+    for line in manifest.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        image_id = int(scalar(row.get("image_id")))
+        record_path = Path(row["record_path"])
+        if not record_path.is_absolute():
+            record_path = trace_dir / record_path
+        mapping[image_id] = record_path
+    return mapping
+
+
+def prompt_lookup(path: Path) -> Dict[Tuple[int, int], Mapping[str, Any]]:
+    rows = load_json(path)
+    return {
+        (int(row["action_id"]), int(row["object_id"])): row
+        for row in rows
+        if not bool(row.get("missing", False))
+    }
+
+
+def prompt_columns(prompt: Optional[Mapping[str, Any]]) -> Dict[str, Any]:
+    fields = {} if prompt is None else dict(prompt.get("field_prompts", {}))
+    out: Dict[str, Any] = {
+        "prototype_verb_phrase": "" if prompt is None else prompt.get("verb_phrase", ""),
+        "prototype_object_phrase": "" if prompt is None else prompt.get("object_phrase", ""),
+        "prototype_prompt_found": prompt is not None,
+    }
+    for field in TEXT_PROMPT_FIELDS:
+        value = fields.get(field, "")
+        out[f"prompt_{field}"] = (
+            json.dumps(value, ensure_ascii=False) if isinstance(value, list) else str(value)
+        )
+    return out
+
+
+def resolve_source_image(image_root: Optional[Path], file_name: str) -> Optional[Path]:
+    if image_root is None or not file_name:
+        return None
+    direct = image_root / file_name
+    if direct.is_file():
+        return direct
+    matches = list(image_root.rglob(file_name))
+    return matches[0] if matches else None
+
+
+def valid_layers(record: Mapping[str, Any]) -> List[Mapping[str, Any]]:
+    layers = record.get("graph_layers")
+    if isinstance(layers, list) and layers:
+        return [layer for layer in layers if isinstance(layer, Mapping)]
+    graph = record.get("graph")
+    return [graph] if isinstance(graph, Mapping) else []
+
+
+def node_description(
+    nodes: Mapping[str, Any], node_idx: int, node_names: Mapping[int, str]
+) -> Tuple[int, str, float, int]:
+    label = int_at(nodes.get("labels"), node_idx)
+    return (
+        label,
+        node_names.get(label, str(label)),
+        float_at(nodes.get("scores"), node_idx),
+        int_at(nodes.get("types"), node_idx),
+    )
+
+
+def tensor_delta_rows(
+    common: Mapping[str, Any],
+    previous: Mapping[str, Any],
+    current: Mapping[str, Any],
+    pair_count: int,
+) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    names = [
+        "selected_hoi_scores",
+        "candidate_evidence_weights",
+        "sync_match_logits",
+        "sync_visual_to_text_attn",
+        "sync_text_to_visual_attn",
+        "sync_evidence_weights",
+        "sync_prototype_scores",
+        "sync_prototype_weights",
+        "sync_prototype_coverage",
+        "sync_anchor_delta",
+        "candidate_evidence_tokens",
+        "candidate_evidence_context",
+        "candidate_anchor_delta",
+        "prototype_slots",
+        "updated_visual_tokens",
+        "updated_prototype_slots",
+        "sync_matched_context",
+        "pair_anchor_pre_sync",
+        "pair_anchor_post_sync",
+    ]
+    for name in names:
+        before = previous.get(name)
+        after = current.get(name)
+        if not isinstance(before, torch.Tensor) or not isinstance(after, torch.Tensor):
+            continue
+        if tuple(before.shape) != tuple(after.shape):
+            continue
+        for pair_idx in range(min(pair_count, int(before.shape[0]))):
+            delta = after[pair_idx].float() - before[pair_idx].float()
+            flat = delta.flatten()
+            rows.append({
+                **common,
+                "pair_idx": pair_idx,
+                "from_layer_idx": int(previous.get("layer_idx", -1)),
+                "to_layer_idx": int(current.get("layer_idx", -1)),
+                "tensor_name": name,
+                "element_count": int(flat.numel()),
+                "mean_signed_delta": float(flat.mean().item()) if flat.numel() else 0.0,
+                "mean_abs_delta": float(flat.abs().mean().item()) if flat.numel() else 0.0,
+                "max_abs_delta": float(flat.abs().max().item()) if flat.numel() else 0.0,
+                "l2_delta": float(flat.norm().item()) if flat.numel() else 0.0,
+            })
+    for categorical_name in ("selected_hoi_indices", "selected_context_indices"):
+        before_ids = previous.get(categorical_name)
+        after_ids = current.get(categorical_name)
+        if not isinstance(before_ids, torch.Tensor) or not isinstance(after_ids, torch.Tensor):
+            continue
+        for pair_idx in range(min(pair_count, int(before_ids.shape[0]))):
+            rows.append({
+                **common,
+                "pair_idx": pair_idx,
+                "from_layer_idx": int(previous.get("layer_idx", -1)),
+                "to_layer_idx": int(current.get("layer_idx", -1)),
+                "tensor_name": f"{categorical_name}_changed",
+                "element_count": int(before_ids[pair_idx].numel()),
+                "mean_signed_delta": "",
+                "mean_abs_delta": "",
+                "max_abs_delta": "",
+                "l2_delta": "",
+                "changed_count": int((before_ids[pair_idx] != after_ids[pair_idx]).sum().item()),
+            })
+    return rows
+
+
+def tensor_statistics(delta: torch.Tensor) -> Dict[str, Any]:
+    flat = delta.float().flatten()
+    return {
+        "element_count": int(flat.numel()),
+        "mean_signed_delta": float(flat.mean().item()) if flat.numel() else 0.0,
+        "mean_abs_delta": float(flat.abs().mean().item()) if flat.numel() else 0.0,
+        "max_abs_delta": float(flat.abs().max().item()) if flat.numel() else 0.0,
+        "l2_delta": float(flat.norm().item()) if flat.numel() else 0.0,
+    }
+
+
+def within_layer_update_rows(
+    common: Mapping[str, Any],
+    layer: Mapping[str, Any],
+    pair_count: int,
+) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    for pair_idx in range(pair_count):
+        comparisons: List[Tuple[str, torch.Tensor, torch.Tensor]] = []
+        visual_input = layer.get("candidate_evidence_tokens")
+        visual_output = layer.get("updated_visual_tokens")
+        if isinstance(visual_input, torch.Tensor) and isinstance(visual_output, torch.Tensor):
+            expanded_visual = visual_input[pair_idx].unsqueeze(0).expand_as(visual_output[pair_idx])
+            comparisons.append(("setm_visual_token_update", expanded_visual, visual_output[pair_idx]))
+        prototype_input = layer.get("prototype_slots")
+        prototype_output = layer.get("updated_prototype_slots")
+        if isinstance(prototype_input, torch.Tensor) and isinstance(prototype_output, torch.Tensor):
+            comparisons.append(("setm_prototype_slot_update", prototype_input[pair_idx], prototype_output[pair_idx]))
+        anchor_input = layer.get("pair_anchor_pre_sync")
+        anchor_output = layer.get("pair_anchor_post_sync")
+        if isinstance(anchor_input, torch.Tensor) and isinstance(anchor_output, torch.Tensor):
+            comparisons.append(("setm_pair_anchor_update", anchor_input[pair_idx], anchor_output[pair_idx]))
+        candidate_delta = layer.get("candidate_anchor_delta")
+        if isinstance(candidate_delta, torch.Tensor):
+            comparisons.append(("vet_candidate_anchor_update", torch.zeros_like(candidate_delta[pair_idx]), candidate_delta[pair_idx]))
+        for update_name, before, after in comparisons:
+            if tuple(before.shape) != tuple(after.shape):
+                continue
+            delta = after.float() - before.float()
+            rows.append({
+                **common,
+                "layer_order": int(layer.get("layer_idx", -1)),
+                "layer_idx": int(layer.get("layer_idx", -1)),
+                "pair_idx": pair_idx,
+                "update_name": update_name,
+                **tensor_statistics(delta),
+            })
+    return rows
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--ranking-csv", type=Path, required=True)
+    parser.add_argument("--trace-dir", type=Path)
+    parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--action-names-json", type=Path, required=True)
+    parser.add_argument("--object-names-json", type=Path, required=True)
+    parser.add_argument("--node-names-json", type=Path, required=True)
+    parser.add_argument("--prompt-metadata-json", type=Path, required=True)
+    parser.add_argument("--image-root", type=Path)
+    parser.add_argument("--copy-source-images", action="store_true")
+    parser.add_argument("--copy-raw-records", action="store_true")
+    parser.add_argument("--compress-npz", action="store_true")
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+    ranking_rows = list(csv.DictReader(args.ranking_csv.open("r", encoding="utf-8")))
+    if not ranking_rows:
+        raise ValueError(f"Ranking CSV is empty: {args.ranking_csv}")
+
+    actions = load_name_map(args.action_names_json)
+    objects = load_name_map(args.object_names_json)
+    node_names = load_name_map(args.node_names_json)
+    prompts = prompt_lookup(args.prompt_metadata_json)
+    records_by_image = trace_record_map(args.trace_dir)
+
+    root = args.output_dir
+    tables_dir = root / "tables"
+    arrays_dir = root / "arrays"
+    json_dir = root / "json"
+    labels_dir = root / "labels"
+    images_dir = root / "source_images"
+    raw_dir = root / "raw_records"
+    for directory in (tables_dir, arrays_dir, json_dir, labels_dir):
+        directory.mkdir(parents=True, exist_ok=True)
+    if args.copy_source_images:
+        images_dir.mkdir(parents=True, exist_ok=True)
+    if args.copy_raw_records:
+        raw_dir.mkdir(parents=True, exist_ok=True)
+
+    manifest_rows: List[Dict[str, Any]] = []
+    nodes_rows: List[Dict[str, Any]] = []
+    pairs_rows: List[Dict[str, Any]] = []
+    action_rows: List[Dict[str, Any]] = []
+    evidence_rows: List[Dict[str, Any]] = []
+    prototype_rows: List[Dict[str, Any]] = []
+    setm_rows: List[Dict[str, Any]] = []
+    topology_rows: List[Dict[str, Any]] = []
+    delta_rows: List[Dict[str, Any]] = []
+    update_rows: List[Dict[str, Any]] = []
+
+    layer_counts: List[int] = []
+    dense_count = 0
+    feature_count = 0
+
+    for fallback_rank, ranking in enumerate(ranking_rows, start=1):
+        rank = int(ranking.get("mechanism_rank") or fallback_rank)
+        image_id = int(ranking["image_id"])
+        candidate_id = ranking.get("candidate_id") or f"image_{image_id}"
+        record_path = records_by_image.get(image_id, Path(ranking["record_path"]))
+        if not record_path.is_file():
+            raise FileNotFoundError(f"Trace record not found for image {image_id}: {record_path}")
+        record = torch.load(record_path, map_location="cpu")
+        image = record.get("image", {})
+        nodes = record.get("nodes", {})
+        pairs = record.get("pairs", {})
+        graph = record.get("graph") or {}
+        layers = valid_layers(record)
+        graph_dense = record.get("graph_dense") or {}
+        layer_counts.append(len(layers))
+        dense_count += int(bool(graph_dense))
+        has_features = any("candidate_evidence_tokens" in layer for layer in layers)
+        feature_count += int(has_features)
+
+        file_name = str(image.get("file_name") or ranking.get("file_name") or "")
+        selected_pair_idx = int(ranking.get("pair_idx", -1))
+        pair_count = int(pairs["indices"].shape[0])
+        common = {
+            "mechanism_rank": rank,
+            "candidate_id": candidate_id,
+            "image_id": image_id,
+            "file_name": file_name,
+            "selected_pair_idx": selected_pair_idx,
+        }
+
+        source_image = resolve_source_image(args.image_root, file_name)
+        if args.copy_source_images and source_image is not None:
+            shutil.copy2(source_image, images_dir / file_name)
+        if args.copy_raw_records:
+            shutil.copy2(record_path, raw_dir / f"{rank:02d}_{record_path.name}")
+
+        tensor_archive: Dict[str, np.ndarray] = {}
+        flatten_tensors("record", record, tensor_archive)
+        archive_path = arrays_dir / f"{rank:02d}_{candidate_id}.npz"
+        if args.compress_npz:
+            np.savez_compressed(archive_path, **tensor_archive)
+        else:
+            np.savez(archive_path, **tensor_archive)
+
+        valid_node_mask = nodes.get("valid_mask")
+        node_count = int(valid_node_mask.shape[0]) if isinstance(valid_node_mask, torch.Tensor) else 0
+        for node_idx in range(node_count):
+            label, name, score, node_type = node_description(nodes, node_idx, node_names)
+            box = nodes.get("boxes_xyxy_norm")
+            nodes_rows.append({
+                **common,
+                "node_idx": node_idx,
+                "valid": bool_at(valid_node_mask, node_idx),
+                "label_id": label,
+                "label_name": name,
+                "detector_score": score,
+                "node_type": node_type,
+                "x1_norm": float_at(box, node_idx, 0),
+                "y1_norm": float_at(box, node_idx, 1),
+                "x2_norm": float_at(box, node_idx, 2),
+                "y2_norm": float_at(box, node_idx, 3),
+            })
+
+        for pair_idx in range(pair_count):
+            h_idx = int_at(pairs.get("indices"), pair_idx, 0)
+            o_idx = int_at(pairs.get("indices"), pair_idx, 1)
+            _, h_name, h_score, _ = node_description(nodes, h_idx, node_names)
+            _, o_name, o_score, _ = node_description(nodes, o_idx, node_names)
+            final_probs = pairs.get("action_probs")
+            coarse_probs = pairs.get("coarse_action_probs")
+            final_row = final_probs[pair_idx].float() if isinstance(final_probs, torch.Tensor) else torch.empty(0)
+            coarse_row = coarse_probs[pair_idx].float() if isinstance(coarse_probs, torch.Tensor) else torch.empty(0)
+            top_action = int(final_row.argmax().item()) if final_row.numel() else -1
+            gt = pairs.get("gt_action_targets")
+            gt_ids = (
+                torch.nonzero(gt[pair_idx].bool(), as_tuple=False).flatten().tolist()
+                if isinstance(gt, torch.Tensor) else []
+            )
+            pairs_rows.append({
+                **common,
+                "pair_idx": pair_idx,
+                "is_selected_pair": pair_idx == selected_pair_idx,
+                "human_node_idx": h_idx,
+                "human_label": h_name,
+                "human_detector_score": h_score,
+                "object_node_idx": o_idx,
+                "object_label": o_name,
+                "object_detector_score": o_score,
+                "pair_valid": bool_at(graph.get("pair_valid_mask"), pair_idx),
+                "proposal_logit": float_at(pairs.get("proposal_logits"), pair_idx),
+                "proposal_probability": float_at(pairs.get("proposal_probs"), pair_idx),
+                "top_action_id": top_action,
+                "top_action_name": actions.get(top_action, str(top_action)),
+                "top_action_probability": float(final_row[top_action].item()) if top_action >= 0 else 0.0,
+                "top_action_coarse_probability": float(coarse_row[top_action].item()) if top_action >= 0 and coarse_row.numel() else 0.0,
+                "gt_pair_matched": bool_at(pairs.get("gt_pair_matched"), pair_idx),
+                "gt_action_ids": json.dumps(gt_ids),
+                "gt_action_names": json.dumps([actions.get(int(value), str(value)) for value in gt_ids], ensure_ascii=False),
+            })
+            if final_row.numel():
+                for action_id in range(int(final_row.numel())):
+                    action_rows.append({
+                        **common,
+                        "pair_idx": pair_idx,
+                        "action_id": action_id,
+                        "action_name": actions.get(action_id, str(action_id)),
+                        "coarse_probability": float(coarse_row[action_id].item()) if coarse_row.numel() else "",
+                        "final_probability": float(final_row[action_id].item()),
+                        "probability_delta": float(final_row[action_id].item() - coarse_row[action_id].item()) if coarse_row.numel() else "",
+                        "ranking_score": float_at(pairs.get("ranking_action_scores"), pair_idx, action_id),
+                        "is_gt_action": action_id in gt_ids,
+                    })
+
+        for layer_order, layer in enumerate(layers):
+            layer_idx = int(layer.get("layer_idx", layer_order))
+            visual_roles = list(layer.get("visual_token_roles", VISUAL_ROLE_LABELS))
+            text_roles = list(layer.get("prototype_slot_names", TEXT_PROMPT_FIELDS))
+            pair_valid = layer.get("pair_valid_mask")
+            selected_context = layer.get("selected_context_indices")
+            context_mask = layer.get("selected_context_mask")
+            selected_mask = layer.get("selected_hoi_mask")
+            prototype_count = int(selected_mask.shape[-1]) if isinstance(selected_mask, torch.Tensor) else 0
+            visual_count = int(layer["candidate_evidence_mask"].shape[-1])
+            text_role_count = int(layer["prototype_slot_mask"].shape[-1])
+
+            for pair_idx in range(pair_count):
+                h_idx = int_at(pairs.get("indices"), pair_idx, 0)
+                o_idx = int_at(pairs.get("indices"), pair_idx, 1)
+                for prototype_idx in range(prototype_count):
+                    action_id = int_at(layer.get("selected_hoi_action_ids"), pair_idx, prototype_idx)
+                    raw_action_id = int_at(layer.get("selected_hoi_raw_action_ids"), pair_idx, prototype_idx)
+                    object_id = int_at(layer.get("selected_hoi_object_ids"), pair_idx, prototype_idx)
+                    prototype_valid = bool_at(selected_mask, pair_idx, prototype_idx)
+                    prompt = prompts.get((action_id, object_id))
+                    coverage_values = layer.get("sync_prototype_coverage")
+                    role_mask = layer.get("prototype_slot_mask")
+                    valid_coverage = []
+                    for role_idx in range(text_role_count):
+                        if bool_at(role_mask, pair_idx, prototype_idx, role_idx):
+                            valid_coverage.append(float_at(coverage_values, pair_idx, prototype_idx, role_idx))
+                    prototype_rows.append({
+                        **common,
+                        "layer_order": layer_order,
+                        "layer_idx": layer_idx,
+                        "stage": layer.get("stage", ""),
+                        "pair_idx": pair_idx,
+                        "pair_valid": bool_at(pair_valid, pair_idx),
+                        "prototype_idx": prototype_idx,
+                        "prototype_valid": prototype_valid,
+                        "text_bank_index": int_at(layer.get("selected_hoi_indices"), pair_idx, prototype_idx),
+                        "action_id": action_id,
+                        "raw_action_id": raw_action_id,
+                        "action_name": actions.get(action_id, str(action_id)),
+                        "object_id": object_id,
+                        "object_name": objects.get(object_id, str(object_id)),
+                        "retrieval_score": float_at(layer.get("selected_hoi_scores"), pair_idx, prototype_idx),
+                        "setm_prototype_score": float_at(layer.get("sync_prototype_scores"), pair_idx, prototype_idx),
+                        "setm_pi_weight": float_at(layer.get("sync_prototype_weights"), pair_idx, prototype_idx),
+                        "coverage_mean": float(np.mean(valid_coverage)) if valid_coverage else 0.0,
+                        "coverage_min": float(np.min(valid_coverage)) if valid_coverage else 0.0,
+                        **prompt_columns(prompt),
+                    })
+
+                    for visual_idx in range(visual_count):
+                        if visual_idx == 0:
+                            node_idx, token_name = -1, "pair anchor"
+                        elif visual_idx == 1:
+                            node_idx, token_name = h_idx, "target human"
+                        elif visual_idx == 2:
+                            node_idx, token_name = o_idx, "target object"
+                        else:
+                            context_slot = visual_idx - 3
+                            node_idx = int_at(selected_context, pair_idx, context_slot)
+                            token_name = node_description(nodes, node_idx, node_names)[1] if node_idx >= 0 else "invalid context"
+                        context_slot = visual_idx - 3
+                        evidence_rows.append({
+                            **common,
+                            "layer_order": layer_order,
+                            "layer_idx": layer_idx,
+                            "pair_idx": pair_idx,
+                            "prototype_idx": prototype_idx,
+                            "prototype_action_id": action_id,
+                            "prototype_action_name": actions.get(action_id, str(action_id)),
+                            "visual_idx": visual_idx,
+                            "visual_role": VISUAL_ROLE_LABELS[visual_idx] if visual_idx < len(VISUAL_ROLE_LABELS) else str(visual_roles[visual_idx]),
+                            "visual_role_raw": str(visual_roles[visual_idx]) if visual_idx < len(visual_roles) else "",
+                            "node_idx": node_idx,
+                            "node_name": token_name,
+                            "candidate_token_valid": bool_at(layer.get("candidate_evidence_mask"), pair_idx, visual_idx),
+                            "context_selected": True if visual_idx < 3 else bool_at(context_mask, pair_idx, context_slot),
+                            "vet_candidate_weight": float_at(layer.get("candidate_evidence_weights"), pair_idx, visual_idx),
+                            "setm_alpha_weight": float_at(layer.get("sync_evidence_weights"), pair_idx, prototype_idx, visual_idx),
+                            "hk_edge_valid": False if visual_idx < 3 else bool_at(layer.get("selected_context_edge_hk_mask"), pair_idx, context_slot),
+                            "hk_edge_score": 0.0 if visual_idx < 3 else float_at(layer.get("selected_context_edge_hk_score"), pair_idx, context_slot),
+                            "ko_edge_valid": False if visual_idx < 3 else bool_at(layer.get("selected_context_edge_ko_mask"), pair_idx, context_slot),
+                            "ko_edge_score": 0.0 if visual_idx < 3 else float_at(layer.get("selected_context_edge_ko_score"), pair_idx, context_slot),
+                            "two_hop_path_valid": False if visual_idx < 3 else bool_at(layer.get("selected_context_two_hop_mask"), pair_idx, context_slot),
+                        })
+
+                        for role_idx in range(text_role_count):
+                            setm_rows.append({
+                                **common,
+                                "layer_order": layer_order,
+                                "layer_idx": layer_idx,
+                                "pair_idx": pair_idx,
+                                "prototype_idx": prototype_idx,
+                                "prototype_action_id": action_id,
+                                "prototype_action_name": actions.get(action_id, str(action_id)),
+                                "visual_idx": visual_idx,
+                                "visual_role": VISUAL_ROLE_LABELS[visual_idx] if visual_idx < len(VISUAL_ROLE_LABELS) else str(visual_idx),
+                                "text_role_idx": role_idx,
+                                "text_role": TEXT_ROLE_LABELS[role_idx] if role_idx < len(TEXT_ROLE_LABELS) else str(role_idx),
+                                "text_role_raw": str(text_roles[role_idx]) if role_idx < len(text_roles) else "",
+                                "visual_valid": bool_at(layer.get("candidate_evidence_mask"), pair_idx, visual_idx),
+                                "text_role_valid": bool_at(layer.get("prototype_slot_mask"), pair_idx, prototype_idx, role_idx),
+                                "match_logit": float_at(layer.get("sync_match_logits"), pair_idx, prototype_idx, visual_idx, role_idx),
+                                "visual_to_text_probability": float_at(layer.get("sync_visual_to_text_attn"), pair_idx, prototype_idx, visual_idx, role_idx),
+                                "text_to_visual_probability": float_at(layer.get("sync_text_to_visual_attn"), pair_idx, prototype_idx, role_idx, visual_idx),
+                                "prototype_role_coverage": float_at(layer.get("sync_prototype_coverage"), pair_idx, prototype_idx, role_idx),
+                            })
+
+            update_rows.extend(within_layer_update_rows(common, layer, pair_count))
+            if layer_order > 0:
+                delta_rows.extend(tensor_delta_rows(common, layers[layer_order - 1], layer, pair_count))
+
+        edge_mask = graph_dense.get("edge_mask")
+        edge_scores = graph_dense.get("edge_scores")
+        initial_edges = graph_dense.get("initial_edge_features")
+        updated_edges = graph_dense.get("updated_edge_features")
+        if isinstance(edge_mask, torch.Tensor):
+            for source_idx, target_idx in torch.nonzero(edge_mask.bool(), as_tuple=False).tolist():
+                initial_feature = initial_edges[source_idx, target_idx].float() if isinstance(initial_edges, torch.Tensor) else None
+                updated_feature = updated_edges[source_idx, target_idx].float() if isinstance(updated_edges, torch.Tensor) else None
+                feature_delta = updated_feature - initial_feature if initial_feature is not None and updated_feature is not None else None
+                topology_rows.append({
+                    **common,
+                    "scope": "dense_visual_graph",
+                    "pair_idx": "",
+                    "source_node_idx": source_idx,
+                    "source_node_name": node_description(nodes, source_idx, node_names)[1],
+                    "target_node_idx": target_idx,
+                    "target_node_name": node_description(nodes, target_idx, node_names)[1],
+                    "edge_score": float_at(edge_scores, source_idx, target_idx),
+                    "initial_feature_l2": float(initial_feature.norm().item()) if initial_feature is not None else "",
+                    "updated_feature_l2": float(updated_feature.norm().item()) if updated_feature is not None else "",
+                    "feature_delta_l2": float(feature_delta.norm().item()) if feature_delta is not None else "",
+                })
+        else:
+            for pair_idx in range(pair_count):
+                h_idx = int_at(pairs.get("indices"), pair_idx, 0)
+                o_idx = int_at(pairs.get("indices"), pair_idx, 1)
+                for slot in range(int(graph.get("selected_context_indices", torch.empty(0, 0)).shape[-1])):
+                    c_idx = int_at(graph.get("selected_context_indices"), pair_idx, slot)
+                    if bool_at(graph.get("selected_context_edge_hk_mask"), pair_idx, slot):
+                        topology_rows.append({
+                            **common, "scope": "selected_pair_path", "pair_idx": pair_idx,
+                            "source_node_idx": h_idx, "source_node_name": node_description(nodes, h_idx, node_names)[1],
+                            "target_node_idx": c_idx, "target_node_name": node_description(nodes, c_idx, node_names)[1],
+                            "edge_score": float_at(graph.get("selected_context_edge_hk_score"), pair_idx, slot),
+                            "edge_kind": "H-C",
+                        })
+                    if bool_at(graph.get("selected_context_edge_ko_mask"), pair_idx, slot):
+                        topology_rows.append({
+                            **common, "scope": "selected_pair_path", "pair_idx": pair_idx,
+                            "source_node_idx": c_idx, "source_node_name": node_description(nodes, c_idx, node_names)[1],
+                            "target_node_idx": o_idx, "target_node_name": node_description(nodes, o_idx, node_names)[1],
+                            "edge_score": float_at(graph.get("selected_context_edge_ko_score"), pair_idx, slot),
+                            "edge_kind": "C-O",
+                        })
+
+        summary = {
+            **common,
+            "record_path": str(record_path),
+            "source_image_path": str(source_image) if source_image else None,
+            "array_archive": str(archive_path),
+            "pair_count": pair_count,
+            "layer_count": len(layers),
+            "layer_indices": [int(layer.get("layer_idx", index)) for index, layer in enumerate(layers)],
+            "has_layerwise_trace": bool(record.get("graph_layers")),
+            "has_feature_tensors": has_features,
+            "has_dense_topology": bool(graph_dense),
+            "available_final_graph_keys": sorted(graph),
+            "available_layer_keys": [sorted(layer) for layer in layers],
+            "available_dense_keys": sorted(graph_dense),
+        }
+        (json_dir / f"{rank:02d}_{candidate_id}.json").write_text(
+            json.dumps(json_safe(summary), ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        manifest_rows.append(summary)
+        print(
+            f"[{rank:02d}/{len(ranking_rows):02d}] image_id={image_id} "
+            f"pairs={pair_count} layers={len(layers)} features={has_features} dense={bool(graph_dense)}"
+        )
+
+    table_map = {
+        "image_manifest.csv": manifest_rows,
+        "nodes.csv": nodes_rows,
+        "pairs.csv": pairs_rows,
+        "action_scores.csv": action_rows,
+        "vet_evidence_chain.csv": evidence_rows,
+        "text_prototypes.csv": prototype_rows,
+        "setm_correspondence.csv": setm_rows,
+        "within_layer_updates.csv": update_rows,
+        "visual_topology_edges.csv": topology_rows,
+        "layer_changes.csv": delta_rows,
+    }
+    for name, rows in table_map.items():
+        write_csv(tables_dir / name, rows)
+
+    for source in (
+        args.action_names_json,
+        args.object_names_json,
+        args.node_names_json,
+        args.prompt_metadata_json,
+    ):
+        shutil.copy2(source, labels_dir / source.name)
+
+    package_summary = {
+        "schema_version": 1,
+        "image_count": len(manifest_rows),
+        "pair_count": len(pairs_rows),
+        "node_row_count": len(nodes_rows),
+        "action_score_row_count": len(action_rows),
+        "vet_evidence_row_count": len(evidence_rows),
+        "text_prototype_row_count": len(prototype_rows),
+        "within_layer_update_row_count": len(update_rows),
+        "setm_correspondence_row_count": len(setm_rows),
+        "topology_edge_row_count": len(topology_rows),
+        "layer_change_row_count": len(delta_rows),
+        "layer_count_min": min(layer_counts),
+        "layer_count_max": max(layer_counts),
+        "records_with_feature_tensors": feature_count,
+        "records_with_dense_topology": dense_count,
+        "source_trace_dir": str(args.trace_dir) if args.trace_dir else None,
+        "source_ranking_csv": str(args.ranking_csv),
+        "missing_data_notice": (
+            "Layer changes and feature/dense tables are empty when the source trace was exported "
+            "without TRACE_EACH_LAYER, TRACE_INCLUDE_FEATURES, or GRAPH_STORE_DENSE_DEBUG_TENSORS."
+        ),
+    }
+    (root / "package_summary.json").write_text(
+        json.dumps(package_summary, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    print(json.dumps(package_summary, ensure_ascii=False, indent=2))
+
+
+if __name__ == "__main__":
+    main()

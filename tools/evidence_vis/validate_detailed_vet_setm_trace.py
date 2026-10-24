@@ -1,0 +1,235 @@
+#!/usr/bin/env python3
+"""Validate detailed per-layer VET/SETM trace records."""
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Mapping
+
+import torch
+
+
+CORE_LAYER_KEYS = [
+    "pair_indices",
+    "pair_valid_mask",
+    "selected_context_indices",
+    "selected_context_mask",
+    "candidate_evidence_mask",
+    "candidate_evidence_weights",
+    "selected_hoi_indices",
+    "selected_hoi_mask",
+    "selected_hoi_scores",
+    "prototype_slot_mask",
+]
+
+SETM_LAYER_KEYS = [
+    "sync_match_logits",
+    "sync_visual_to_text_attn",
+    "sync_text_to_visual_attn",
+    "sync_evidence_weights",
+    "sync_prototype_scores",
+    "sync_prototype_weights",
+    "sync_prototype_coverage",
+    "sync_anchor_delta",
+]
+
+FEATURE_LAYER_KEYS = [
+    "candidate_evidence_tokens",
+    "candidate_evidence_context",
+    "candidate_anchor_delta",
+    "prototype_slots",
+    "pair_anchor_pre_sync",
+    "pair_anchor_post_sync",
+]
+
+SETM_FEATURE_LAYER_KEYS = [
+    "updated_visual_tokens",
+    "updated_prototype_slots",
+    "sync_matched_context",
+]
+
+DENSE_KEYS = [
+    "fused_node_features",
+    "updated_node_features",
+    "initial_edge_features",
+    "updated_edge_features",
+    "edge_mask",
+    "edge_scores",
+    "final_pair_features",
+    "refined_pair_edge_features",
+]
+
+
+def load_image_ids(path: Path) -> List[int]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if isinstance(payload, dict):
+        payload = payload.get("image_ids")
+    if not isinstance(payload, list):
+        raise ValueError(f"Expected JSON image-ID list in {path}")
+    return list(dict.fromkeys(int(value) for value in payload))
+
+
+def finite_tensors(values: Iterable[Any]) -> bool:
+    for value in values:
+        if isinstance(value, torch.Tensor) and torch.is_floating_point(value):
+            if not bool(torch.isfinite(value).all()):
+                return False
+    return True
+
+
+def record_paths(trace_dir: Path) -> Dict[int, Path]:
+    manifest = trace_dir / "manifest.jsonl"
+    if not manifest.is_file():
+        raise FileNotFoundError(f"Missing merged manifest: {manifest}")
+    output: Dict[int, Path] = {}
+    for line in manifest.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        image_id = row["image_id"]
+        if isinstance(image_id, list):
+            image_id = image_id[0]
+        path = Path(row["record_path"])
+        output[int(image_id)] = path if path.is_absolute() else trace_dir / path
+    return output
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--trace-dir", type=Path, required=True)
+    parser.add_argument("--image-ids-file", type=Path, required=True)
+    parser.add_argument("--expected-layers", type=int, default=2)
+    parser.add_argument("--expected-m", type=int, default=4)
+    parser.add_argument("--expected-k", type=int, default=5)
+    parser.add_argument("--expected-roles", type=int, default=6)
+    parser.add_argument("--require-features", action="store_true")
+    parser.add_argument("--require-dense", action="store_true")
+    parser.add_argument("--output-json", type=Path)
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+    expected_ids = load_image_ids(args.image_ids_file)
+    paths = record_paths(args.trace_dir)
+    errors: List[str] = []
+    rows: List[Dict[str, Any]] = []
+
+    missing_ids = [value for value in expected_ids if value not in paths]
+    extra_ids = [value for value in paths if value not in set(expected_ids)]
+    if missing_ids:
+        errors.append(f"missing image IDs: {missing_ids}")
+    if extra_ids:
+        errors.append(f"unexpected image IDs: {extra_ids}")
+
+    for image_id in expected_ids:
+        path = paths.get(image_id)
+        if path is None:
+            continue
+        record = torch.load(path, map_location="cpu")
+        layers = record.get("graph_layers")
+        dense = record.get("graph_dense")
+        image_errors: List[str] = []
+        if not isinstance(layers, list):
+            image_errors.append("graph_layers missing")
+            layers = []
+        if len(layers) != args.expected_layers:
+            image_errors.append(f"layer count {len(layers)} != {args.expected_layers}")
+
+        observed_layer_indices = []
+        for order, layer in enumerate(layers):
+            observed_layer_indices.append(int(layer.get("layer_idx", -1)))
+            variant = str(layer.get(
+                "mechanism_validation_variant",
+                record.get("graph", {}).get("mechanism_validation_variant", "full"),
+            ))
+            no_setm = variant == "no_setm"
+            required = list(CORE_LAYER_KEYS)
+            if not no_setm:
+                required += SETM_LAYER_KEYS
+            if args.require_features:
+                required += FEATURE_LAYER_KEYS
+                if not no_setm:
+                    required += SETM_FEATURE_LAYER_KEYS
+            missing = [key for key in required if not isinstance(layer.get(key), torch.Tensor)]
+            if missing:
+                image_errors.append(f"layer {order} missing tensors: {missing}")
+                continue
+            if no_setm:
+                if layer.get("setm_called") is not False or int(layer.get("setm_correction_count", -1)) != 0:
+                    image_errors.append(f"layer {order} no_setm flags are inconsistent")
+                unexpected = [key for key in SETM_LAYER_KEYS if key in layer]
+                if unexpected:
+                    image_errors.append(f"layer {order} no_setm unexpectedly contains: {unexpected}")
+            visual_count = args.expected_m + 3
+            expected_shapes = {
+                "selected_context_indices": (32, args.expected_m),
+                "selected_hoi_mask": (32, args.expected_k),
+                "prototype_slot_mask": (32, args.expected_k, args.expected_roles),
+            }
+            if not no_setm:
+                expected_shapes.update({
+                    "sync_match_logits": (32, args.expected_k, visual_count, args.expected_roles),
+                    "sync_visual_to_text_attn": (32, args.expected_k, visual_count, args.expected_roles),
+                    "sync_text_to_visual_attn": (32, args.expected_k, args.expected_roles, visual_count),
+                    "sync_evidence_weights": (32, args.expected_k, visual_count),
+                    "sync_prototype_weights": (32, args.expected_k),
+                    "sync_prototype_coverage": (32, args.expected_k, args.expected_roles),
+                })
+            for key, expected in expected_shapes.items():
+                observed = tuple(int(value) for value in layer[key].shape)
+                if observed != expected:
+                    image_errors.append(f"layer {order} {key} shape {observed} != {expected}")
+            if not finite_tensors(layer.values()):
+                image_errors.append(f"layer {order} contains non-finite values")
+
+        if args.require_dense:
+            if not isinstance(dense, Mapping):
+                image_errors.append("graph_dense missing")
+            else:
+                missing = [key for key in DENSE_KEYS if not isinstance(dense.get(key), torch.Tensor)]
+                if missing:
+                    image_errors.append(f"graph_dense missing tensors: {missing}")
+                if not finite_tensors(dense.values()):
+                    image_errors.append("graph_dense contains non-finite values")
+
+        metadata = record.get("metadata", {})
+        if args.require_features and not bool(metadata.get("graph_layers_available", False)):
+            image_errors.append("metadata.graph_layers_available is false")
+        if args.require_dense and not bool(metadata.get("graph_dense_available", False)):
+            image_errors.append("metadata.graph_dense_available is false")
+
+        rows.append({
+            "image_id": image_id,
+            "record_path": str(path),
+            "layer_count": len(layers),
+            "layer_indices": observed_layer_indices,
+            "dense_keys": sorted(dense) if isinstance(dense, Mapping) else [],
+            "passed": not image_errors,
+            "errors": image_errors,
+        })
+        errors.extend(f"image {image_id}: {message}" for message in image_errors)
+
+    summary = {
+        "trace_dir": str(args.trace_dir),
+        "expected_image_count": len(expected_ids),
+        "record_count": len(paths),
+        "expected_layers": args.expected_layers,
+        "require_features": args.require_features,
+        "require_dense": args.require_dense,
+        "passed": not errors,
+        "errors": errors,
+        "records": rows,
+    }
+    output = args.output_json or args.trace_dir / "detailed_vet_setm_validation.json"
+    output.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps({key: value for key, value in summary.items() if key != "records"}, ensure_ascii=False, indent=2))
+    if errors:
+        raise SystemExit(1)
+    print("DETAILED VET/SETM TRACE VALIDATION PASSED")
+
+
+if __name__ == "__main__":
+    main()

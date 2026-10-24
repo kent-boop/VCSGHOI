@@ -1,0 +1,10 @@
+{
+  "status": "skipped",
+  "reason": "User instruction included '跳过vcoco数据集'; HICO-DET trainval/test were run only.",
+  "expected_filters_if_enabled": [
+    "exclude object_id=-1",
+    "exclude role object missing",
+    "exclude body-only actions: walk/run/smile/stand",
+    "prioritize object-role actions such as hold/sit on/look at/talk on phone/eat/drink/carry/ride/work on computer"
+  ]
+}

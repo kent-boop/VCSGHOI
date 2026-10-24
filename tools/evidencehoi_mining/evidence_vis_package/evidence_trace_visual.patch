@@ -1,0 +1,314 @@
+--- a/src/models/visual_scene_graph_oov8.py
++++ b/src/models/visual_scene_graph_oov8.py
+@@ -5,7 +5,7 @@
+ import sys
+ from dataclasses import replace
+ from pathlib import Path
+-from typing import Any, Optional
++from typing import Any, Dict, List, Optional
+ 
+ import torch
+ from torch import Tensor
+@@ -76,6 +76,12 @@
+         graph_layerwise_sync_detach_text_update: bool = False,
+         graph_layerwise_sync_debug: bool = False,
+         graph_store_dense_debug_tensors: bool = False,
++        graph_export_evidence_trace: bool = False,
++        graph_export_trace_each_layer: bool = False,
++        graph_export_trace_to_cpu: bool = True,
++        graph_export_trace_float_dtype: str = "float16",
++        graph_export_trace_include_match_logits: bool = False,
++        graph_export_trace_include_features: bool = False,
+         **kwargs: Any,
+     ):
+         if graph_enable_layerwise_sync_evidence_matching and bool(kwargs.get("graph_text_dynamic_retrieval", False)):
+@@ -102,6 +108,18 @@
+         self.graph_layerwise_sync_detach_text_update = bool(graph_layerwise_sync_detach_text_update)
+         self.graph_layerwise_sync_debug = bool(graph_layerwise_sync_debug)
+         self.graph_store_dense_debug_tensors = bool(graph_store_dense_debug_tensors)
++        self.graph_export_evidence_trace = bool(graph_export_evidence_trace)
++        self.graph_export_trace_each_layer = bool(graph_export_trace_each_layer)
++        self.graph_export_trace_to_cpu = bool(graph_export_trace_to_cpu)
++        self.graph_export_trace_float_dtype = str(graph_export_trace_float_dtype).lower()
++        self.graph_export_trace_include_match_logits = bool(graph_export_trace_include_match_logits)
++        self.graph_export_trace_include_features = bool(graph_export_trace_include_features)
++        valid_trace_dtypes = {"float16", "float32", "bfloat16"}
++        if self.graph_export_trace_float_dtype not in valid_trace_dtypes:
++            raise ValueError(
++                "graph_export_trace_float_dtype must be one of "
++                f"{sorted(valid_trace_dtypes)}, got {self.graph_export_trace_float_dtype}"
++            )
+ 
+         if self.graph_enable_layerwise_sync_evidence_matching and self.graph_layerwise_sync_final_matching:
+             raise ValueError(
+@@ -294,6 +312,179 @@
+             debug_info=debug_info,
+         )
+ 
++    def _trace_tensor(self, tensor: Optional[Tensor]) -> Optional[Tensor]:
++        """Detach a tensor for evaluation-only evidence tracing.
++
++        Tracing is strictly opt-in. Floating tensors are compressed to the
++        configured dtype and can be moved to CPU before leaving the graph
++        reasoner, preventing the caller from retaining the autograd graph.
++        """
++        if tensor is None:
++            return None
++        out = tensor.detach()
++        if torch.is_floating_point(out):
++            dtype_map = {
++                "float16": torch.float16,
++                "float32": torch.float32,
++                "bfloat16": torch.bfloat16,
++            }
++            out = out.to(dtype=dtype_map[self.graph_export_trace_float_dtype])
++        if self.graph_export_trace_to_cpu:
++            out = out.cpu()
++        return out
++
++    def _selected_path_support(
++        self,
++        pair_indices: Tensor,
++        selected_context_indices: Tensor,
++        selected_context_mask: Tensor,
++        edge_mask_dense: Tensor,
++        edge_score_dense: Tensor,
++    ) -> Dict[str, Tensor]:
++        """Gather whether every selected context forms h->k and k->o edges."""
++        batch_size, num_pairs, context_count = selected_context_indices.shape
++        num_nodes = edge_mask_dense.shape[1]
++        device = pair_indices.device
++        batch_idx = torch.arange(batch_size, device=device).view(batch_size, 1, 1)
++        batch_idx = batch_idx.expand(batch_size, num_pairs, context_count)
++
++        h_idx = pair_indices[..., 0].unsqueeze(-1).expand_as(selected_context_indices)
++        o_idx = pair_indices[..., 1].unsqueeze(-1).expand_as(selected_context_indices)
++        k_idx = selected_context_indices.long()
++        in_bounds = (
++            (h_idx >= 0)
++            & (h_idx < num_nodes)
++            & (o_idx >= 0)
++            & (o_idx < num_nodes)
++            & (k_idx >= 0)
++            & (k_idx < num_nodes)
++            & selected_context_mask.to(dtype=torch.bool)
++        )
++        safe_h = h_idx.clamp(min=0, max=max(num_nodes - 1, 0))
++        safe_o = o_idx.clamp(min=0, max=max(num_nodes - 1, 0))
++        safe_k = k_idx.clamp(min=0, max=max(num_nodes - 1, 0))
++
++        hk_mask = edge_mask_dense[batch_idx, safe_h, safe_k].to(dtype=torch.bool) & in_bounds
++        ko_mask = edge_mask_dense[batch_idx, safe_k, safe_o].to(dtype=torch.bool) & in_bounds
++        hk_score = edge_score_dense[batch_idx, safe_h, safe_k]
++        ko_score = edge_score_dense[batch_idx, safe_k, safe_o]
++        hk_score = torch.where(hk_mask, hk_score, torch.zeros_like(hk_score))
++        ko_score = torch.where(ko_mask, ko_score, torch.zeros_like(ko_score))
++        return {
++            "selected_context_edge_hk_mask": hk_mask,
++            "selected_context_edge_ko_mask": ko_mask,
++            "selected_context_two_hop_mask": hk_mask & ko_mask,
++            "selected_context_edge_hk_score": hk_score,
++            "selected_context_edge_ko_score": ko_score,
++        }
++
++    def _selected_hoi_semantic_ids(self, text_out: Any) -> Dict[str, Tensor]:
++        """Map retrieved text-bank rows to action/object ids when available."""
++        if text_out is None or not hasattr(text_out, "selected_hoi_indices"):
++            return {}
++        selected = text_out.selected_hoi_indices.long()
++        selected_mask = text_out.selected_hoi_mask.to(dtype=torch.bool)
++        bank = getattr(getattr(self.text_graph_reasoner, "retriever", None), "bank", None)
++        if bank is None:
++            return {}
++
++        out: Dict[str, Tensor] = {}
++        for source_name, output_name in (
++            ("hoi_action_ids", "selected_hoi_action_ids"),
++            ("hoi_object_ids", "selected_hoi_object_ids"),
++        ):
++            source = getattr(bank, source_name, None)
++            if source is None or source.numel() == 0:
++                continue
++            source = source.to(device=selected.device)
++            safe = selected.clamp(min=0, max=max(source.shape[0] - 1, 0))
++            mapped = source[safe]
++            mapped = torch.where(selected_mask, mapped, torch.full_like(mapped, -1))
++            out[output_name] = mapped
++        return out
++
++    def _build_evidence_trace(
++        self,
++        *,
++        stage: str,
++        layer_idx: int,
++        pair_indices: Tensor,
++        pair_valid_mask: Tensor,
++        candidate_out: Any,
++        text_out: Any,
++        sync_out: Any,
++        edge_mask_dense: Tensor,
++        edge_score_dense: Tensor,
++    ) -> Dict[str, Any]:
++        """Create the compact tensor trace used by the example-mining pipeline."""
++        selected_context_indices = candidate_out.selected_context_indices
++        selected_context_mask = candidate_out.selected_context_mask.to(dtype=torch.bool)
++        path_support = self._selected_path_support(
++            pair_indices=pair_indices,
++            selected_context_indices=selected_context_indices,
++            selected_context_mask=selected_context_mask,
++            edge_mask_dense=edge_mask_dense,
++            edge_score_dense=edge_score_dense,
++        )
++        evidence_count = int(candidate_out.evidence_tokens.shape[-2])
++        context_count = max(evidence_count - 3, 0)
++        trace: Dict[str, Any] = {
++            "schema_version": 1,
++            "stage": str(stage),
++            "layer_idx": int(layer_idx),
++            "visual_token_roles": ["anchor", "human", "object"]
++            + [f"context_{idx + 1}" for idx in range(context_count)],
++            "prototype_slot_names": [
++                "human_state",
++                "object_state",
++                "anchor_relation",
++                "discriminative",
++                "scene",
++                "context_object",
++            ],
++            "pair_indices": self._trace_tensor(pair_indices),
++            "pair_valid_mask": self._trace_tensor(pair_valid_mask.to(dtype=torch.bool)),
++            "selected_context_indices": self._trace_tensor(selected_context_indices),
++            "selected_context_mask": self._trace_tensor(selected_context_mask),
++            "candidate_evidence_mask": self._trace_tensor(candidate_out.evidence_mask.to(dtype=torch.bool)),
++            "candidate_evidence_weights": self._trace_tensor(candidate_out.evidence_weights),
++        }
++        trace.update({name: self._trace_tensor(value) for name, value in path_support.items()})
++
++        if text_out is not None:
++            trace.update({
++                "selected_hoi_indices": self._trace_tensor(text_out.selected_hoi_indices),
++                "selected_hoi_mask": self._trace_tensor(text_out.selected_hoi_mask.to(dtype=torch.bool)),
++                "selected_hoi_scores": self._trace_tensor(text_out.selected_scores),
++                "prototype_slot_mask": self._trace_tensor(text_out.prototype_slot_mask.to(dtype=torch.bool)),
++            })
++            trace.update({
++                name: self._trace_tensor(value)
++                for name, value in self._selected_hoi_semantic_ids(text_out).items()
++            })
++
++        if sync_out is not None:
++            trace.update({
++                "sync_visual_to_text_attn": self._trace_tensor(sync_out.visual_to_text_attn),
++                "sync_text_to_visual_attn": self._trace_tensor(sync_out.text_to_visual_attn),
++                "sync_evidence_weights": self._trace_tensor(sync_out.evidence_weights),
++                "sync_prototype_scores": self._trace_tensor(sync_out.prototype_scores),
++                "sync_prototype_weights": self._trace_tensor(sync_out.prototype_weights),
++                "sync_prototype_coverage": self._trace_tensor(sync_out.prototype_coverage),
++                "sync_anchor_delta": self._trace_tensor(sync_out.anchor_delta),
++            })
++            if self.graph_export_trace_include_match_logits:
++                trace["sync_match_logits"] = self._trace_tensor(sync_out.match_logits)
++
++        if self.graph_export_trace_include_features:
++            trace["candidate_evidence_tokens"] = self._trace_tensor(candidate_out.evidence_tokens)
++            if text_out is not None:
++                trace["prototype_slots"] = self._trace_tensor(text_out.prototype_slots)
++            if sync_out is not None:
++                trace["updated_visual_tokens"] = self._trace_tensor(sync_out.updated_visual_tokens)
++                trace["updated_prototype_slots"] = self._trace_tensor(sync_out.updated_prototype_slots)
++        return trace
++
+     def forward(
+         self,
+         node_feats: Tensor,
+@@ -324,6 +515,8 @@
+ 
+         layerwise_sync_enabled = bool(self.graph_enable_layerwise_sync_evidence_matching)
+         layerwise_sync_debug = []
++        evidence_trace_layers: List[Dict[str, Any]] = []
++        final_evidence_trace: Optional[Dict[str, Any]] = None
+         layerwise_sync_total_anchor_delta_norm = 0.0
+         layerwise_sync_has_nan = False
+         layerwise_skip_final_matching = layerwise_sync_enabled
+@@ -433,6 +626,21 @@
+                         prototype_slot_mask=text_out_l.prototype_slot_mask,
+                         pair_valid_mask=layer_text_pair_valid_mask,
+                     )
++                    if self.graph_export_evidence_trace and not self.training:
++                        trace_l = self._build_evidence_trace(
++                            stage="layerwise",
++                            layer_idx=layer_idx,
++                            pair_indices=pair_indices,
++                            pair_valid_mask=layer_text_pair_valid_mask,
++                            candidate_out=candidate_out_l,
++                            text_out=text_out_l,
++                            sync_out=sync_out_l,
++                            edge_mask_dense=edge_mask_dense,
++                            edge_score_dense=edge_score_dense,
++                        )
++                        final_evidence_trace = trace_l
++                        if self.graph_export_trace_each_layer:
++                            evidence_trace_layers.append(trace_l)
+                     if self.graph_layerwise_sync_write_visual:
+                         updated_edge_attr = self._scatter_pair_delta_to_dense_edges(
+                             edge_attr_dense=updated_edge_attr,
+@@ -684,6 +892,7 @@
+             sync_evidence_debug_info["text_prototype_slots_shape"] = text_out_for_matching.debug_info.get("prototype_slots_shape", None)
+             sync_evidence_debug_info["text_prototype_slot_valid_ratio"] = text_out_for_matching.debug_info.get("prototype_slot_valid_ratio", 0.0)
+ 
++        sync_out = None
+         if self.graph_enable_sync_evidence_matching and self.sync_evidence_matcher is not None and not layerwise_skip_final_matching:
+             if candidate_out is None:
+                 sync_evidence_debug_info["sync_evidence_skip_reason"] = "candidate_evidence_output_missing"
+@@ -704,6 +913,26 @@
+                 sync_evidence_debug_info["sync_evidence_applied"] = True
+                 sync_evidence_debug_info.pop("sync_evidence_skip_reason", None)
+ 
++        if (
++            self.graph_export_evidence_trace
++            and not self.training
++            and not layerwise_skip_final_matching
++            and candidate_out is not None
++        ):
++            final_evidence_trace = self._build_evidence_trace(
++                stage="final",
++                layer_idx=max(len(self.layers) - 1, 0),
++                pair_indices=pair_indices,
++                pair_valid_mask=valid_pair_mask,
++                candidate_out=candidate_out,
++                text_out=text_out_for_matching,
++                sync_out=sync_out,
++                edge_mask_dense=edge_mask_dense,
++                edge_score_dense=edge_score_dense,
++            )
++            if self.graph_export_trace_each_layer:
++                evidence_trace_layers.append(final_evidence_trace)
++
+         pair_out_input = torch.cat([refined_edge, node_h, node_o, base_pair_feats, union_input], dim=-1)
+         pair_out = self.pair_out_mlp(pair_out_input)
+         fallback_pair_feats = base_pair_feats if pair_feats is not None else torch.zeros_like(base_pair_feats)
+@@ -775,6 +1004,11 @@
+             "layer_debug": layer_debug,
+             "has_nan": has_nan,
+         }
++        if self.graph_export_evidence_trace and not self.training:
++            debug_info["evidence_trace_enabled"] = True
++            debug_info["evidence_trace"] = final_evidence_trace
++            if self.graph_export_trace_each_layer:
++                debug_info["evidence_trace_layers"] = evidence_trace_layers
+         if self.graph_store_dense_debug_tensors:
+             debug_info.update({
+                 "edge_attr_dense": edge_attr_dense.detach(),
+@@ -932,6 +1166,12 @@
+         "graph_layerwise_sync_detach_text_update": getattr(args, "graph_layerwise_sync_detach_text_update", False),
+         "graph_layerwise_sync_debug": getattr(args, "graph_layerwise_sync_debug", False),
+         "graph_store_dense_debug_tensors": getattr(args, "graph_store_dense_debug_tensors", False),
++        "graph_export_evidence_trace": getattr(args, "graph_export_evidence_trace", False),
++        "graph_export_trace_each_layer": getattr(args, "graph_export_trace_each_layer", False),
++        "graph_export_trace_to_cpu": getattr(args, "graph_export_trace_to_cpu", True),
++        "graph_export_trace_float_dtype": getattr(args, "graph_export_trace_float_dtype", "float16"),
++        "graph_export_trace_include_match_logits": getattr(args, "graph_export_trace_include_match_logits", False),
++        "graph_export_trace_include_features": getattr(args, "graph_export_trace_include_features", False),
+     }
+     config.update(kwargs)
+     return VisualSceneGraphReasoner(**config)

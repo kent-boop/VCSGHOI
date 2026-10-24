@@ -1,0 +1,291 @@
+--- a/src/models/stip_graph6.py
++++ b/src/models/stip_graph6.py
+@@ -6,6 +6,7 @@
+ import numpy as np
+ import time
+ import os
++from typing import Any, Dict, List, Optional, Tuple
+ from PIL import Image
+ from src.util.misc import NestedTensor, nested_tensor_from_tensor_list
+ from torchvision.ops import roi_align
+@@ -146,6 +147,20 @@
+         self.graph_node_score_thresh = getattr(args, 'graph_node_score_thresh', 0.05)
+         self.graph_min_score_nodes = getattr(args, 'graph_min_score_nodes', 0)
+         self.graph_max_extra_nodes = getattr(args, 'graph_max_extra_nodes', self.args.num_queries)
++        self.graph_export_evidence_trace = bool(getattr(args, "graph_export_evidence_trace", False))
++        self.graph_export_trace_float_dtype = str(getattr(args, "graph_export_trace_float_dtype", "float16")).lower()
++        self.graph_export_trace_topk_actions = max(int(getattr(args, "graph_export_trace_topk_actions", 10)), 1)
++        self.graph_export_trace_include_all_action_logits = bool(
++            getattr(args, "graph_export_trace_include_all_action_logits", True)
++        )
++        self.graph_export_trace_match_ground_truth = bool(
++            getattr(args, "graph_export_trace_match_ground_truth", True)
++        )
++        if self.graph_export_trace_float_dtype not in {"float16", "float32", "bfloat16"}:
++            raise ValueError(
++                "graph_export_trace_float_dtype must be one of "
++                "['bfloat16', 'float16', 'float32']"
++            )
+         def _short_path(path):
+             return os.path.basename(path) if path else ""
+         print(
+@@ -225,6 +240,15 @@
+         outputs_class = outputs_class_org
+ 
+         det2gt_indices = None
++        trace_det2gt_indices = None
++        if (
++            self.graph_export_evidence_trace
++            and self.graph_export_trace_match_ground_truth
++            and not self.training
++            and targets is not None
++        ):
++            trace_detr_outs = {"pred_logits": outputs_class[-1], "pred_boxes": outputs_coord[-1]}
++            trace_det2gt_indices = self.detr_matcher(trace_detr_outs, targets)
+         if self.training:
+             detr_outs = {"pred_logits": outputs_class[-1], "pred_boxes": outputs_coord[-1]}
+             det2gt_indices = self.detr_matcher(detr_outs, targets)
+@@ -246,6 +270,7 @@
+         graph_input_debug = []
+         graph_reasoner_debug = []
+         graph_debug_stats = []
++        evidence_traces: List[Dict[str, Any]] = []
+         memory_input, memory_input_mask = features[-2].decompose()
+         memory_pos = pos[-2]
+         # print(f"memory_pos Shape: {memory_pos.shape}")
+@@ -457,6 +482,7 @@
+ 
+             # >>>>>>>>>>>> relation classification <<<<<<<<<<<<<<<
+             query_reps = self.rel_query_pre_proj(sampled_rel_reps).unsqueeze(1)# (query, 1, dim)
++            graph_out = None
+             if self.use_visual_scene_graph:
+                 graph_out = self.visual_scene_graph(
+                     node_feats=node_detr_features.unsqueeze(0),
+@@ -615,6 +641,23 @@
+                                                  memory_value_embedding=None)
+ 
+             action_logits = self.action_embed(outs)
++            if self.graph_export_evidence_trace and not self.training:
++                evidence_traces.append(self._build_evidence_trace_record(
++                    imgid=imgid,
++                    target=None if targets is None else targets[imgid],
++                    graph_out=graph_out,
++                    sampled_rel_pairs=sampled_rel_pairs,
++                    sampled_rel_pred_exists=sampled_rel_pred_exists,
++                    sampled_actions=sampled_actions,
++                    final_action_logits=action_logits[-1].squeeze(1),
++                    node_boxes_xyxy=pred_boxes_xyxy_img,
++                    node_class_logits=outputs_class[-1, imgid],
++                    node_scores=inst_scores,
++                    node_labels=inst_labels,
++                    node_types=node_types,
++                    node_mask=node_mask,
++                    trace_det2gt=None if trace_det2gt_indices is None else trace_det2gt_indices[imgid],
++                ))
+             pred_sampled_actions.append(sampled_actions)
+             pred_rel_pairs.append(sampled_rel_pairs)
+             pred_actions.append(action_logits)
+@@ -635,12 +678,203 @@
+             "det2gt_indices": det2gt_indices,
+             "hoi_recognition_time": hoi_recognition_time,
+         }
++        if self.graph_export_evidence_trace and not self.training:
++            out["evidence_traces"] = evidence_traces
+         if self.args.hoi_aux_loss: out['hoi_aux_outputs'] = self._set_hoi_aux_loss(pred_actions)
+         if self.args.train_detr and self.args.aux_loss: out['aux_outputs'] = self._set_aux_loss(outputs_class,
+                                                                                                 outputs_coord)
+ 
+         return out
+ 
++    def _trace_tensor(self, tensor: Optional[torch.Tensor]) -> Optional[torch.Tensor]:
++        if tensor is None:
++            return None
++        out = tensor.detach()
++        if torch.is_floating_point(out):
++            dtype_map = {
++                "float16": torch.float16,
++                "float32": torch.float32,
++                "bfloat16": torch.bfloat16,
++            }
++            out = out.to(dtype=dtype_map[self.graph_export_trace_float_dtype])
++        return out.cpu()
++
++    @staticmethod
++    def _trace_python_value(value: Any) -> Any:
++        if isinstance(value, torch.Tensor):
++            detached = value.detach().cpu()
++            if detached.numel() == 1:
++                return detached.item()
++            return detached.tolist()
++        if isinstance(value, np.generic):
++            return value.item()
++        return value
++
++    def _trace_image_metadata(self, target: Optional[Dict[str, Any]], imgid: int) -> Dict[str, Any]:
++        target = target or {}
++        image_id = target.get("image_id", target.get("id", imgid))
++        file_name = None
++        for key in ("file_name", "filename", "image_path", "img_path", "path"):
++            if key in target and target[key] is not None:
++                file_name = str(target[key])
++                break
++        orig_size = target.get("orig_size", target.get("size", None))
++        return {
++            "image_id": self._trace_python_value(image_id),
++            "file_name": file_name,
++            "orig_size_hw": self._trace_python_value(orig_size),
++            "batch_image_index": int(imgid),
++        }
++
++    @staticmethod
++    def _squeeze_trace_batch(value: Any) -> Any:
++        if isinstance(value, torch.Tensor):
++            if value.dim() > 0 and value.shape[0] == 1:
++                return value.squeeze(0)
++            return value
++        if isinstance(value, dict):
++            return {key: STIP._squeeze_trace_batch(item) for key, item in value.items()}
++        if isinstance(value, list):
++            return [STIP._squeeze_trace_batch(item) for item in value]
++        if isinstance(value, tuple):
++            return tuple(STIP._squeeze_trace_batch(item) for item in value)
++        return value
++
++    def _build_pair_gt_targets(
++        self,
++        sampled_rel_pairs: torch.Tensor,
++        target: Optional[Dict[str, Any]],
++        trace_det2gt: Optional[Tuple[torch.Tensor, torch.Tensor]],
++        num_actions: int,
++    ) -> Tuple[torch.Tensor, torch.Tensor]:
++        pair_count = int(sampled_rel_pairs.shape[0])
++        pair_targets = torch.zeros(
++            (pair_count, num_actions),
++            dtype=torch.uint8,
++            device=sampled_rel_pairs.device,
++        )
++        pair_matched = torch.zeros(pair_count, dtype=torch.bool, device=sampled_rel_pairs.device)
++        if target is None or trace_det2gt is None or "relation_map" not in target:
++            return pair_targets, pair_matched
++
++        det_indices, gt_indices = trace_det2gt
++        det_to_gt = {int(det): int(gt) for det, gt in zip(det_indices.detach().cpu().tolist(), gt_indices.detach().cpu().tolist())}
++        relation_map = target["relation_map"].to(device=sampled_rel_pairs.device)
++        copy_actions = min(int(relation_map.shape[-1]), num_actions)
++        for pair_idx, pair in enumerate(sampled_rel_pairs):
++            human_idx = int(pair[0].item())
++            object_idx = int(pair[1].item())
++            if human_idx not in det_to_gt or object_idx not in det_to_gt:
++                continue
++            pair_matched[pair_idx] = True
++            gt_h = det_to_gt[human_idx]
++            gt_o = det_to_gt[object_idx]
++            pair_targets[pair_idx, :copy_actions] = (
++                relation_map[gt_h, gt_o, :copy_actions] > 0
++            ).to(dtype=torch.uint8)
++        return pair_targets, pair_matched
++
++    def _build_evidence_trace_record(
++        self,
++        *,
++        imgid: int,
++        target: Optional[Dict[str, Any]],
++        graph_out: Any,
++        sampled_rel_pairs: torch.Tensor,
++        sampled_rel_pred_exists: torch.Tensor,
++        sampled_actions: torch.Tensor,
++        final_action_logits: torch.Tensor,
++        node_boxes_xyxy: torch.Tensor,
++        node_class_logits: torch.Tensor,
++        node_scores: torch.Tensor,
++        node_labels: torch.Tensor,
++        node_types: torch.Tensor,
++        node_mask: torch.Tensor,
++        trace_det2gt: Optional[Tuple[torch.Tensor, torch.Tensor]],
++    ) -> Dict[str, Any]:
++        """Package a compact, serializable per-image trace for example mining."""
++        final_action_probs = final_action_logits.sigmoid()
++        coarse_action_probs = sampled_actions.sigmoid()
++        topk = min(self.graph_export_trace_topk_actions, int(final_action_probs.shape[-1]))
++        topk_probs, topk_action_ids = final_action_probs.topk(k=topk, dim=-1)
++        pair_gt_targets, pair_gt_matched = self._build_pair_gt_targets(
++            sampled_rel_pairs=sampled_rel_pairs,
++            target=target,
++            trace_det2gt=trace_det2gt,
++            num_actions=int(final_action_logits.shape[-1]),
++        )
++
++        object_indices = sampled_rel_pairs[:, 1].long()
++        pair_detector_object_labels = node_labels[object_indices]
++        if str(getattr(self.args, "dataset_file", "")) == "hico-det" and getattr(self.args, "valid_obj_ids", None):
++            valid_obj_ids = list(getattr(self.args, "valid_obj_ids"))
++            hico_logit_ids = valid_obj_ids + [valid_obj_ids[-1] + 1]
++            pair_object_logits = node_class_logits[object_indices][:, hico_logit_ids]
++            pair_object_scores, pair_object_labels = F.softmax(pair_object_logits, dim=-1)[..., :-1].max(dim=-1)
++        else:
++            pair_object_scores = node_scores[object_indices]
++            pair_object_labels = pair_detector_object_labels
++        pair_exist_probs = sampled_rel_pred_exists.sigmoid()
++        ranking_action_scores = final_action_probs * pair_object_scores.unsqueeze(-1)
++        pair_filter_threshold = float(getattr(self.args, "pair_filter_threshold", 0.0))
++        if pair_filter_threshold > 0:
++            ranking_action_scores = ranking_action_scores.clone()
++            ranking_action_scores[pair_exist_probs < pair_filter_threshold] = 0.0
++        if bool(getattr(self.args, "use_pair_score_weighting", False)):
++            ranking_action_scores = ranking_action_scores * pair_exist_probs.unsqueeze(-1)
++
++        graph_trace = None
++        graph_trace_layers = None
++        if graph_out is not None and hasattr(graph_out, "debug_info"):
++            graph_trace = graph_out.debug_info.get("evidence_trace", None)
++            graph_trace_layers = graph_out.debug_info.get("evidence_trace_layers", None)
++            graph_trace = self._squeeze_trace_batch(graph_trace)
++            graph_trace_layers = self._squeeze_trace_batch(graph_trace_layers)
++
++        pair_record: Dict[str, Any] = {
++            "indices": self._trace_tensor(sampled_rel_pairs),
++            "proposal_logits": self._trace_tensor(sampled_rel_pred_exists),
++            "proposal_probs": self._trace_tensor(pair_exist_probs),
++            "object_labels": self._trace_tensor(pair_object_labels),
++            "detector_object_labels": self._trace_tensor(pair_detector_object_labels),
++            "object_scores": self._trace_tensor(pair_object_scores),
++            "action_topk_ids": self._trace_tensor(topk_action_ids),
++            "action_topk_probs": self._trace_tensor(topk_probs),
++            "ranking_action_scores": self._trace_tensor(ranking_action_scores),
++            "coarse_action_logits": self._trace_tensor(sampled_actions),
++            "coarse_action_probs": self._trace_tensor(coarse_action_probs),
++            "gt_action_targets": self._trace_tensor(pair_gt_targets),
++            "gt_pair_matched": self._trace_tensor(pair_gt_matched),
++        }
++        if self.graph_export_trace_include_all_action_logits:
++            pair_record["action_logits"] = self._trace_tensor(final_action_logits)
++            pair_record["action_probs"] = self._trace_tensor(final_action_probs)
++
++        record: Dict[str, Any] = {
++            "schema_version": 1,
++            "image": self._trace_image_metadata(target, imgid),
++            "nodes": {
++                "boxes_xyxy_norm": self._trace_tensor(node_boxes_xyxy),
++                "scores": self._trace_tensor(node_scores),
++                "labels": self._trace_tensor(node_labels),
++                "types": self._trace_tensor(node_types),
++                "valid_mask": self._trace_tensor(node_mask.to(dtype=torch.bool)),
++            },
++            "pairs": pair_record,
++            "graph": graph_trace,
++            "metadata": {
++                "dataset_file": str(getattr(self.args, "dataset_file", "")),
++                "valid_action_ids": list(getattr(self.args, "valid_ids", [])),
++                "valid_object_ids": list(getattr(self.args, "valid_obj_ids", [])),
++                "pair_filter_threshold": pair_filter_threshold,
++                "use_pair_score_weighting": bool(getattr(self.args, "use_pair_score_weighting", False)),
++                "graph_trace_available": graph_trace is not None,
++            },
++        }
++        if graph_trace_layers is not None:
++            record["graph_layers"] = graph_trace_layers
++        return record
++
+     def _maybe_print_graph_debug_summary(self, stats):
+         if not self.graph_debug or len(stats) == 0 or get_rank() != 0:
+             return

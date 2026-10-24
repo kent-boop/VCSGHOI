@@ -1,0 +1,58 @@
+{
+  "json_path": "D:\\HOI\\SICHOI\\SICHOI\\SAM-BLIP-HOI3\\vcoco_hoi_conditioned_text_graph_gpt55.json",
+  "pretrained": "D:\\HOI\\SICHOI\\SICHOI\\SAM-BLIP-HOI3\\pth\\blip\\model_base_retrieval_coco.pth",
+  "order": "json",
+  "hico_label_module": "hico_text_label",
+  "hoi_count": 289,
+  "feature_shape": [
+    289,
+    6,
+    256
+  ],
+  "mask_shape": [
+    289,
+    6
+  ],
+  "field_order": [
+    "human_node",
+    "object_node",
+    "ho_edge",
+    "discriminative",
+    "scene_context",
+    "oo_context"
+  ],
+  "text_dim": 256,
+  "normalize_text": false,
+  "empty_oo_mode": "zero",
+  "missing_in_json_count": 0,
+  "missing_in_json_examples": [],
+  "field_nonempty_counts": {
+    "human_node": 289,
+    "object_node": 289,
+    "ho_edge": 289,
+    "discriminative": 289,
+    "scene_context": 289,
+    "oo_context": 143
+  },
+  "oo_context_total_individual_edges": 258,
+  "oo_context_nonempty_hoi_count": 143,
+  "oo_context_max_edges_per_hoi": 3,
+  "main_feature_path": ".\\vcoco_text_graph_blip256\\vcoco_hoi_graph_blip256_text_features_6x256.npy",
+  "main_mask_path": ".\\vcoco_text_graph_blip256\\vcoco_hoi_graph_blip256_text_mask_6.npy",
+  "separate_paths": {
+    "human_node": ".\\vcoco_text_graph_blip256\\vcoco_hoi_graph_blip256_human_node_features.npy",
+    "object_node": ".\\vcoco_text_graph_blip256\\vcoco_hoi_graph_blip256_object_node_features.npy",
+    "ho_edge": ".\\vcoco_text_graph_blip256\\vcoco_hoi_graph_blip256_ho_edge_features.npy",
+    "discriminative": ".\\vcoco_text_graph_blip256\\vcoco_hoi_graph_blip256_discriminative_features.npy",
+    "scene_context": ".\\vcoco_text_graph_blip256\\vcoco_hoi_graph_blip256_scene_context_features.npy",
+    "oo_context": ".\\vcoco_text_graph_blip256\\vcoco_hoi_graph_blip256_oo_context_features.npy",
+    "human_node_mask": ".\\vcoco_text_graph_blip256\\vcoco_hoi_graph_blip256_human_node_mask.npy",
+    "object_node_mask": ".\\vcoco_text_graph_blip256\\vcoco_hoi_graph_blip256_object_node_mask.npy",
+    "ho_edge_mask": ".\\vcoco_text_graph_blip256\\vcoco_hoi_graph_blip256_ho_edge_mask.npy",
+    "discriminative_mask": ".\\vcoco_text_graph_blip256\\vcoco_hoi_graph_blip256_discriminative_mask.npy",
+    "scene_context_mask": ".\\vcoco_text_graph_blip256\\vcoco_hoi_graph_blip256_scene_context_mask.npy",
+    "oo_context_mask": ".\\vcoco_text_graph_blip256\\vcoco_hoi_graph_blip256_oo_context_mask.npy"
+  },
+  "oo_edge_feature_path": ".\\vcoco_text_graph_blip256\\vcoco_hoi_graph_blip256_oo_context_edge_features.npy",
+  "refine_feature_path": ".\\vcoco_text_graph_blip256\\vcoco_hoi_graph_blip256_topk_refine_features.npy"
+}

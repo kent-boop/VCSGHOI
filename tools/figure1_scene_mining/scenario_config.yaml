@@ -1,0 +1,71 @@
+schema_version: evidencehoi.figure1_scene_mining.v1
+random_seed: 20260714
+
+index:
+  pairs: outputs/figure1_search_v2/index/pairs.parquet
+  instances: outputs/figure1_search_v2/index/instances.parquet
+  images: outputs/figure1_search_v2/index/image_summary.parquet
+
+mining:
+  max_raw_per_scenario: 250
+  min_human_area_ratio: 0.035
+  min_object_area_ratio: 0.0008
+  preferred_entity_min: 4
+  preferred_entity_max: 10
+  preferred_context_min: 2
+  contact_sheet_top_k: 40
+
+scenarios:
+  tennis_racket:
+    target_object: tennis racket
+    exact_hico_actions: [carry, hold, inspect, swing]
+    alternative_plausible_actions: [carry, hold, swing]
+    decisive_cues: [sports ball]
+    distractor_cues: [bench, bottle, backpack, chair, cup, handbag]
+    scene_evidence: tennis court / net
+    long_range: false
+
+  knife_food:
+    target_object: knife
+    exact_hico_actions: [cut_with, hold, stick, wash, wield, lick]
+    alternative_plausible_actions: [hold, cut_with]
+    decisive_cues: [cake, pizza, apple, banana, sandwich, orange, broccoli, carrot, hot dog, bowl, dining table]
+    distractor_cues: [cup, bottle, plate, fork, spoon, bowl, chair, dining table]
+    scene_evidence: kitchen / dining table
+    long_range: false
+
+  bicycle:
+    target_object: bicycle
+    exact_hico_actions: [carry, hold, inspect, jump, hop_on, park, push, repair, ride, sit_on, straddle, walk, wash]
+    alternative_plausible_actions: [hold, push, walk, ride, straddle]
+    decisive_cues: [backpack, stop sign, traffic light]
+    distractor_cues: [backpack, handbag, bench, car, motorcycle, chair, bottle]
+    scene_evidence: road / outdoor scene
+    long_range: false
+
+  kite:
+    target_object: kite
+    exact_hico_actions: [assemble, carry, fly, hold, inspect, launch, pull]
+    alternative_plausible_actions: [carry, hold, fly, pull]
+    decisive_cues: []
+    distractor_cues: [backpack, bench, bottle, chair, sports ball]
+    scene_evidence: sky / open outdoor scene / string
+    long_range: true
+
+  tv:
+    target_object: tv
+    exact_hico_actions: [control, repair, watch]
+    alternative_plausible_actions: [watch, control, repair]
+    decisive_cues: [remote]
+    distractor_cues: [couch, chair, cup, bottle, dining table, book, cell phone]
+    scene_evidence: indoor room / screen / gaze
+    long_range: true
+
+  laptop:
+    target_object: laptop
+    exact_hico_actions: [hold, open, read, repair, type_on]
+    alternative_plausible_actions: [hold, open, read, type_on]
+    decisive_cues: [mouse, keyboard]
+    distractor_cues: [cup, bottle, book, cell phone, dining table, chair]
+    scene_evidence: desk / gaze / hand posture
+    long_range: false

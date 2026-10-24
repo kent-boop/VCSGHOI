@@ -1,0 +1,51 @@
+# Model checkpoints and weights (kept locally)
+checkpoints/
+checkpoint/
+*.pth
+*.pth.*
+*.pt
+*.ckpt
+*.safetensors
+pytorch_model*.bin
+model*.bin
+
+# Generated experiment outputs and caches
+/outputs/
+__pycache__/
+*.py[cod]
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+wandb/
+tools/evidencehoi_image_search/cache/
+
+# Local environments, credentials and assistant/editor state
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+env/
+node_modules/
+.kilo/
+.codex/
+.agents/
+.codex-backups/
+.idea/
+.vscode/
+.run/
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+
+# Crash dumps and local temporary files
+core
+core.[0-9]*
+/:
+*.swp
+*.swo
+*~
+.DS_Store

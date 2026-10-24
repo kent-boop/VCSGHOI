@@ -1,0 +1,2720 @@
+# EvidenceHOI Final Manual Review
+
+Generated from scored candidates and existing contact sheets.
+
+## Final Ranking
+
+1. Best Figure 1 candidate: `3946` (HICO_train2015_00003946.jpg)
+   visual: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0013_3946.jpg`
+2. Backup Figure 1 candidate: `24103` (HICO_train2015_00024103.jpg)
+   visual: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0023_24103.jpg`
+3. Best Figure 2 candidate: `19218` (HICO_train2015_00019218.jpg)
+   visual: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0003_19218.jpg`
+4. Backup Figure 2 candidate: `3761` (HICO_train2015_00003761.jpg)
+   visual: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0001_3761.jpg`
+5. Best diagnostic candidate: `HICO_test2015_00008398` (HICO_test2015_00008398.jpg)
+   visual: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0007_HICO_test2015_00008398.jpg`
+6. Backup diagnostic candidate: `HICO_test2015_00006520` (HICO_test2015_00006520.jpg)
+   visual: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0014_HICO_test2015_00006520.jpg`
+
+## Candidate Checklist
+
+### 1. 3946 (HICO_train2015_00003946.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00003946.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0013_3946.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0013_3946_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0013_3946.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0013_3946_crops.jpg`
+- metrics: pairs=6, verbs=4, objects=2, action_groups=4, primary_context=6, visible_pairs=6
+- scores: total=6.853568, A=9.26, B=5.630352, C=5.3, visual_clarity=0.5, layout=0.753568, crowding=0.5
+- primary_pair: h0-o2 motorcycle hold/straddle ctx=6
+- secondary_pairs: ['h3-o2 motorcycle hold/sit_on ctx=6', 'h6-o7 motorcycle straddle ctx=6']
+- evidence_paths: ['P0 -> C1(bicycle) -> O2', 'P0 -> C3(person) -> O2', 'P0 -> C4(person) -> O2']
+- recommendation: 推荐作为 Figure 1，因为它有 6 个 HO pairs、4 类 action groups，主 pair `motorcycle:hold/straddle` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：需要人工确认上下文物体是否真的支撑动作，而不是仅由空间接近造成。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 2. 24103 (HICO_train2015_00024103.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00024103.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0023_24103.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0023_24103_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0023_24103.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0023_24103_crops.jpg`
+- metrics: pairs=5, verbs=4, objects=2, action_groups=4, primary_context=6, visible_pairs=5
+- scores: total=6.339632, A=9.76, B=5.258268, C=5.05, visual_clarity=0.2804, layout=0.569032, crowding=0.5
+- primary_pair: h3-o4 cell phone hold ctx=6
+- secondary_pairs: ['h5-o6 cell phone read ctx=6', 'h0-o1 bench sit_on ctx=5']
+- evidence_paths: ['P3 -> C0(person) -> O4', 'P3 -> C1(bench) -> O4', 'P3 -> C2(person) -> O4']
+- recommendation: 推荐作为 Figure 1，因为它有 5 个 HO pairs、4 类 action groups，主 pair `cell phone:hold` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：cell phone object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 3. 28929 (HICO_train2015_00028929.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00028929.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0008_28929.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0008_28929_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0008_28929.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0008_28929_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=4, primary_context=5, visible_pairs=4
+- scores: total=6.957367, A=9.597751, B=5.711595, C=3.466667, visual_clarity=0.24879, layout=0.684182, crowding=0.0
+- primary_pair: h0-o1 boat ride/sit_on ctx=5
+- secondary_pairs: ['h2-o3 boat sail ctx=5', 'h4-o6 umbrella carry ctx=5']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(boat) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 4 个 HO pairs、4 类 action groups，主 pair `boat:ride/sit_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：需要人工确认上下文物体是否真的支撑动作，而不是仅由空间接近造成。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 4. 22722 (HICO_train2015_00022722.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00022722.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0004_22722.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0004_22722_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0004_22722.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0004_22722_crops.jpg`
+- metrics: pairs=5, verbs=3, objects=2, action_groups=3, primary_context=6, visible_pairs=5
+- scores: total=7.105759, A=9.889757, B=5.583639, C=4.683333, visual_clarity=0.5, layout=0.255759, crowding=0.0
+- primary_pair: h8-o9 bench sit_on ctx=6
+- secondary_pairs: ['h6-o7 bench sit_on ctx=6', 'h0-o1 backpack carry ctx=6']
+- evidence_paths: ['P8 -> C0(person) -> O9', 'P8 -> C1(backpack) -> O9', 'P8 -> C2(person) -> O9']
+- recommendation: 推荐作为 Figure 1，因为它有 5 个 HO pairs、3 类 action groups，主 pair `bench:sit_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：主 pair 不在画面中心区域，版面裁剪和三栏对比可能不够稳定。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 5. 3761 (HICO_train2015_00003761.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00003761.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0001_3761.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0001_3761_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0001_3761.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0001_3761_crops.jpg`
+- metrics: pairs=5, verbs=4, objects=2, action_groups=3, primary_context=8, visible_pairs=5
+- scores: total=7.638089, A=9.489619, B=6.382134, C=5.183333, visual_clarity=0.5, layout=0.788089, crowding=0.0
+- primary_pair: h2-o3 bicycle walk ctx=8
+- secondary_pairs: ['h0-o1 bicycle hold ctx=8', 'h6-o7 backpack carry/wear ctx=4']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(bicycle) -> O3', 'P2 -> C4(person) -> O3']
+- recommendation: 推荐作为 Figure 1，因为它有 5 个 HO pairs、3 类 action groups，主 pair `bicycle:walk` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：需要人工确认上下文物体是否真的支撑动作，而不是仅由空间接近造成。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 6. 19218 (HICO_train2015_00019218.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00019218.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0003_19218.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0003_19218_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0003_19218.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0003_19218_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=4, primary_context=4, visible_pairs=4
+- scores: total=7.414377, A=9.266666, B=6.852122, C=4.888889, visual_clarity=1.0, layout=0.792155, crowding=0.0
+- primary_pair: h3-o5 motorcycle hold/straddle ctx=4
+- secondary_pairs: ['h3-o4 bicycle straddle ctx=4', 'h0-o1 bicycle ride/sit_on/straddle ctx=1']
+- evidence_paths: ['P3 -> C0(person) -> O5', 'P3 -> C1(bicycle) -> O5', 'P3 -> C2(motorcycle) -> O5']
+- recommendation: 推荐作为 Figure 1，因为它有 4 个 HO pairs、4 类 action groups，主 pair `motorcycle:hold/straddle` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：需要人工确认上下文物体是否真的支撑动作，而不是仅由空间接近造成。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 7. 23295 (HICO_train2015_00023295.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00023295.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0014_23295.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0014_23295_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0014_23295.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0014_23295_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=4, primary_context=6, visible_pairs=4
+- scores: total=6.833352, A=8.9, B=5.558854, C=5.4, visual_clarity=0.31372, layout=0.462772, crowding=0.0
+- primary_pair: h2-o3 bicycle ride/sit_on ctx=6
+- secondary_pairs: ['h4-o5 cell phone hold ctx=6', 'h6-o7 cell phone text_on ctx=6']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(bicycle) -> O3', 'P2 -> C4(person) -> O3']
+- recommendation: 推荐作为 Figure 1，因为它有 4 个 HO pairs、4 类 action groups，主 pair `bicycle:ride/sit_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：cell phone object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 8. 30963 (HICO_train2015_00030963.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00030963.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0027_30963.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0027_30963_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0027_30963.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0027_30963_crops.jpg`
+- metrics: pairs=5, verbs=3, objects=2, action_groups=3, primary_context=3, visible_pairs=5
+- scores: total=6.015446, A=8.786666, B=6.427612, C=4.781111, visual_clarity=1.0, layout=0.671001, crowding=0.0
+- primary_pair: h8-o7 motorcycle sit_on/straddle ctx=3
+- secondary_pairs: ['h6-o7 motorcycle sit_on ctx=3', 'h2-o3 motorcycle ride/sit_on ctx=2']
+- evidence_paths: ['P8 -> C4(person) -> O7', 'P8 -> C5(motorcycle) -> O7', 'P8 -> C6(person) -> O7']
+- recommendation: 推荐作为 Figure 1，因为它有 5 个 HO pairs、3 类 action groups，主 pair `motorcycle:sit_on/straddle` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：需要人工确认上下文物体是否真的支撑动作，而不是仅由空间接近造成。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 9. 11747 (HICO_train2015_00011747.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00011747.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0002_11747.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0002_11747_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0002_11747.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0002_11747_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=3, primary_context=4, visible_pairs=4
+- scores: total=7.424237, A=9.114904, B=6.236356, C=3.466667, visual_clarity=0.5, layout=0.774237, crowding=0.0
+- primary_pair: h2-o3 umbrella carry/hold/stand_under ctx=4
+- secondary_pairs: ['h0-o1 tie wear ctx=4', 'h2-o1 tie wear ctx=4']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(tie) -> O3', 'P2 -> C4(person) -> O3']
+- recommendation: 推荐作为 Figure 1，因为它有 4 个 HO pairs、3 类 action groups，主 pair `umbrella:carry/hold/stand_under` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：需要人工确认上下文物体是否真的支撑动作，而不是仅由空间接近造成。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 10. 19935 (HICO_train2015_00019935.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00019935.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0021_19935.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0021_19935_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0021_19935.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0021_19935_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=3, primary_context=5, visible_pairs=4
+- scores: total=6.399547, A=9.489896, B=5.52924, C=4.1, visual_clarity=0.405733, layout=0.640947, crowding=0.5
+- primary_pair: h5-o6 cell phone hold/talk_on ctx=5
+- secondary_pairs: ['h0-o1 bench sit_on ctx=5', 'h2-o1 bench sit_on ctx=5']
+- evidence_paths: ['P5 -> C0(person) -> O6', 'P5 -> C1(bench) -> O6', 'P5 -> C2(person) -> O6']
+- recommendation: 推荐作为 Figure 1，因为它有 4 个 HO pairs、3 类 action groups，主 pair `cell phone:hold/talk_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：cell phone object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 11. 35616 (HICO_train2015_00035616.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00035616.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0039_35616.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0039_35616_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0039_35616.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0039_35616_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=3, primary_context=6, visible_pairs=4
+- scores: total=5.496515, A=8.825, B=5.969773, C=4.133333, visual_clarity=0.5, layout=0.846515, crowding=0.0
+- primary_pair: h0-o1 cow hold ctx=6
+- secondary_pairs: ['h2-o3 horse ride/run ctx=3', 'h6-o7 horse straddle ctx=3']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(horse) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 4 个 HO pairs、3 类 action groups，主 pair `cow:hold` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：需要人工确认上下文物体是否真的支撑动作，而不是仅由空间接近造成。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 12. 1366 (HICO_train2015_00001366.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00001366.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0022_1366.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0022_1366_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0022_1366.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0022_1366_crops.jpg`
+- metrics: pairs=3, verbs=3, objects=3, action_groups=3, primary_context=3, visible_pairs=3
+- scores: total=6.360104, A=9.586666, B=5.392105, C=3.172222, visual_clarity=0.258015, layout=0.750859, crowding=0.0
+- primary_pair: h3-o4 stop sign no_interaction ctx=3
+- secondary_pairs: ['h0-o2 truck ride/sit_on ctx=2', 'h0-o1 car ride ctx=2']
+- evidence_paths: ['P3 -> C0(person) -> O4', 'P3 -> C1(car) -> O4', 'P3 -> C2(truck) -> O4']
+- recommendation: 推荐作为 Figure 1，因为它有 3 个 HO pairs、3 类 action groups，主 pair `stop sign:no_interaction` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：需要人工确认上下文物体是否真的支撑动作，而不是仅由空间接近造成。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 13. 528 (HICO_train2015_00000528.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00000528.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0035_528.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0035_528_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0035_528.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0035_528_crops.jpg`
+- metrics: pairs=3, verbs=4, objects=3, action_groups=4, primary_context=3, visible_pairs=3
+- scores: total=5.718913, A=9.376573, B=5.415869, C=3.483333, visual_clarity=0.5, layout=0.802246, crowding=1.0
+- primary_pair: h2-o4 laptop read/type_on ctx=3
+- secondary_pairs: ['h2-o3 banana no_interaction ctx=3', 'h0-o1 chair sit_on ctx=3']
+- evidence_paths: ['P2 -> C0(person) -> O4', 'P2 -> C1(chair) -> O4', 'P2 -> C3(banana) -> O4']
+- recommendation: 推荐作为 Figure 1，因为它有 3 个 HO pairs、4 类 action groups，主 pair `laptop:read/type_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：线太多 Figure 1 会乱，更适合作为 diagnostic 或局部裁剪示例。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 14. 16479 (HICO_train2015_00016479.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00016479.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0005_16479.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0005_16479_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0005_16479.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0005_16479_crops.jpg`
+- metrics: pairs=8, verbs=2, objects=2, action_groups=2, primary_context=11, visible_pairs=8
+- scores: total=7.10268, A=8.243334, B=5.42902, C=4.233333, visual_clarity=0.5, layout=0.75268, crowding=0.0
+- primary_pair: h6-o8 laptop read/type_on ctx=11
+- secondary_pairs: ['h6-o7 keyboard type_on ctx=11', 'h11-o12 laptop read ctx=10']
+- evidence_paths: ['P6 -> C0(person) -> O8', 'P6 -> C1(keyboard) -> O8', 'P6 -> C2(laptop) -> O8']
+- recommendation: 推荐作为 Figure 1，因为它有 8 个 HO pairs、2 类 action groups，主 pair `laptop:read/type_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 15. 16244 (HICO_train2015_00016244.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00016244.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0018_16244.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0018_16244_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0018_16244.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0018_16244_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=3, primary_context=5, visible_pairs=4
+- scores: total=6.54475, A=8.9, B=5.704625, C=3.933333, visual_clarity=0.5, layout=0.64475, crowding=0.5
+- primary_pair: h3-o4 book hold/open/read ctx=5
+- secondary_pairs: ['h0-o1 bench sit_on ctx=5', 'h2-o1 bench sit_on ctx=5']
+- evidence_paths: ['P3 -> C0(person) -> O4', 'P3 -> C1(bench) -> O4', 'P3 -> C2(person) -> O4']
+- recommendation: 推荐作为 Figure 1，因为它有 4 个 HO pairs、3 类 action groups，主 pair `book:hold/open/read` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：book object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 16. 1469 (HICO_train2015_00001469.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00001469.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0009_1469.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0009_1469_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0009_1469.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0009_1469_crops.jpg`
+- metrics: pairs=5, verbs=2, objects=2, action_groups=2, primary_context=8, visible_pairs=5
+- scores: total=6.93609, A=8.645458, B=6.104004, C=2.65, visual_clarity=0.444733, layout=0.66899, crowding=0.0
+- primary_pair: h2-o3 keyboard type_on ctx=8
+- secondary_pairs: ['h0-o1 keyboard type_on ctx=8', 'h8-o9 mouse hold ctx=8']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(keyboard) -> O3', 'P2 -> C4(person) -> O3']
+- recommendation: 推荐作为 Figure 1，因为它有 5 个 HO pairs、2 类 action groups，主 pair `keyboard:type_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：mouse object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 17. 1964 (HICO_train2015_00001964.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00001964.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0006_1964.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0006_1964_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0006_1964.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0006_1964_crops.jpg`
+- metrics: pairs=5, verbs=4, objects=2, action_groups=2, primary_context=7, visible_pairs=5
+- scores: total=7.077531, A=8.318334, B=6.291297, C=4.116667, visual_clarity=0.5, layout=0.727531, crowding=0.0
+- primary_pair: h2-o1 cow lasso ctx=7
+- secondary_pairs: ['h5-o6 horse ride/straddle ctx=3', 'h7-o8 horse run ctx=3']
+- evidence_paths: ['P2 -> C0(person) -> O1', 'P2 -> C3(person) -> O1', 'P2 -> C4(horse) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 5 个 HO pairs、2 类 action groups，主 pair `cow:lasso` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 18. 26655 (HICO_train2015_00026655.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00026655.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0028_26655.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0028_26655_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0028_26655.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0028_26655_crops.jpg`
+- metrics: pairs=3, verbs=3, objects=3, action_groups=3, primary_context=4, visible_pairs=3
+- scores: total=5.950428, A=9.42, B=5.343883, C=3.483333, visual_clarity=0.459467, layout=0.761228, crowding=1.0
+- primary_pair: h0-o1 chair sit_on ctx=4
+- secondary_pairs: ['h2-o3 cup hold ctx=4', 'h4-o5 tie wear ctx=4']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(cup) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 3 个 HO pairs、3 类 action groups，主 pair `chair:sit_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：线太多 Figure 1 会乱，更适合作为 diagnostic 或局部裁剪示例。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 19. 5957 (HICO_train2015_00005957.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00005957.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0012_5957.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0012_5957_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0012_5957.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0012_5957_crops.jpg`
+- metrics: pairs=5, verbs=4, objects=2, action_groups=2, primary_context=6, visible_pairs=5
+- scores: total=6.92373, A=7.993334, B=6.060595, C=4.583333, visual_clarity=0.5, layout=0.57373, crowding=0.0
+- primary_pair: h6-o7 umbrella carry/stand_under ctx=6
+- secondary_pairs: ['h2-o3 bench sit_on ctx=6', 'h8-o9 umbrella hold ctx=6']
+- evidence_paths: ['P6 -> C0(person) -> O7', 'P6 -> C1(bench) -> O7', 'P6 -> C2(person) -> O7']
+- recommendation: 推荐作为 Figure 1，因为它有 5 个 HO pairs、2 类 action groups，主 pair `umbrella:carry/stand_under` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 20. 2028 (HICO_train2015_00002028.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00002028.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0007_2028.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0007_2028_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0007_2028.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0007_2028_crops.jpg`
+- metrics: pairs=4, verbs=2, objects=2, action_groups=2, primary_context=5, visible_pairs=4
+- scores: total=6.958376, A=8.533334, B=6.350064, C=2.533333, visual_clarity=0.5, layout=0.808376, crowding=0.0
+- primary_pair: h5-o6 book open ctx=5
+- secondary_pairs: ['h3-o4 book open ctx=4', 'h0-o1 couch sit_on ctx=4']
+- evidence_paths: ['P5 -> C0(person) -> O6', 'P5 -> C1(couch) -> O6', 'P5 -> C2(person) -> O6']
+- recommendation: 推荐作为 Figure 1，因为它有 4 个 HO pairs、2 类 action groups，主 pair `book:open` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 21. 26774 (HICO_train2015_00026774.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00026774.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0015_26774.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0015_26774_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0015_26774.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0015_26774_crops.jpg`
+- metrics: pairs=4, verbs=2, objects=2, action_groups=2, primary_context=6, visible_pairs=4
+- scores: total=6.770363, A=8.533334, B=6.130545, C=3.466667, visual_clarity=0.5, layout=0.620363, crowding=0.0
+- primary_pair: h6-o7 chair sit_on ctx=6
+- secondary_pairs: ['h4-o5 chair sit_on ctx=3', 'h2-o3 bottle hold ctx=3']
+- evidence_paths: ['P6 -> C0(person) -> O7', 'P6 -> C1(bottle) -> O7', 'P6 -> C2(person) -> O7']
+- recommendation: 推荐作为 Figure 1，因为它有 4 个 HO pairs、2 类 action groups，主 pair `chair:sit_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：bottle object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 22. 8783 (HICO_train2015_00008783.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00008783.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0016_8783.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0016_8783_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0016_8783.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0016_8783_crops.jpg`
+- metrics: pairs=4, verbs=2, objects=2, action_groups=2, primary_context=6, visible_pairs=4
+- scores: total=6.722919, A=8.333334, B=6.073142, C=3.0, visual_clarity=0.469413, layout=0.618799, crowding=0.0
+- primary_pair: h2-o3 chair sit_on ctx=6
+- secondary_pairs: ['h0-o1 chair sit_on ctx=4', 'h4-o5 wine glass hold ctx=3']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(chair) -> O3', 'P2 -> C4(person) -> O3']
+- recommendation: 推荐作为 Figure 1，因为它有 4 个 HO pairs、2 类 action groups，主 pair `chair:sit_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：wine glass object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 23. 3908 (HICO_train2015_00003908.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00003908.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0010_3908.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0010_3908_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0010_3908.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0010_3908_crops.jpg`
+- metrics: pairs=4, verbs=3, objects=2, action_groups=2, primary_context=5, visible_pairs=4
+- scores: total=6.934894, A=8.111964, B=6.314841, C=3.0, visual_clarity=0.5, layout=0.784894, crowding=0.0
+- primary_pair: h5-o6 horse ride/run ctx=5
+- secondary_pairs: ['h2-o1 cow lasso ctx=5', 'h3-o4 horse ride/run ctx=4']
+- evidence_paths: ['P5 -> C0(person) -> O6', 'P5 -> C1(cow) -> O6', 'P5 -> C2(person) -> O6']
+- recommendation: 推荐作为 Figure 1，因为它有 4 个 HO pairs、2 类 action groups，主 pair `horse:ride/run` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 24. 35899 (HICO_train2015_00035899.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00035899.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0017_35899.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0017_35899_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0017_35899.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0017_35899_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=2, primary_context=5, visible_pairs=4
+- scores: total=6.667042, A=7.814765, B=6.090841, C=3.911111, visual_clarity=0.5, layout=0.739264, crowding=0.0
+- primary_pair: h3-o4 horse ride/run/straddle ctx=5
+- secondary_pairs: ['h2-o1 cow lasso ctx=5', 'h0-o1 cow lasso ctx=2']
+- evidence_paths: ['P3 -> C0(person) -> O4', 'P3 -> C1(cow) -> O4', 'P3 -> C2(person) -> O4']
+- recommendation: 推荐作为 Figure 1，因为它有 4 个 HO pairs、2 类 action groups，主 pair `horse:ride/run/straddle` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 25. 19039 (HICO_train2015_00019039.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00019039.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0024_19039.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0024_19039_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0024_19039.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0024_19039_crops.jpg`
+- metrics: pairs=4, verbs=5, objects=2, action_groups=2, primary_context=6, visible_pairs=4
+- scores: total=6.249772, A=8.242667, B=6.074658, C=4.933333, visual_clarity=0.5, layout=0.849772, crowding=0.5
+- primary_pair: h4-o5 knife cut_with/wield ctx=6
+- secondary_pairs: ['h0-o1 apple cut/peel ctx=6', 'h6-o7 knife hold ctx=6']
+- evidence_paths: ['P4 -> C0(person) -> O5', 'P4 -> C1(apple) -> O5', 'P4 -> C2(person) -> O5']
+- recommendation: 推荐作为 Figure 1，因为它有 4 个 HO pairs、2 类 action groups，主 pair `knife:cut_with/wield` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 26. 2676 (HICO_train2015_00002676.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00002676.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0020_2676.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0020_2676_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0020_2676.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0020_2676_crops.jpg`
+- metrics: pairs=4, verbs=2, objects=2, action_groups=2, primary_context=4, visible_pairs=4
+- scores: total=6.429282, A=7.806667, B=5.965311, C=2.962222, visual_clarity=0.5, layout=0.790393, crowding=0.0
+- primary_pair: h4-o5 keyboard no_interaction ctx=4
+- secondary_pairs: ['h2-o3 chair sit_on ctx=2', 'h6-o5 keyboard no_interaction ctx=2']
+- evidence_paths: ['P4 -> C0(person) -> O5', 'P4 -> C1(chair) -> O5', 'P4 -> C2(person) -> O5']
+- recommendation: 推荐作为 Figure 1，因为它有 4 个 HO pairs、2 类 action groups，主 pair `keyboard:no_interaction` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 27. 29597 (HICO_train2015_00029597.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00029597.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0037_29597.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0037_29597_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0037_29597.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0037_29597_crops.jpg`
+- metrics: pairs=4, verbs=2, objects=2, action_groups=2, primary_context=4, visible_pairs=4
+- scores: total=5.565689, A=8.081604, B=5.496212, C=2.533333, visual_clarity=0.33849, layout=0.741287, crowding=0.5
+- primary_pair: h0-o1 couch sit_on ctx=4
+- secondary_pairs: ['h2-o1 couch sit_on ctx=4', 'h3-o4 laptop read ctx=4']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(person) -> O1', 'P0 -> C4(laptop) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 4 个 HO pairs、2 类 action groups，主 pair `couch:sit_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 28. 33843 (HICO_train2015_00033843.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00033843.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0032_33843.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0032_33843_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0032_33843.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0032_33843_crops.jpg`
+- metrics: pairs=2, verbs=5, objects=2, action_groups=4, primary_context=2, visible_pairs=2
+- scores: total=5.782989, A=7.123333, B=4.763966, C=3.186667, visual_clarity=0.49004, layout=0.747929, crowding=0.0
+- primary_pair: h0-o1 boat ride/sail/sit_on ctx=2
+- secondary_pairs: ['h2-o3 umbrella carry/hold ctx=2']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(umbrella) -> O1', 'P2 -> C0(person) -> O3']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、4 类 action groups，主 pair `boat:ride/sail/sit_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：可解释上下文偏少，evidence paths 可能需要从 secondary pairs 补充。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 29. HICO_test2015_00008398 (HICO_test2015_00008398.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00008398.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0007_HICO_test2015_00008398.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0007_HICO_test2015_00008398_crops.jpg`
+- metrics: pairs=5, verbs=4, objects=2, action_groups=2, primary_context=4, visible_pairs=5
+- scores: total=6.573141, A=7.993334, B=5.534712, C=5.616667, visual_clarity=0.5, layout=0.223141, crowding=0.0
+- primary_pair: h4-o5 suitcase carry ctx=4
+- secondary_pairs: ['h8-o9 suitcase hold ctx=4', 'h6-o7 suitcase drag ctx=4']
+- evidence_paths: ['P4 -> C6(person) -> O5', 'P4 -> C7(suitcase) -> O5', 'P4 -> C8(person) -> O5']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `suitcase:carry` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 30. HICO_test2015_00006520 (HICO_test2015_00006520.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00006520.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0014_HICO_test2015_00006520.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0014_HICO_test2015_00006520_crops.jpg`
+- metrics: pairs=5, verbs=5, objects=2, action_groups=3, primary_context=8, visible_pairs=5
+- scores: total=6.059672, A=9.26, B=5.464508, C=5.583333, visual_clarity=0.5, layout=0.709672, crowding=1.0
+- primary_pair: h2-o3 bicycle push ctx=8
+- secondary_pairs: ['h4-o5 bicycle walk ctx=8', 'h0-o1 bicycle hold ctx=8']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(bicycle) -> O3', 'P2 -> C4(person) -> O3']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `bicycle:push` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：线太多 Figure 1 会乱，更适合作为 diagnostic 或局部裁剪示例。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 31. 778 (HICO_train2015_00000778.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00000778.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0011_778.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0011_778_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0011_778.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0011_778_crops.jpg`
+- metrics: pairs=4, verbs=2, objects=2, action_groups=2, primary_context=5, visible_pairs=4
+- scores: total=6.924286, A=7.833334, B=6.298929, C=2.533333, visual_clarity=0.5, layout=0.774286, crowding=0.0
+- primary_pair: h0-o1 car no_interaction ctx=5
+- secondary_pairs: ['h2-o1 car no_interaction ctx=5', 'h3-o4 skateboard ride ctx=5']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(person) -> O1', 'P0 -> C4(skateboard) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 4 个 HO pairs、2 类 action groups，主 pair `car:no_interaction` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 32. 31010 (HICO_train2015_00031010.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00031010.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0045_31010.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0045_31010_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0045_31010.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0045_31010_crops.jpg`
+- metrics: pairs=4, verbs=3, objects=2, action_groups=2, primary_context=6, visible_pairs=4
+- scores: total=5.317, A=7.833334, B=5.4239, C=4.933333, visual_clarity=0.448, layout=0.745, crowding=1.0
+- primary_pair: h6-o7 knife wield ctx=6
+- secondary_pairs: ['h4-o5 knife hold ctx=6', 'h0-o1 fork hold ctx=6']
+- evidence_paths: ['P6 -> C0(person) -> O7', 'P6 -> C1(fork) -> O7', 'P6 -> C2(person) -> O7']
+- recommendation: 推荐作为 Figure 1，因为它有 4 个 HO pairs、2 类 action groups，主 pair `knife:wield` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：fork object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 33. HICO_test2015_00004515 (HICO_test2015_00004515.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00004515.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0012_HICO_test2015_00004515.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0012_HICO_test2015_00004515_crops.jpg`
+- metrics: pairs=5, verbs=4, objects=2, action_groups=2, primary_context=8, visible_pairs=5
+- scores: total=6.352027, A=7.793334, B=5.92804, C=5.45, visual_clarity=0.5, layout=0.752027, crowding=0.5
+- primary_pair: h0-o1 backpack carry ctx=8
+- secondary_pairs: ['h6-o7 baseball bat hold ctx=8', 'h8-o9 baseball bat wield ctx=8']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(backpack) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `backpack:carry` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 34. HICO_test2015_00000986 (HICO_test2015_00000986.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00000986.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0016_HICO_test2015_00000986.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0016_HICO_test2015_00000986_crops.jpg`
+- metrics: pairs=5, verbs=4, objects=3, action_groups=2, primary_context=8, visible_pairs=5
+- scores: total=5.793513, A=8.509791, B=5.391736, C=5.45, visual_clarity=0.441187, layout=0.731733, crowding=1.0
+- primary_pair: h6-o7 knife wield ctx=8
+- secondary_pairs: ['h4-o5 knife hold ctx=8', 'h8-o9 mouse no_interaction ctx=8']
+- evidence_paths: ['P6 -> C0(person) -> O7', 'P6 -> C1(fork) -> O7', 'P6 -> C2(person) -> O7']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `knife:wield` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：mouse object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 35. HICO_test2015_00008854 (HICO_test2015_00008854.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00008854.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0028_HICO_test2015_00008854.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0028_HICO_test2015_00008854_crops.jpg`
+- metrics: pairs=5, verbs=4, objects=2, action_groups=4, primary_context=6, visible_pairs=5
+- scores: total=4.756879, A=8.66, B=5.285318, C=5.583333, visual_clarity=0.5, layout=0.656879, crowding=0.5
+- primary_pair: h0-o1 bicycle hold ctx=6
+- secondary_pairs: ['h6-o7 bicycle straddle ctx=6', 'h2-o3 bicycle ride ctx=6']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(bicycle) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `bicycle:hold` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：需要人工确认上下文物体是否真的支撑动作，而不是仅由空间接近造成。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 36. HICO_test2015_00008327 (HICO_test2015_00008327.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00008327.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0020_HICO_test2015_00008327.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0020_HICO_test2015_00008327_crops.jpg`
+- metrics: pairs=4, verbs=3, objects=2, action_groups=2, primary_context=2, visible_pairs=4
+- scores: total=5.647394, A=7.393334, B=5.139425, C=5.32, visual_clarity=0.5, layout=0.364061, crowding=0.0
+- primary_pair: h0-o1 backpack carry ctx=2
+- secondary_pairs: ['h2-o3 backpack wear ctx=2', 'h6-o7 handbag hold ctx=2']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(backpack) -> O1', 'P2 -> C0(person) -> O3']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `backpack:carry` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 37. HICO_test2015_00007697 (HICO_test2015_00007697.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00007697.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0027_HICO_test2015_00007697.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0027_HICO_test2015_00007697_crops.jpg`
+- metrics: pairs=5, verbs=4, objects=2, action_groups=2, primary_context=8, visible_pairs=5
+- scores: total=5.295232, A=7.993334, B=5.067848, C=5.45, visual_clarity=0.5, layout=0.445232, crowding=1.0
+- primary_pair: h2-o3 fork stick ctx=8
+- secondary_pairs: ['h0-o1 fork hold ctx=8', 'h6-o7 knife hold ctx=8']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(fork) -> O3', 'P2 -> C4(person) -> O3']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `fork:stick` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：knife object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 38. HICO_test2015_00000461 (HICO_test2015_00000461.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00000461.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0015_HICO_test2015_00000461.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0015_HICO_test2015_00000461_crops.jpg`
+- metrics: pairs=5, verbs=5, objects=2, action_groups=3, primary_context=8, visible_pairs=5
+- scores: total=6.021082, A=9.26, B=5.406623, C=5.583333, visual_clarity=0.5, layout=0.671082, crowding=1.0
+- primary_pair: h0-o1 chair lie_on ctx=8
+- secondary_pairs: ['h2-o3 chair sit_on ctx=8', 'h8-o9 book read ctx=8']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(chair) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `chair:lie_on` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：book object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 39. 4785 (HICO_train2015_00004785.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00004785.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0033_4785.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0033_4785_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0033_4785.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0033_4785_crops.jpg`
+- metrics: pairs=2, verbs=3, objects=2, action_groups=3, primary_context=2, visible_pairs=2
+- scores: total=5.729303, A=6.976534, B=4.678955, C=2.72, visual_clarity=0.5, layout=0.679303, crowding=0.0
+- primary_pair: h2-o3 laptop hold/read ctx=2
+- secondary_pairs: ['h0-o1 bed lie_on ctx=2']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(bed) -> O3', 'P0 -> C2(person) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、3 类 action groups，主 pair `laptop:hold/read` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：可解释上下文偏少，evidence paths 可能需要从 secondary pairs 补充。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 40. 7415 (HICO_train2015_00007415.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00007415.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0019_7415.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0019_7415_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0019_7415.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0019_7415_crops.jpg`
+- metrics: pairs=2, verbs=3, objects=2, action_groups=3, primary_context=2, visible_pairs=2
+- scores: total=6.469675, A=6.923333, B=5.564513, C=3.186667, visual_clarity=1.0, layout=0.669675, crowding=0.0
+- primary_pair: h0-o1 knife hold/wield ctx=2
+- secondary_pairs: ['h2-o3 toilet sit_on ctx=2']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(toilet) -> O1', 'P2 -> C0(person) -> O3']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、3 类 action groups，主 pair `knife:hold/wield` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：knife object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 41. HICO_test2015_00000204 (HICO_test2015_00000204.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00000204.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0019_HICO_test2015_00000204.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0019_HICO_test2015_00000204_crops.jpg`
+- metrics: pairs=4, verbs=3, objects=2, action_groups=2, primary_context=6, visible_pairs=4
+- scores: total=5.65235, A=7.924022, B=5.178525, C=5.5, visual_clarity=0.5, layout=0.25235, crowding=0.5
+- primary_pair: h4-o5 knife hold ctx=6
+- secondary_pairs: ['h2-o3 banana hold ctx=6', 'h0-o1 banana cut ctx=6']
+- evidence_paths: ['P4 -> C0(person) -> O5', 'P4 -> C1(banana) -> O5', 'P4 -> C2(person) -> O5']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `knife:hold` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 42. HICO_test2015_00006508 (HICO_test2015_00006508.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00006508.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0001_HICO_test2015_00006508.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0001_HICO_test2015_00006508_crops.jpg`
+- metrics: pairs=4, verbs=3, objects=2, action_groups=3, primary_context=6, visible_pairs=4
+- scores: total=7.404524, A=9.6, B=6.331786, C=5.466667, visual_clarity=0.5, layout=0.754524, crowding=0.0
+- primary_pair: h6-o7 couch sit_on ctx=6
+- secondary_pairs: ['h4-o5 couch carry ctx=6', 'h0-o1 bicycle ride ctx=5']
+- evidence_paths: ['P6 -> C0(person) -> O7', 'P6 -> C1(bicycle) -> O7', 'P6 -> C2(person) -> O7']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `couch:sit_on` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：需要人工确认上下文物体是否真的支撑动作，而不是仅由空间接近造成。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 43. HICO_test2015_00003805 (HICO_test2015_00003805.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00003805.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0005_HICO_test2015_00003805.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0005_HICO_test2015_00003805_crops.jpg`
+- metrics: pairs=4, verbs=3, objects=2, action_groups=2, primary_context=4, visible_pairs=3
+- scores: total=6.744057, A=8.200001, B=6.291069, C=5.244445, visual_clarity=0.450653, layout=0.890299, crowding=0.0
+- primary_pair: h0-o1 bicycle hold ctx=4
+- secondary_pairs: ['h2-o3 bicycle walk ctx=4', 'h4-o5 hot dog carry ctx=2']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(bicycle) -> O1', 'P0 -> C5(hot dog) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `bicycle:hold` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 44. 8703 (HICO_train2015_00008703.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00008703.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0040_8703.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0040_8703_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0040_8703.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0040_8703_crops.jpg`
+- metrics: pairs=2, verbs=3, objects=2, action_groups=3, primary_context=2, visible_pairs=2
+- scores: total=5.469556, A=6.694503, B=4.341399, C=3.186667, visual_clarity=0.3843, layout=0.593106, crowding=0.0
+- primary_pair: h2-o3 cell phone hold/talk_on ctx=2
+- secondary_pairs: ['h0-o1 bench sit_on ctx=2']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(bench) -> O3', 'P0 -> C2(person) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、3 类 action groups，主 pair `cell phone:hold/talk_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：cell phone object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 45. HICO_test2015_00001521 (HICO_test2015_00001521.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00001521.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0023_HICO_test2015_00001521.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0023_HICO_test2015_00001521_crops.jpg`
+- metrics: pairs=4, verbs=3, objects=2, action_groups=2, primary_context=6, visible_pairs=4
+- scores: total=5.404394, A=7.833334, B=5.531591, C=5.333333, visual_clarity=0.5, layout=0.754394, crowding=1.0
+- primary_pair: h2-o3 fork lift ctx=6
+- secondary_pairs: ['h6-o7 knife wield ctx=6', 'h4-o5 knife hold ctx=6']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(fork) -> O3', 'P2 -> C4(person) -> O3']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `fork:lift` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：knife object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 46. HICO_test2015_00001901 (HICO_test2015_00001901.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00001901.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0026_HICO_test2015_00001901.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0026_HICO_test2015_00001901_crops.jpg`
+- metrics: pairs=4, verbs=3, objects=2, action_groups=2, primary_context=6, visible_pairs=4
+- scores: total=5.370527, A=7.833334, B=5.480791, C=5.333333, visual_clarity=0.5, layout=0.720527, crowding=1.0
+- primary_pair: h2-o3 fork lift ctx=6
+- secondary_pairs: ['h0-o1 fork hold ctx=6', 'h4-o5 knife hold ctx=6']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(fork) -> O3', 'P2 -> C4(person) -> O3']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `fork:lift` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：knife object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 47. 28654 (HICO_train2015_00028654.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00028654.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0029_28654.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0029_28654_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0029_28654.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0029_28654_crops.jpg`
+- metrics: pairs=2, verbs=4, objects=2, action_groups=3, primary_context=2, visible_pairs=2
+- scores: total=5.825376, A=6.597731, B=4.823064, C=3.186667, visual_clarity=0.5, layout=0.775376, crowding=0.0
+- primary_pair: h2-o3 book hold/open/read ctx=2
+- secondary_pairs: ['h0-o1 bench sit_on ctx=2']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(bench) -> O3', 'P0 -> C2(person) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、3 类 action groups，主 pair `book:hold/open/read` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：book object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 48. 13284 (HICO_train2015_00013284.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00013284.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0034_13284.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0034_13284_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0034_13284.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0034_13284_crops.jpg`
+- metrics: pairs=2, verbs=3, objects=2, action_groups=3, primary_context=2, visible_pairs=2
+- scores: total=5.722653, A=6.553967, B=4.66898, C=2.72, visual_clarity=0.5, layout=0.672653, crowding=0.0
+- primary_pair: h2-o3 book open/read ctx=2
+- secondary_pairs: ['h0-o1 bed sit_on ctx=2']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(bed) -> O3', 'P0 -> C2(person) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、3 类 action groups，主 pair `book:open/read` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：book object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 49. 14003 (HICO_train2015_00014003.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00014003.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0031_14003.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0031_14003_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0031_14003.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0031_14003_crops.jpg`
+- metrics: pairs=2, verbs=3, objects=2, action_groups=3, primary_context=2, visible_pairs=2
+- scores: total=5.801795, A=6.423333, B=4.789826, C=2.72, visual_clarity=0.49526, layout=0.758905, crowding=0.0
+- primary_pair: h2-o3 remote hold/point ctx=2
+- secondary_pairs: ['h0-o1 couch lie_on ctx=2']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(couch) -> O3', 'P0 -> C2(person) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、3 类 action groups，主 pair `remote:hold/point` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：remote object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 50. HICO_test2015_00002277 (HICO_test2015_00002277.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00002277.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0032_HICO_test2015_00002277.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0032_HICO_test2015_00002277_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=3, primary_context=6, visible_pairs=4
+- scores: total=4.638388, A=8.5, B=5.407582, C=5.466667, visual_clarity=0.5, layout=0.738388, crowding=0.5
+- primary_pair: h0-o1 chair sit_on ctx=6
+- secondary_pairs: ['h2-o3 cup drink_with ctx=6', 'h6-o7 cup sip ctx=6']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(cup) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `chair:sit_on` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：cup object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 51. 11290 (HICO_train2015_00011290.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00011290.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0030_11290.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0030_11290_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0030_11290.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0030_11290_crops.jpg`
+- metrics: pairs=2, verbs=3, objects=2, action_groups=3, primary_context=2, visible_pairs=2
+- scores: total=5.814036, A=6.223333, B=4.806054, C=3.186667, visual_clarity=0.5, layout=0.764036, crowding=0.0
+- primary_pair: h2-o3 book open/read ctx=2
+- secondary_pairs: ['h0-o1 bench sit_on ctx=2']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(bench) -> O3', 'P0 -> C2(person) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、3 类 action groups，主 pair `book:open/read` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：book object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 52. 13445 (HICO_train2015_00013445.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00013445.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0036_13445.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0036_13445_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0036_13445.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0036_13445_crops.jpg`
+- metrics: pairs=2, verbs=4, objects=2, action_groups=3, primary_context=2, visible_pairs=2
+- scores: total=5.699495, A=6.223333, B=4.634243, C=3.186667, visual_clarity=0.5, layout=0.649495, crowding=0.0
+- primary_pair: h2-o3 book hold/open/read ctx=2
+- secondary_pairs: ['h0-o1 bench sit_on ctx=2']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(bench) -> O3', 'P0 -> C2(person) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、3 类 action groups，主 pair `book:hold/open/read` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：book object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 53. HICO_test2015_00002348 (HICO_test2015_00002348.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00002348.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0043_HICO_test2015_00002348.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0043_HICO_test2015_00002348_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=3, primary_context=6, visible_pairs=4
+- scores: total=3.926853, A=8.5, B=5.065279, C=5.466667, visual_clarity=0.5, layout=0.776853, crowding=1.0
+- primary_pair: h0-o1 chair sit_on ctx=6
+- secondary_pairs: ['h2-o3 cup carry ctx=6', 'h4-o5 cup drink_with ctx=6']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(cup) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `chair:sit_on` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：cup object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 54. HICO_test2015_00006487 (HICO_test2015_00006487.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00006487.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0013_HICO_test2015_00006487.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0013_HICO_test2015_00006487_crops.jpg`
+- metrics: pairs=5, verbs=4, objects=2, action_groups=2, primary_context=8, visible_pairs=5
+- scores: total=6.287656, A=8.693334, B=5.831484, C=4.983333, visual_clarity=0.5, layout=0.687656, crowding=0.5
+- primary_pair: h8-o9 spoon lick ctx=8
+- secondary_pairs: ['h4-o5 fork stick ctx=8', 'h6-o7 spoon hold ctx=8']
+- evidence_paths: ['P8 -> C0(person) -> O9', 'P8 -> C1(fork) -> O9', 'P8 -> C2(person) -> O9']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `spoon:lick` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：spoon object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 55. HICO_test2015_00008647 (HICO_test2015_00008647.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00008647.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0002_HICO_test2015_00008647.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0002_HICO_test2015_00008647_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=4, primary_context=6, visible_pairs=4
+- scores: total=7.326789, A=9.614932, B=6.223871, C=5.133333, visual_clarity=0.480693, layout=0.705749, crowding=0.0
+- primary_pair: h2-o3 dining table sit_at ctx=6
+- secondary_pairs: ['h0-o1 dining table eat_at ctx=6', 'h6-o7 knife wield ctx=4']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(dining table) -> O3', 'P2 -> C4(person) -> O3']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `dining table:sit_at` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：knife object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 56. HICO_test2015_00004223 (HICO_test2015_00004223.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00004223.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0003_HICO_test2015_00004223.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0003_HICO_test2015_00004223_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=4, primary_context=6, visible_pairs=4
+- scores: total=7.317511, A=9.666667, B=6.379044, C=5.044445, visual_clarity=0.5, layout=0.889733, crowding=0.0
+- primary_pair: h2-o3 train sit_on ctx=6
+- secondary_pairs: ['h0-o1 train ride ctx=6', 'h4-o5 backpack carry ctx=2']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(train) -> O3', 'P2 -> C4(person) -> O3']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `train:sit_on` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：需要人工确认上下文物体是否真的支撑动作，而不是仅由空间接近造成。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 57. 33982 (HICO_train2015_00033982.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00033982.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0038_33982.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0038_33982_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0038_33982.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0038_33982_crops.jpg`
+- metrics: pairs=2, verbs=4, objects=2, action_groups=3, primary_context=2, visible_pairs=2
+- scores: total=5.558278, A=6.723333, B=4.716029, C=3.136667, visual_clarity=0.44012, layout=0.931431, crowding=0.0
+- primary_pair: h0-o1 kite fly/pull ctx=2
+- secondary_pairs: ['h2-o3 skateboard ride/stand_on ctx=1']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(skateboard) -> O1', 'P2 -> C0(person) -> O3']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、3 类 action groups，主 pair `kite:fly/pull` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：太像 sports/group scene，可能被理解成 GroupHOI 或 local grouping 场景。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 58. HICO_test2015_00003043 (HICO_test2015_00003043.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00003043.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0018_HICO_test2015_00003043.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0018_HICO_test2015_00003043_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=4, primary_context=6, visible_pairs=4
+- scores: total=5.718414, A=9.1, B=5.26912, C=5.133333, visual_clarity=0.463333, layout=0.623414, crowding=1.0
+- primary_pair: h2-o3 backpack wear ctx=6
+- secondary_pairs: ['h4-o5 skateboard ride ctx=6', 'h0-o1 backpack carry ctx=6']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(backpack) -> O3', 'P2 -> C4(person) -> O3']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `backpack:wear` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：线太多 Figure 1 会乱，更适合作为 diagnostic 或局部裁剪示例。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 59. HICO_test2015_00004278 (HICO_test2015_00004278.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00004278.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0006_HICO_test2015_00004278.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0006_HICO_test2015_00004278_crops.jpg`
+- metrics: pairs=5, verbs=4, objects=2, action_groups=3, primary_context=8, visible_pairs=5
+- scores: total=6.666452, A=9.26, B=5.649678, C=5.116667, visual_clarity=0.5, layout=0.566452, crowding=0.5
+- primary_pair: h4-o5 book hold ctx=8
+- secondary_pairs: ['h8-o9 book read ctx=8', 'h6-o7 book open ctx=8']
+- evidence_paths: ['P4 -> C0(person) -> O5', 'P4 -> C1(chair) -> O5', 'P4 -> C2(person) -> O5']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `book:hold` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：book object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 60. HICO_test2015_00009634 (HICO_test2015_00009634.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00009634.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0025_HICO_test2015_00009634.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0025_HICO_test2015_00009634_crops.jpg`
+- metrics: pairs=4, verbs=3, objects=2, action_groups=2, primary_context=6, visible_pairs=4
+- scores: total=5.402356, A=7.633334, B=5.528534, C=4.866667, visual_clarity=0.5, layout=0.752356, crowding=1.0
+- primary_pair: h0-o1 microwave open ctx=6
+- secondary_pairs: ['h2-o3 microwave operate ctx=6', 'h4-o5 oven inspect ctx=6']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(microwave) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `microwave:open` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 61. HICO_test2015_00005509 (HICO_test2015_00005509.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00005509.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0047_HICO_test2015_00005509.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0047_HICO_test2015_00005509_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=3, primary_context=6, visible_pairs=4
+- scores: total=3.813192, A=8.5, B=4.894788, C=5.0, visual_clarity=0.5, layout=0.663192, crowding=1.0
+- primary_pair: h2-o3 bicycle sit_on ctx=6
+- secondary_pairs: ['h0-o1 bicycle ride ctx=6', 'h6-o7 boat no_interaction ctx=6']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(bicycle) -> O3', 'P2 -> C4(person) -> O3']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `bicycle:sit_on` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：线太多 Figure 1 会乱，更适合作为 diagnostic 或局部裁剪示例。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 62. HICO_test2015_00003479 (HICO_test2015_00003479.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00003479.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0035_HICO_test2015_00003479.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0035_HICO_test2015_00003479_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=4, primary_context=6, visible_pairs=4
+- scores: total=4.513165, A=8.461482, B=5.256288, C=5.166667, visual_clarity=0.4188, layout=0.734965, crowding=0.5
+- primary_pair: h0-o1 bench sit_on ctx=6
+- secondary_pairs: ['h6-o7 cell phone text_on ctx=6', 'h4-o5 cell phone read ctx=6']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(cell phone) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `bench:sit_on` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：cell phone object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 63. HICO_test2015_00001490 (HICO_test2015_00001490.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00001490.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0022_HICO_test2015_00001490.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0022_HICO_test2015_00001490_crops.jpg`
+- metrics: pairs=4, verbs=3, objects=2, action_groups=3, primary_context=6, visible_pairs=3
+- scores: total=5.527948, A=9.1, B=5.061302, C=5.0, visual_clarity=0.290265, layout=0.69255, crowding=1.0
+- primary_pair: h2-o3 car ride ctx=6
+- secondary_pairs: ['h4-o5 truck ride ctx=6', 'h0-o1 car drive ctx=6']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(car) -> O3', 'P2 -> C4(person) -> O3']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `car:ride` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：线太多 Figure 1 会乱，更适合作为 diagnostic 或局部裁剪示例。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 64. HICO_test2015_00001451 (HICO_test2015_00001451.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00001451.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0031_HICO_test2015_00001451.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0031_HICO_test2015_00001451_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=3, primary_context=6, visible_pairs=4
+- scores: total=4.666672, A=9.2, B=5.461275, C=5.0, visual_clarity=0.474965, layout=0.804225, crowding=0.5
+- primary_pair: h0-o1 bench no_interaction ctx=6
+- secondary_pairs: ['h6-o7 umbrella stand_under ctx=5', 'h2-o3 umbrella carry ctx=5']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(umbrella) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `bench:no_interaction` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：需要人工确认上下文物体是否真的支撑动作，而不是仅由空间接近造成。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 65. HICO_test2015_00008476 (HICO_test2015_00008476.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00008476.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0033_HICO_test2015_00008476.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0033_HICO_test2015_00008476_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=4, primary_context=6, visible_pairs=4
+- scores: total=4.62094, A=8.741271, B=5.38141, C=5.0, visual_clarity=0.5, layout=0.72094, crowding=0.5
+- primary_pair: h0-o1 bench sit_on ctx=6
+- secondary_pairs: ['h6-o7 laptop type_on ctx=6', 'h4-o5 laptop read ctx=6']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(laptop) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `bench:sit_on` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：需要人工确认上下文物体是否真的支撑动作，而不是仅由空间接近造成。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 66. HICO_test2015_00007618 (HICO_test2015_00007618.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00007618.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0044_HICO_test2015_00007618.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0044_HICO_test2015_00007618_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=3, primary_context=6, visible_pairs=4
+- scores: total=3.924605, A=8.405735, B=5.061908, C=5.0, visual_clarity=0.5, layout=0.774605, crowding=1.0
+- primary_pair: h0-o1 bench sit_on ctx=6
+- secondary_pairs: ['h2-o3 book hold ctx=6', 'h6-o7 book read ctx=6']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(book) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `bench:sit_on` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：book object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 67. HICO_test2015_00000116 (HICO_test2015_00000116.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00000116.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0045_HICO_test2015_00000116.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0045_HICO_test2015_00000116_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=3, primary_context=6, visible_pairs=4
+- scores: total=3.912519, A=8.3, B=5.043779, C=5.0, visual_clarity=0.5, layout=0.762519, crowding=1.0
+- primary_pair: h0-o1 bench sit_on ctx=6
+- secondary_pairs: ['h4-o5 book open ctx=6', 'h2-o3 book hold ctx=6']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(book) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `bench:sit_on` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：book object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 68. 15006 (HICO_train2015_00015006.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00015006.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0025_15006.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0025_15006_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0025_15006.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0025_15006_crops.jpg`
+- metrics: pairs=2, verbs=2, objects=2, action_groups=2, primary_context=2, visible_pairs=2
+- scores: total=6.143807, A=5.856667, B=5.825711, C=2.586667, visual_clarity=1.0, layout=0.843807, crowding=0.0
+- primary_pair: h0-o1 chair sit_on ctx=2
+- secondary_pairs: ['h2-o3 spoon hold ctx=2']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(spoon) -> O1', 'P2 -> C0(person) -> O3']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、2 类 action groups，主 pair `chair:sit_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：spoon object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 69. 6877 (HICO_train2015_00006877.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00006877.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0026_6877.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0026_6877_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0026_6877.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0026_6877_crops.jpg`
+- metrics: pairs=2, verbs=2, objects=2, action_groups=2, primary_context=2, visible_pairs=2
+- scores: total=6.140104, A=5.481667, B=5.820156, C=2.12, visual_clarity=1.0, layout=0.840104, crowding=0.0
+- primary_pair: h2-o3 elephant feed ctx=2
+- secondary_pairs: ['h0-o1 banana hold ctx=2']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(banana) -> O3', 'P0 -> C2(person) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、2 类 action groups，主 pair `elephant:feed` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 70. 16884 (HICO_train2015_00016884.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00016884.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0048_16884.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0048_16884_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0048_16884.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0048_16884_crops.jpg`
+- metrics: pairs=2, verbs=2, objects=2, action_groups=2, primary_context=2, visible_pairs=2
+- scores: total=5.28582, A=5.856667, B=4.76373, C=2.12, visual_clarity=0.5, layout=0.73582, crowding=0.0
+- primary_pair: h0-o1 keyboard type_on ctx=2
+- secondary_pairs: ['h2-o3 mouse no_interaction ctx=2']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(mouse) -> O1', 'P2 -> C0(person) -> O3']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、2 类 action groups，主 pair `keyboard:type_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：mouse object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 71. 6590 (HICO_train2015_00006590.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00006590.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0049_6590.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0049_6590_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0049_6590.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0049_6590_crops.jpg`
+- metrics: pairs=2, verbs=2, objects=2, action_groups=2, primary_context=2, visible_pairs=2
+- scores: total=5.255597, A=5.856667, B=4.718396, C=2.586667, visual_clarity=0.5, layout=0.705597, crowding=0.0
+- primary_pair: h2-o3 bench sit_on ctx=2
+- secondary_pairs: ['h0-o1 bicycle no_interaction ctx=2']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(bicycle) -> O3', 'P0 -> C2(person) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、2 类 action groups，主 pair `bench:sit_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 72. 32821 (HICO_train2015_00032821.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00032821.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0050_32821.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0050_32821_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0050_32821.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0050_32821_crops.jpg`
+- metrics: pairs=2, verbs=2, objects=2, action_groups=2, primary_context=2, visible_pairs=2
+- scores: total=5.193625, A=5.77009, B=4.625438, C=2.586667, visual_clarity=0.5, layout=0.643625, crowding=0.0
+- primary_pair: h2-o3 bench sit_on ctx=2
+- secondary_pairs: ['h0-o1 bicycle no_interaction ctx=2']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(bicycle) -> O3', 'P0 -> C2(person) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、2 类 action groups，主 pair `bench:sit_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 73. 22052 (HICO_train2015_00022052.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00022052.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0046_22052.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0046_22052_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0046_22052.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0046_22052_crops.jpg`
+- metrics: pairs=2, verbs=2, objects=2, action_groups=2, primary_context=2, visible_pairs=2
+- scores: total=5.307242, A=5.656667, B=4.795863, C=2.586667, visual_clarity=0.5, layout=0.757242, crowding=0.0
+- primary_pair: h2-o3 umbrella no_interaction ctx=2
+- secondary_pairs: ['h0-o1 chair sit_on ctx=2']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(chair) -> O3', 'P0 -> C2(person) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、2 类 action groups，主 pair `umbrella:no_interaction` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 74. 636 (HICO_train2015_00000636.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00000636.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0043_636.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0043_636_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0043_636.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0043_636_crops.jpg`
+- metrics: pairs=2, verbs=2, objects=2, action_groups=2, primary_context=2, visible_pairs=2
+- scores: total=5.357156, A=5.639337, B=4.870734, C=2.586667, visual_clarity=0.5, layout=0.807156, crowding=0.0
+- primary_pair: h2-o3 bench sit_on ctx=2
+- secondary_pairs: ['h0-o1 bird feed ctx=2']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(bird) -> O3', 'P0 -> C2(person) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、2 类 action groups，主 pair `bench:sit_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 75. 33331 (HICO_train2015_00033331.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00033331.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0047_33331.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0047_33331_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0047_33331.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0047_33331_crops.jpg`
+- metrics: pairs=2, verbs=2, objects=2, action_groups=2, primary_context=2, visible_pairs=2
+- scores: total=5.303408, A=5.499337, B=4.790112, C=2.586667, visual_clarity=0.5, layout=0.753408, crowding=0.0
+- primary_pair: h0-o1 chair sit_on ctx=2
+- secondary_pairs: ['h2-o3 book no_interaction ctx=2']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(book) -> O1', 'P2 -> C0(person) -> O3']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、2 类 action groups，主 pair `chair:sit_on` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：book object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 76. 9554 (HICO_train2015_00009554.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00009554.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0041_9554.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0041_9554_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0041_9554.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0041_9554_crops.jpg`
+- metrics: pairs=2, verbs=3, objects=2, action_groups=2, primary_context=2, visible_pairs=2
+- scores: total=5.418839, A=5.456666, B=5.27159, C=3.086667, visual_clarity=1.0, layout=0.785505, crowding=0.0
+- primary_pair: h2-o3 umbrella carry/hold ctx=2
+- secondary_pairs: ['h0-o1 backpack carry/wear ctx=0']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(backpack) -> O3']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、2 类 action groups，主 pair `umbrella:carry/hold` 可与 2 条 evidence paths 形成三栏对比。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 77. 15385 (HICO_train2015_00015385.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00015385.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0044_15385.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0044_15385_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0044_15385.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0044_15385_crops.jpg`
+- metrics: pairs=2, verbs=3, objects=2, action_groups=2, primary_context=2, visible_pairs=2
+- scores: total=5.356722, A=5.227464, B=4.870083, C=2.92, visual_clarity=0.5, layout=0.806722, crowding=0.0
+- primary_pair: h2-o3 horse ride/straddle ctx=2
+- secondary_pairs: ['h0-o1 cow lasso ctx=2']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(cow) -> O3', 'P0 -> C2(person) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、2 类 action groups，主 pair `horse:ride/straddle` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 78. HICO_test2015_00002114 (HICO_test2015_00002114.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00002114.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0050_HICO_test2015_00002114.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0050_HICO_test2015_00002114_crops.jpg`
+- metrics: pairs=4, verbs=3, objects=2, action_groups=2, primary_context=5, visible_pairs=4
+- scores: total=3.802488, A=7.204316, B=4.91307, C=4.533333, visual_clarity=0.34036, layout=0.641948, crowding=0.5
+- primary_pair: h5-o6 wine glass no_interaction ctx=5
+- secondary_pairs: ['h2-o4 bottle hold ctx=4', 'h0-o1 bottle carry ctx=4']
+- evidence_paths: ['P5 -> C0(person) -> O6', 'P5 -> C1(bottle) -> O6', 'P5 -> C2(person) -> O6']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `wine glass:no_interaction` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：bottle object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 79. 10042 (HICO_train2015_00010042.jpg)
+- intended_use: `Figure 1, Figure 2`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00010042.jpg`
+- Figure 1 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/annotated_images/top_0042_10042.jpg`
+- Figure 1 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_A_figure1_top50/crop_sheets/top_0042_10042_crops.jpg`
+- Figure 2 visual_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/annotated_images/top_0042_10042.jpg`
+- Figure 2 crop_path: `tools/evidencehoi_image_search/results/hico_trainval/contact_sheets/bucket_B_figure2_top50/crop_sheets/top_0042_10042_crops.jpg`
+- metrics: pairs=2, verbs=2, objects=2, action_groups=2, primary_context=2, visible_pairs=2
+- scores: total=5.375521, A=5.656667, B=5.398282, C=2.586667, visual_clarity=1.0, layout=0.825521, crowding=0.5
+- primary_pair: h2-o3 tie wear ctx=2
+- secondary_pairs: ['h0-o1 bottle hold ctx=2']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(bottle) -> O3', 'P0 -> C2(person) -> O1']
+- recommendation: 推荐作为 Figure 1，因为它有 2 个 HO pairs、2 类 action groups，主 pair `tie:wear` 可与 3 条 evidence paths 形成三栏对比。
+- risk: 风险：bottle object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 80. HICO_test2015_00003006 (HICO_test2015_00003006.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00003006.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0024_HICO_test2015_00003006.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0024_HICO_test2015_00003006_crops.jpg`
+- metrics: pairs=4, verbs=2, objects=2, action_groups=2, primary_context=5, visible_pairs=4
+- scores: total=5.40353, A=7.458334, B=5.473987, C=4.4, visual_clarity=0.48624, layout=0.77417, crowding=1.0
+- primary_pair: h4-o6 carrot eat ctx=5
+- secondary_pairs: ['h0-o1 broccoli eat ctx=5', 'h4-o5 carrot eat ctx=5']
+- evidence_paths: ['P4 -> C0(person) -> O6', 'P4 -> C1(broccoli) -> O6', 'P4 -> C2(person) -> O6']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `carrot:eat` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 81. HICO_test2015_00004720 (HICO_test2015_00004720.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00004720.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0009_HICO_test2015_00004720.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0009_HICO_test2015_00004720_crops.jpg`
+- metrics: pairs=4, verbs=3, objects=2, action_groups=3, primary_context=6, visible_pairs=3
+- scores: total=6.536832, A=9.1, B=5.755248, C=4.333333, visual_clarity=0.5, layout=0.636832, crowding=0.5
+- primary_pair: h6-o7 laptop type_on ctx=6
+- secondary_pairs: ['h4-o5 laptop read ctx=6', 'h2-o3 chair sit_on ctx=6']
+- evidence_paths: ['P6 -> C0(person) -> O7', 'P6 -> C1(chair) -> O7', 'P6 -> C2(person) -> O7']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `laptop:type_on` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：需要人工确认上下文物体是否真的支撑动作，而不是仅由空间接近造成。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 82. HICO_test2015_00005993 (HICO_test2015_00005993.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00005993.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0010_HICO_test2015_00005993.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0010_HICO_test2015_00005993_crops.jpg`
+- metrics: pairs=4, verbs=3, objects=2, action_groups=3, primary_context=5, visible_pairs=4
+- scores: total=6.494023, A=9.575898, B=5.647435, C=4.333333, visual_clarity=0.458, layout=0.657023, crowding=0.5
+- primary_pair: h0-o1 bench sit_on ctx=5
+- secondary_pairs: ['h2-o1 bench sit_on ctx=5', 'h5-o6 sandwich hold ctx=4']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(person) -> O1', 'P0 -> C4(sandwich) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `bench:sit_on` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：需要人工确认上下文物体是否真的支撑动作，而不是仅由空间接近造成。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 83. HICO_test2015_00005759 (HICO_test2015_00005759.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00005759.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0046_HICO_test2015_00005759.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0046_HICO_test2015_00005759_crops.jpg`
+- metrics: pairs=4, verbs=4, objects=2, action_groups=3, primary_context=6, visible_pairs=4
+- scores: total=3.846773, A=8.5, B=4.945159, C=4.533333, visual_clarity=0.5, layout=0.696773, crowding=1.0
+- primary_pair: h2-o3 keyboard hold ctx=6
+- secondary_pairs: ['h4-o5 keyboard type_on ctx=6', 'h0-o1 keyboard carry ctx=6']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(keyboard) -> O3', 'P2 -> C4(person) -> O3']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `keyboard:hold` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：线太多 Figure 1 会乱，更适合作为 diagnostic 或局部裁剪示例。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 84. HICO_test2015_00006744 (HICO_test2015_00006744.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00006744.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0040_HICO_test2015_00006744.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0040_HICO_test2015_00006744_crops.jpg`
+- metrics: pairs=4, verbs=2, objects=2, action_groups=2, primary_context=6, visible_pairs=4
+- scores: total=4.19596, A=7.314246, B=5.49394, C=4.4, visual_clarity=0.5, layout=0.79596, crowding=0.5
+- primary_pair: h0-o1 laptop hold ctx=6
+- secondary_pairs: ['h4-o5 laptop read ctx=6', 'h2-o3 laptop read ctx=6']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(laptop) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `laptop:hold` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 85. HICO_test2015_00005054 (HICO_test2015_00005054.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00005054.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0036_HICO_test2015_00005054.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0036_HICO_test2015_00005054_crops.jpg`
+- metrics: pairs=3, verbs=3, objects=2, action_groups=3, primary_context=4, visible_pairs=3
+- scores: total=4.488095, A=8.532369, B=5.363238, C=4.216667, visual_clarity=0.486453, layout=0.808415, crowding=0.5
+- primary_pair: h0-o1 bench sit_on ctx=4
+- secondary_pairs: ['h4-o5 cell phone talk_on ctx=4', 'h2-o3 cell phone hold ctx=4']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(cell phone) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `bench:sit_on` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：cell phone object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 86. HICO_test2015_00004071 (HICO_test2015_00004071.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00004071.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0042_HICO_test2015_00004071.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0042_HICO_test2015_00004071_crops.jpg`
+- metrics: pairs=3, verbs=3, objects=2, action_groups=3, primary_context=4, visible_pairs=3
+- scores: total=4.047864, A=8.184763, B=4.748629, C=4.216667, visual_clarity=0.384813, layout=0.520644, crowding=0.5
+- primary_pair: h0-o1 bench sit_on ctx=4
+- secondary_pairs: ['h2-o3 laptop read ctx=3', 'h4-o5 laptop type_on ctx=3']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(laptop) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `bench:sit_on` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：需要人工确认上下文物体是否真的支撑动作，而不是仅由空间接近造成。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 87. HICO_test2015_00008811 (HICO_test2015_00008811.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00008811.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0030_HICO_test2015_00008811.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0030_HICO_test2015_00008811_crops.jpg`
+- metrics: pairs=3, verbs=3, objects=2, action_groups=2, primary_context=4, visible_pairs=3
+- scores: total=4.680906, A=7.398334, B=5.671359, C=3.95, visual_clarity=0.5, layout=0.730906, crowding=0.0
+- primary_pair: h4-o5 horse straddle ctx=4
+- secondary_pairs: ['h2-o3 horse ride ctx=4', 'h0-o1 cow lasso ctx=4']
+- evidence_paths: ['P4 -> C0(person) -> O5', 'P4 -> C1(cow) -> O5', 'P4 -> C2(person) -> O5']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `horse:straddle` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 88. HICO_test2015_00002713 (HICO_test2015_00002713.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00002713.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0038_HICO_test2015_00002713.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0038_HICO_test2015_00002713_crops.jpg`
+- metrics: pairs=3, verbs=3, objects=2, action_groups=3, primary_context=4, visible_pairs=3
+- scores: total=4.451446, A=8.688789, B=5.302169, C=3.75, visual_clarity=0.5, layout=0.751446, crowding=0.5
+- primary_pair: h4-o5 laptop read ctx=4
+- secondary_pairs: ['h2-o3 laptop hold ctx=4', 'h0-o1 keyboard no_interaction ctx=4']
+- evidence_paths: ['P4 -> C0(person) -> O5', 'P4 -> C1(keyboard) -> O5', 'P4 -> C2(person) -> O5']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `laptop:read` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：需要人工确认上下文物体是否真的支撑动作，而不是仅由空间接近造成。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 89. HICO_test2015_00001315 (HICO_test2015_00001315.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00001315.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0008_HICO_test2015_00001315.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0008_HICO_test2015_00001315_crops.jpg`
+- metrics: pairs=4, verbs=2, objects=3, action_groups=2, primary_context=5, visible_pairs=4
+- scores: total=6.540251, A=8.834723, B=5.997876, C=3.6, visual_clarity=0.5, layout=0.840251, crowding=0.5
+- primary_pair: h5-o6 laptop read ctx=5
+- secondary_pairs: ['h2-o3 keyboard no_interaction ctx=5', 'h4-o3 keyboard no_interaction ctx=5']
+- evidence_paths: ['P5 -> C0(person) -> O6', 'P5 -> C1(book) -> O6', 'P5 -> C2(person) -> O6']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `laptop:read` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 90. HICO_test2015_00008611 (HICO_test2015_00008611.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00008611.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0039_HICO_test2015_00008611.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0039_HICO_test2015_00008611_crops.jpg`
+- metrics: pairs=3, verbs=3, objects=2, action_groups=2, primary_context=4, visible_pairs=3
+- scores: total=4.335831, A=7.440001, B=5.331524, C=3.527778, visual_clarity=0.5, layout=0.608053, crowding=0.0
+- primary_pair: h0-o1 carrot cook ctx=4
+- secondary_pairs: ['h2-o3 carrot stir ctx=4', 'h4-o5 spoon hold ctx=2']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(carrot) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `carrot:cook` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 91. HICO_test2015_00007055 (HICO_test2015_00007055.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00007055.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0048_HICO_test2015_00007055.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0048_HICO_test2015_00007055_crops.jpg`
+- metrics: pairs=2, verbs=2, objects=2, action_groups=2, primary_context=2, visible_pairs=2
+- scores: total=3.80892, A=4.956667, B=3.99838, C=3.453334, visual_clarity=0.5, layout=0.75892, crowding=1.0
+- primary_pair: h2-o3 bench sit_on ctx=2
+- secondary_pairs: ['h0-o1 bottle hold ctx=2']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(bottle) -> O3', 'P0 -> C2(person) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `bench:sit_on` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：bottle object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 92. HICO_test2015_00008079 (HICO_test2015_00008079.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00008079.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0004_HICO_test2015_00008079.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0004_HICO_test2015_00008079_crops.jpg`
+- metrics: pairs=4, verbs=2, objects=2, action_groups=2, primary_context=5, visible_pairs=4
+- scores: total=6.95356, A=8.533334, B=6.34284, C=3.4, visual_clarity=0.5, layout=0.80356, crowding=0.0
+- primary_pair: h5-o6 bench sit_on ctx=5
+- secondary_pairs: ['h0-o1 bicycle no_interaction ctx=5', 'h2-o1 bicycle no_interaction ctx=5']
+- evidence_paths: ['P5 -> C0(person) -> O6', 'P5 -> C1(bicycle) -> O6', 'P5 -> C2(person) -> O6']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `bench:sit_on` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 93. HICO_test2015_00004034 (HICO_test2015_00004034.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00004034.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0017_HICO_test2015_00004034.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0017_HICO_test2015_00004034_crops.jpg`
+- metrics: pairs=4, verbs=2, objects=2, action_groups=2, primary_context=2, visible_pairs=4
+- scores: total=5.721431, A=7.393334, B=5.34393, C=3.553334, visual_clarity=0.292333, layout=0.749598, crowding=0.0
+- primary_pair: h0-o1 bench sit_on ctx=2
+- secondary_pairs: ['h4-o5 cup no_interaction ctx=2', 'h6-o7 cup no_interaction ctx=2']
+- evidence_paths: ['P0 -> C4(person) -> O1', 'P0 -> C5(cup) -> O1', 'P4 -> C0(person) -> O5']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `bench:sit_on` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：cup object 太小，圆形节点和箭头标注可能需要放大裁剪。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 94. HICO_test2015_00006568 (HICO_test2015_00006568.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00006568.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0011_HICO_test2015_00006568.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0011_HICO_test2015_00006568_crops.jpg`
+- metrics: pairs=4, verbs=2, objects=2, action_groups=2, primary_context=4, visible_pairs=4
+- scores: total=6.422761, A=8.266667, B=5.984141, C=3.4, visual_clarity=0.5, layout=0.606094, crowding=0.0
+- primary_pair: h3-o4 tv no_interaction ctx=4
+- secondary_pairs: ['h5-o4 tv no_interaction ctx=4', 'h0-o1 chair sit_on ctx=3']
+- evidence_paths: ['P3 -> C0(person) -> O4', 'P3 -> C1(chair) -> O4', 'P3 -> C2(person) -> O4']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `tv:no_interaction` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 95. HICO_test2015_00005005 (HICO_test2015_00005005.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00005005.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0034_HICO_test2015_00005005.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0034_HICO_test2015_00005005_crops.jpg`
+- metrics: pairs=2, verbs=2, objects=2, action_groups=2, primary_context=2, visible_pairs=2
+- scores: total=4.569519, A=5.371859, B=4.414279, C=2.986667, visual_clarity=0.5, layout=0.769519, crowding=0.5
+- primary_pair: h0-o1 train no_interaction ctx=2
+- secondary_pairs: ['h2-o3 bench sit_on ctx=2']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(bench) -> O1', 'P2 -> C0(person) -> O3']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `train:no_interaction` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 96. HICO_test2015_00003386 (HICO_test2015_00003386.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00003386.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0037_HICO_test2015_00003386.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0037_HICO_test2015_00003386_crops.jpg`
+- metrics: pairs=2, verbs=2, objects=2, action_groups=2, primary_context=2, visible_pairs=2
+- scores: total=4.461907, A=5.838308, B=4.252861, C=2.986667, visual_clarity=0.5, layout=0.661907, crowding=0.5
+- primary_pair: h2-o3 couch sit_on ctx=2
+- secondary_pairs: ['h0-o1 chair no_interaction ctx=2']
+- evidence_paths: ['P2 -> C0(person) -> O3', 'P2 -> C1(chair) -> O3', 'P0 -> C2(person) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `couch:sit_on` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 97. HICO_test2015_00000549 (HICO_test2015_00000549.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00000549.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0049_HICO_test2015_00000549.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0049_HICO_test2015_00000549_crops.jpg`
+- metrics: pairs=2, verbs=2, objects=2, action_groups=2, primary_context=2, visible_pairs=2
+- scores: total=3.806428, A=4.956667, B=3.994642, C=2.986667, visual_clarity=0.5, layout=0.756428, crowding=1.0
+- primary_pair: h0-o1 bottle hold ctx=2
+- secondary_pairs: ['h2-o3 tie wear ctx=2']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(tie) -> O1', 'P2 -> C0(person) -> O3']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `bottle:hold` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 98. HICO_test2015_00000363 (HICO_test2015_00000363.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00000363.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0021_HICO_test2015_00000363.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0021_HICO_test2015_00000363_crops.jpg`
+- metrics: pairs=4, verbs=2, objects=2, action_groups=2, primary_context=4, visible_pairs=4
+- scores: total=5.634532, A=7.411204, B=5.559462, C=2.933333, visual_clarity=0.427413, layout=0.676746, crowding=0.5
+- primary_pair: h5-o4 toilet repair ctx=4
+- secondary_pairs: ['h0-o1 sink no_interaction ctx=4', 'h2-o1 sink no_interaction ctx=4']
+- evidence_paths: ['P5 -> C0(person) -> O4', 'P5 -> C1(sink) -> O4', 'P5 -> C2(person) -> O4']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `toilet:repair` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 99. HICO_test2015_00006642 (HICO_test2015_00006642.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00006642.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0029_HICO_test2015_00006642.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0029_HICO_test2015_00006642_crops.jpg`
+- metrics: pairs=4, verbs=2, objects=2, action_groups=2, primary_context=5, visible_pairs=4
+- scores: total=4.723362, A=7.376667, B=5.742265, C=3.008889, visual_clarity=0.5, layout=0.80114, crowding=0.0
+- primary_pair: h0-o1 keyboard no_interaction ctx=5
+- secondary_pairs: ['h6-o7 laptop hold ctx=3', 'h4-o5 laptop hold ctx=2']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(laptop) -> O1', 'P0 -> C4(person) -> O1']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `keyboard:no_interaction` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？
+
+### 100. HICO_test2015_00008593 (HICO_test2015_00008593.jpg)
+- intended_use: `diagnostic`
+- image_path: `/share/share/Datasets/hico_20160224_det/images/test2015/HICO_test2015_00008593.jpg`
+- diagnostic visual_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/annotated_images/top_0041_HICO_test2015_00008593.jpg`
+- diagnostic crop_path: `tools/evidencehoi_image_search/results/hico_test/contact_sheets/bucket_C_diagnostic_top50/crop_sheets/top_0041_HICO_test2015_00008593_crops.jpg`
+- metrics: pairs=2, verbs=2, objects=2, action_groups=2, primary_context=2, visible_pairs=2
+- scores: total=4.168273, A=4.962828, B=4.079076, C=2.603333, visual_clarity=0.5, layout=0.701606, crowding=0.5
+- primary_pair: h0-o1 potted plant no_interaction ctx=2
+- secondary_pairs: ['h2-o3 bench sit_on ctx=1']
+- evidence_paths: ['P0 -> C2(person) -> O1', 'P0 -> C3(bench) -> O1', 'P2 -> C0(person) -> O3']
+- recommendation: 推荐作为 diagnostic，因为它包含 ambiguous tags 或 test split 场景，可用于展示 `potted plant:no_interaction` 的混淆、删除 evidence 或失败分析。
+- risk: 风险：动作差异不够明显，Figure 1 的 evidence requirement 对比可能需要文字辅助。
+- manual_checks:
+  - [ ] 主 pair 是否一眼能看懂？
+  - [ ] 至少 3 个 HO pairs 是否清楚？
+  - [ ] 不同 pair 的动作是否有 evidence requirement 差异？
+  - [ ] 是否能画出 2-3 条 evidence paths？
+  - [ ] 是否能支持 Figure 1 的三栏对比： (a) Generic Context Aggregation (b) Local Grouping (c) EvidenceHOI
+  - [ ] 是否容易裁剪圆形节点？
+  - [ ] 是否太像 GroupHOI / local grouping 场景？
+  - [ ] 是否存在严重遮挡或过度拥挤？
+  - [ ] 主 pair 是否位于画面中心区域？
+  - [ ] 上下文物体是否可见、可解释？
+  - [ ] 是否可作为 Figure 2 pipeline 的 clean example？
+  - [ ] 是否适合 qualitative / diagnostic figure？

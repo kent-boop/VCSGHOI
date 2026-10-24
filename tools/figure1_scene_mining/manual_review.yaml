@@ -1,0 +1,194 @@
+schema_version: evidencehoi.figure1_scene_mining.manual_review.v1
+reviewed_at: 2026-07-14
+review_basis: Manual pixel inspection of original HICO-DET images; automatic features used only for search ordering.
+
+candidates:
+  - candidate_id: "test:HICO_test2015_00006795:p136458"
+    alternative_plausible_actions: [hold, cut_with]
+    decisive_evidence: "Knife tip and both hands are aligned with the food-preparation area; the apple cluster and cut produce resolve hold versus cut_with."
+    scene_evidence: "Rustic food-preparation table and indoor work area."
+    potential_distractors: "Ceramic pitchers, basket, barrel, bench, and uncut apples."
+    long_range_relation: "No; the value is role-selective evidence rather than distance."
+    manual_decisive_bboxes: [[378, 194, 493, 252]]
+    manual_distractor_bboxes: [[489, 161, 560, 254], [55, 243, 151, 383]]
+    scores: {ambiguity: 22, decisive_evidence: 19, distractor: 14, topology: 15, cropability: 9, composition: 5, long_range: 2, source: 5}
+    figure_node_H: "Seated food preparer and two-hand working posture"
+    figure_node_A: "person–knife anchor; GT action cut_with"
+    figure_node_O: "Knife state and blade orientation"
+    figure_node_S: "Food-preparation table / indoor work scene"
+    figure_node_D: "Apple and cut-produce region under the knife"
+    figure_node_C: "Pitchers, basket, barrel, bench, extra apples"
+    generic_aggregation_story: "Generic aggregation connects the knife anchor to apples, vessels, basket, bench, and room cues without explicitly identifying which relation verifies cut_with."
+    evidencehoi_story: "The cut_with prototype matches two-hand posture, knife orientation, and the apple/cut-produce path; vessels and furniture are suppressed before verified evidence is written back to the anchor."
+    reviewer_notes: "Best overall. Knife is small but remains visible in the target crop; preserve the hands, blade, and apple cluster."
+
+  - candidate_id: "trainval:HICO_train2015_00004640:p13612"
+    alternative_plausible_actions: [carry, hold, swing]
+    decisive_evidence: "A clearly separated tennis ball near the upper-body motion region, together with court geometry, supports swing over simple carry/hold."
+    scene_evidence: "Tennis court, fence, service lines, and background bench."
+    potential_distractors: "Bench, fence panels, trees, and court markings."
+    long_range_relation: "Moderate; ball evidence is outside the person–racket union."
+    manual_decisive_bboxes: [[384, 103, 411, 132]]
+    manual_distractor_bboxes: [[425, 197, 487, 258]]
+    scores: {ambiguity: 22, decisive_evidence: 18, distractor: 12, topology: 15, cropability: 9, composition: 5, long_range: 2, source: 5}
+    figure_node_H: "Player body state and non-contact arm posture"
+    figure_node_A: "person–tennis racket anchor; GT action swing"
+    figure_node_O: "Racket orientation at the player's left side"
+    figure_node_S: "Tennis court / fence"
+    figure_node_D: "Visible tennis ball near the player's upper-body trajectory"
+    figure_node_C: "Bench, fence panels, trees, court markings"
+    generic_aggregation_story: "Court, ball, bench, fence, and vegetation can all be associated with the person–racket pair, mixing action evidence with scene coincidence."
+    evidencehoi_story: "The swing prototype strengthens the player-state–ball–racket path, retains court as weak scene evidence, and suppresses bench/fence/tree context."
+    reviewer_notes: "Best tennis composition. The ball is near the head rather than the racket face, so caption the cue as trajectory/context evidence rather than impact."
+
+  - candidate_id: "trainval:HICO_train2015_00037585:p112535"
+    alternative_plausible_actions: [carry, hold, fly, pull]
+    decisive_evidence: "The thin but visible string forms a direct long-range path from the hands to the airborne kite."
+    scene_evidence: "Open sky and outdoor kite-flying ground."
+    potential_distractors: "Pavilion, distant structures, clouds, and ground objects."
+    long_range_relation: "Yes; hand–string–kite spans a large part of the image."
+    manual_decisive_bboxes: [[310, 174, 481, 259]]
+    manual_distractor_bboxes: [[349, 220, 579, 329]]
+    scores: {ambiguity: 21, decisive_evidence: 17, distractor: 10, topology: 14, cropability: 8, composition: 5, long_range: 5, source: 5}
+    figure_node_H: "Standing person, gaze, and two-hand string posture"
+    figure_node_A: "person–kite anchor; GT action hold"
+    figure_node_O: "Small airborne kite"
+    figure_node_S: "Open sky / outdoor ground"
+    figure_node_D: "Visible hand-to-kite string path"
+    figure_node_C: "Pavilion, distant structures, clouds, ground objects"
+    generic_aggregation_story: "The anchor may aggregate sky, pavilion, buildings, clouds, and kite without distinguishing the string-mediated evidence path."
+    evidencehoi_story: "The hold/fly prototype validates the hand–string–kite correspondence, keeps open-sky evidence weakly active, and suppresses pavilion/building context."
+    reviewer_notes: "Strongest long-range candidate. Main risk is the kite becoming too small at single-column size."
+
+  - candidate_id: "test:HICO_test2015_00004720:p129304"
+    alternative_plausible_actions: [hold, open, read, type_on]
+    decisive_evidence: "Both hands are positioned over the keyboard, resolving read/hold versus type_on."
+    scene_evidence: "Waiting-area seating / laptop work setting."
+    potential_distractors: "Rows of empty chairs, orange bag, and a blurred background person."
+    long_range_relation: "No."
+    manual_decisive_bboxes: [[211, 248, 389, 335]]
+    manual_distractor_bboxes: [[298, 321, 454, 407], [397, 142, 640, 360]]
+    scores: {ambiguity: 20, decisive_evidence: 17, distractor: 13, topology: 14, cropability: 9, composition: 4, long_range: 2, source: 5}
+    figure_node_H: "Seated user and typing hand posture"
+    figure_node_A: "person–laptop anchor; GT action type_on"
+    figure_node_O: "Open laptop"
+    figure_node_S: "Waiting-area seating"
+    figure_node_D: "Hands aligned with keyboard"
+    figure_node_C: "Empty chairs, bag, blurred background person"
+    generic_aggregation_story: "The laptop relation receives keyboard, bag, chair, and background-person context together."
+    evidencehoi_story: "Typing posture and keyboard alignment are matched to type_on; chair rows and bag context are suppressed."
+    reviewer_notes: "Very clean evidence story, but visually less striking than tennis/knife/kite."
+
+  - candidate_id: "trainval:HICO_train2015_00004906:p14398"
+    alternative_plausible_actions: [hold, push, walk, ride, straddle]
+    decisive_evidence: "Walking gait on rocky terrain, hand contact with the bicycle, and the non-riding body state verify push/walk."
+    scene_evidence: "Mountain trail / steep outdoor terrain."
+    potential_distractors: "Backpack, bottle mounted on the bicycle, rocks, and distant landscape."
+    long_range_relation: "Moderate; scene terrain is necessary to interpret the body–bicycle state."
+    manual_decisive_bboxes: [[287, 281, 397, 552]]
+    manual_distractor_bboxes: [[331, 244, 411, 349], [220, 322, 257, 393]]
+    scores: {ambiguity: 22, decisive_evidence: 17, distractor: 9, topology: 14, cropability: 8, composition: 4, long_range: 4, source: 5}
+    figure_node_H: "Walking body state on uneven terrain"
+    figure_node_A: "person–bicycle anchor; GT actions push and walk"
+    figure_node_O: "Bicycle state beside rather than under the person"
+    figure_node_S: "Mountain trail / steep terrain"
+    figure_node_D: "Walking foot placement and hand-to-bicycle control"
+    figure_node_C: "Backpack, bottle, rocks, distant landscape"
+    generic_aggregation_story: "Generic context mixes terrain, rocks, backpack, bottle, and bicycle parts around the anchor."
+    evidencehoi_story: "The push/walk prototype validates walking gait plus hand control and suppresses unrelated landscape/equipment cues."
+    reviewer_notes: "Best bicycle ambiguity candidate; portrait composition and fine bicycle parts are the main risks."
+
+  - candidate_id: "trainval:HICO_train2015_00031875:p93829"
+    alternative_plausible_actions: [hold, cut_with]
+    decisive_evidence: "Coconut, removed shell pieces, and tool placement support cut_with rather than simple hold."
+    scene_evidence: "Food-processing workbench."
+    potential_distractors: "Bowl, shell fragments, second tool, chopping block, and chalkboard."
+    long_range_relation: "No."
+    manual_decisive_bboxes: [[219, 281, 527, 459]]
+    manual_distractor_bboxes: [[79, 478, 283, 622], [126, 167, 246, 397]]
+    scores: {ambiguity: 19, decisive_evidence: 18, distractor: 12, topology: 14, cropability: 7, composition: 3, long_range: 2, source: 5}
+    figure_node_H: "Worker and one-hand stabilization posture"
+    figure_node_A: "person–knife anchor; GT action cut_with"
+    figure_node_O: "Cutting tool / knife"
+    figure_node_S: "Food-processing bench"
+    figure_node_D: "Coconut and removed shell pieces"
+    figure_node_C: "Bowl, second tool, block, chalkboard"
+    generic_aggregation_story: "Tool, coconut, bowl, shell fragments, block, and chalkboard are all locally available around the anchor."
+    evidencehoi_story: "The cut_with prototype verifies coconut plus shell-removal evidence and suppresses the bowl/chalkboard/secondary-tool context."
+    reviewer_notes: "Good topology but target knife is less visually isolated and the frame is relatively busy."
+
+  - candidate_id: "trainval:HICO_train2015_00010281:p30382"
+    alternative_plausible_actions: [carry, hold, swing]
+    decisive_evidence: "A separated tennis ball in front of the racket and the court setting support swing."
+    scene_evidence: "Clay tennis court and fence."
+    potential_distractors: "Fence, ball basket/net panel, leaves, and court surface."
+    long_range_relation: "Moderate."
+    manual_decisive_bboxes: [[511, 154, 538, 181]]
+    manual_distractor_bboxes: [[432, 82, 640, 323]]
+    scores: {ambiguity: 20, decisive_evidence: 18, distractor: 7, topology: 12, cropability: 9, composition: 5, long_range: 3, source: 5}
+    figure_node_H: "Forward-leaning player posture"
+    figure_node_A: "person–tennis racket anchor; GT action hold"
+    figure_node_O: "Forward-oriented racket"
+    figure_node_S: "Clay court / fence"
+    figure_node_D: "Tennis ball in front of the racket"
+    figure_node_C: "Fence panel, leaves, court surface"
+    generic_aggregation_story: "Ball, fence, leaves, and court surface are jointly associated with the pair."
+    evidencehoi_story: "Ball position and player/racket state are strengthened while fence/leaves are suppressed."
+    reviewer_notes: "Clean, compact alternative to the main tennis image; fewer meaningful distractors."
+
+  - candidate_id: "trainval:HICO_train2015_00037572:p112468"
+    alternative_plausible_actions: [carry, hold, fly, pull, launch]
+    decisive_evidence: "The large separation between the hand controller and airborne kite, with a faint connecting line, supports launch/pull."
+    scene_evidence: "Open field and sky."
+    potential_distractors: "Tree line, clouds, long human shadow, and distant landscape."
+    long_range_relation: "Yes."
+    manual_decisive_bboxes: [[91, 34, 489, 283]]
+    manual_distractor_bboxes: [[0, 186, 640, 255], [446, 284, 638, 426]]
+    scores: {ambiguity: 20, decisive_evidence: 17, distractor: 6, topology: 12, cropability: 8, composition: 5, long_range: 5, source: 5}
+    figure_node_H: "Standing operator and controller posture"
+    figure_node_A: "person–kite anchor; GT actions launch and pull"
+    figure_node_O: "Airborne traction kite"
+    figure_node_S: "Open field / sky"
+    figure_node_D: "Long-range controller-to-kite path"
+    figure_node_C: "Clouds, tree line, shadow, landscape"
+    generic_aggregation_story: "Open-field features and kite are all broadly connected to the anchor."
+    evidencehoi_story: "The launch/pull prototype validates the long controller-to-kite path and suppresses tree/cloud/shadow context."
+    reviewer_notes: "Excellent long-range layout but sparse object-level distractors."
+
+  - candidate_id: "test:HICO_test2015_00008854:p143143"
+    alternative_plausible_actions: [hold, ride, sit_on, straddle]
+    decisive_evidence: "Seated body state, hands on the handlebar, and feet aligned with the bicycle support ride."
+    scene_evidence: "Open urban plaza / transit architecture."
+    potential_distractors: "Bench, seated bystander, distant pedestrians, columns, and background structures."
+    long_range_relation: "No."
+    manual_decisive_bboxes: [[315, 139, 460, 339]]
+    manual_distractor_bboxes: [[0, 158, 283, 378], [448, 170, 640, 330]]
+    scores: {ambiguity: 16, decisive_evidence: 18, distractor: 11, topology: 13, cropability: 8, composition: 5, long_range: 2, source: 5}
+    figure_node_H: "Cyclist seated state"
+    figure_node_A: "person–bicycle anchor; GT action hold"
+    figure_node_O: "Upright bicycle under the rider"
+    figure_node_S: "Urban plaza"
+    figure_node_D: "Seat/handlebar/pedal body alignment"
+    figure_node_C: "Bench, bystander, pedestrians, columns"
+    generic_aggregation_story: "Bystanders, bench, structures, and bicycle all enter the target relation."
+    evidencehoi_story: "Rider-state alignment is matched and bystander/bench/structure context is suppressed."
+    reviewer_notes: "Strong composition, but the riding state is already visually explicit and the image is monochrome."
+
+  - candidate_id: "test:HICO_test2015_00002362:p121534"
+    alternative_plausible_actions: [hold, swing]
+    decisive_evidence: "The ball is sharply visible to the right of the player and aligned with the preparation/swing region."
+    scene_evidence: "Clay court and dark fence background."
+    potential_distractors: "Fence texture, court surface, and ground shadows."
+    long_range_relation: "Moderate."
+    manual_decisive_bboxes: [[425, 190, 454, 219]]
+    manual_distractor_bboxes: [[0, 0, 640, 185], [0, 358, 640, 511]]
+    scores: {ambiguity: 18, decisive_evidence: 19, distractor: 6, topology: 11, cropability: 10, composition: 4, long_range: 2, source: 5}
+    figure_node_H: "Dynamic player posture"
+    figure_node_A: "person–tennis racket anchor; GT action swing"
+    figure_node_O: "Racket held behind the body"
+    figure_node_S: "Clay court / fence"
+    figure_node_D: "Separated tennis ball"
+    figure_node_C: "Fence texture, ground, shadows"
+    generic_aggregation_story: "Ball and court background are jointly aggregated around a very clear pair."
+    evidencehoi_story: "The ball–pose–racket correspondence verifies swing; background texture is suppressed."
+    reviewer_notes: "Highest clarity, but weak distractor richness and relatively low pair ambiguity."

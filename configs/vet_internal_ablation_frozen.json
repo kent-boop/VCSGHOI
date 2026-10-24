@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "model_variant": "vet_internal_ablation",
+  "modes": {
+    "V0": "anchor_raw",
+    "V1": "anchor_svrm",
+    "V2": "endpoints",
+    "V3": "context_uniform",
+    "V4": "path_selection",
+    "V5": "path_reweight"
+  },
+  "frozen_model": {
+    "backbone": "resnet50",
+    "num_hoi_queries": 32,
+    "use_edge_blip_fusion": true,
+    "use_blip_global_memory": true,
+    "use_vet": true,
+    "use_lpt": true,
+    "use_setm_ablation": true,
+    "setm_ablation_stage": 5,
+    "graph_num_layers": 2,
+    "graph_num_heads": 8,
+    "graph_evidence_topk": 4,
+    "graph_text_dynamic_retrieval": false,
+    "graph_layerwise_sync_write_visual": true,
+    "graph_layerwise_sync_write_text": true,
+    "graph_layerwise_sync_final_matching": false,
+    "graph_layerwise_sync_write_reverse_edge": false,
+    "lpt_query_source": "vet_pair",
+    "lpt_context_source": "slots",
+    "graph_text_topk": 5,
+    "graph_text_pre_topk": 20,
+    "graph_text_num_layers": 1
+  },
+  "frozen_training": {
+    "optimizer": "AdamW",
+    "lr": 0.0005,
+    "weight_decay": 0.0001,
+    "epochs": 100,
+    "batch_size_per_gpu": 16,
+    "scheduler": "CosineAnnealingWarmRestarts(T_0=6,T_mult=2)",
+    "pair_dedupe_iou_thr": 0.55,
+    "pair_filter_threshold": 0.0,
+    "formal_seeds": [3407, 3408, 3409],
+    "formal_resume_policy": "shared DETR initialization only; interrupted identical-run resume must be explicitly authorized"
+  },
+  "datasets": {
+    "hico-det": {
+      "metrics": ["Full", "Rare", "Non-Rare"],
+      "graph_text_strict_shape": true
+    },
+    "vcoco": {
+      "metrics": ["AP_role#1", "AP_role#2"],
+      "graph_text_strict_shape": false
+    }
+  }
+}
+

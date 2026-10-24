@@ -1,0 +1,204 @@
+schema_version: evidencehoi.figure1_scene_mining.context_rich_review.v2
+reviewed_at: 2026-07-14
+policy: Every shortlisted image must expose at least three visually distinguishable context cues beyond the target pair.
+
+candidates:
+  - candidate_id: "test:HICO_test2015_00003326:p124709"
+    alternative_plausible_actions: [hold, cut_with]
+    decisive_evidence: "The blade is aligned with the banana and fresh cut pieces on the counter."
+    scene_evidence: "Domestic kitchen and food-preparation counter."
+    potential_distractors: "Paper-towel rolls, fruit tray, plastic bag, sink, cabinets, notes, and loose peel."
+    visible_context_count: 7
+    long_range_relation: "No; this candidate emphasizes selective object-level context."
+    manual_decisive_bboxes: [[225, 300, 446, 548]]
+    manual_distractor_bboxes: [[286, 185, 421, 314], [360, 505, 480, 640], [0, 0, 480, 220]]
+    scores: {ambiguity: 23, decisive_evidence: 19, distractor: 15, topology: 15, cropability: 8, composition: 4, long_range: 2, source: 5}
+    figure_node_H: "Standing food preparer and two-hand cutting posture"
+    figure_node_A: "person–knife anchor; GT action cut_with"
+    figure_node_O: "Knife blade and orientation"
+    figure_node_S: "Kitchen counter / sink scene"
+    figure_node_D: "Banana and newly cut pieces"
+    figure_node_C: "Paper towels, fruit tray, plastic bag, sink, cabinets, notes"
+    generic_aggregation_story: "Banana, paper towels, tray, bag, sink, cabinet edges, and written notes are all locally available to generic aggregation, even though only the knife–banana path verifies cut_with."
+    evidencehoi_story: "The cut_with prototype strengthens hand–blade–banana correspondence, keeps the kitchen scene weakly active, and suppresses paper towels, bag, sink, cabinets, and notes."
+    reviewer_notes: "Best context-rich knife scene. Main risks are portrait layout and the relatively small knife."
+
+  - candidate_id: "test:HICO_test2015_00007022:p137194"
+    alternative_plausible_actions: [watch, control]
+    decisive_evidence: "The target person's gaze and raised remote-like device point toward the TV."
+    scene_evidence: "Indoor viewing room."
+    potential_distractors: "Two other people, three chairs, floor lamp, bottles, game controllers, crate, and window."
+    visible_context_count: 9
+    long_range_relation: "Yes; the target person and TV are separated across the room."
+    manual_decisive_bboxes: [[421, 125, 470, 202]]
+    manual_distractor_bboxes: [[105, 135, 365, 323], [338, 20, 447, 270], [146, 266, 495, 386]]
+    scores: {ambiguity: 22, decisive_evidence: 19, distractor: 15, topology: 15, cropability: 7, composition: 4, long_range: 3, source: 5}
+    figure_node_H: "Right-side seated viewer, gaze, and raised hand"
+    figure_node_A: "person–TV anchor; GT action watch"
+    figure_node_O: "Small TV on a crate"
+    figure_node_S: "Indoor viewing room"
+    figure_node_D: "Remote-like device and gaze direction"
+    figure_node_C: "Other viewers, chairs, lamp, bottles, controllers, crate"
+    generic_aggregation_story: "All people, furniture, lamp, bottles, controllers, and the TV can be aggregated around the target relation, obscuring which person's state actually supports watch."
+    evidencehoi_story: "The watch/control prototype validates the target viewer's gaze and hand-device path to the TV while suppressing the other viewers and room objects."
+    reviewer_notes: "Strongest context-mixing story. Risks are low resolution, yellow lighting, and a relatively small TV."
+
+  - candidate_id: "trainval:HICO_train2015_00020816:p61124"
+    alternative_plausible_actions: [hold, launch, fly, pull]
+    decisive_evidence: "Raised hands and the visible string path connect the main person to the kite overhead."
+    scene_evidence: "Busy outdoor kite field."
+    potential_distractors: "Several people, stroller, bags, blankets, another kite, trees, and grass."
+    visible_context_count: 8
+    long_range_relation: "Yes; evidence spans hands, string, and airborne kite."
+    manual_decisive_bboxes: [[102, 42, 330, 342]]
+    manual_distractor_bboxes: [[0, 315, 426, 511], [300, 330, 426, 472]]
+    scores: {ambiguity: 21, decisive_evidence: 18, distractor: 15, topology: 15, cropability: 8, composition: 3, long_range: 4, source: 5}
+    figure_node_H: "Main standing person with both hands raised"
+    figure_node_A: "person–kite anchor; GT action launch"
+    figure_node_O: "Large kite overhead"
+    figure_node_S: "Public park / kite field"
+    figure_node_D: "Hand–string–kite path"
+    figure_node_C: "People, stroller, bags, blankets, other kite, trees"
+    generic_aggregation_story: "Nearby people, equipment, other kites, stroller, and park cues all connect to the target pair without role verification."
+    evidencehoi_story: "Launch topology matches raised hands and the string-mediated kite path; background people, equipment, and other-kite evidence are suppressed."
+    reviewer_notes: "Best outdoor context-rich candidate. Portrait composition and the large target kite reduce room for a right-side topology."
+
+  - candidate_id: "trainval:HICO_train2015_00004469:p12944"
+    alternative_plausible_actions: [hold, ride, sit_on, straddle]
+    decisive_evidence: "Seat, handlebar, and foot placement identify the adult's bicycle state."
+    scene_evidence: "Street-side café / bicycle parking area."
+    potential_distractors: "Child and child's bicycle, parked bicycles, café tables and chairs, menu signs, backpack, and storefront."
+    visible_context_count: 9
+    long_range_relation: "No."
+    manual_decisive_bboxes: [[350, 190, 610, 410]]
+    manual_distractor_bboxes: [[190, 170, 385, 410], [0, 140, 230, 420], [480, 185, 640, 405]]
+    scores: {ambiguity: 18, decisive_evidence: 18, distractor: 15, topology: 15, cropability: 9, composition: 4, long_range: 3, source: 5}
+    figure_node_H: "Adult rider body state"
+    figure_node_A: "person–bicycle anchor; GT actions hold, ride, sit_on, straddle"
+    figure_node_O: "Adult bicycle"
+    figure_node_S: "Café-side street"
+    figure_node_D: "Adult seat/handlebar/foot alignment"
+    figure_node_C: "Child pair, second bicycles, café furniture, signs, backpack"
+    generic_aggregation_story: "The target pair is surrounded by a competing child–bicycle pair, parked bikes, furniture, signs, and storefront evidence."
+    evidencehoi_story: "Adult-specific body–bicycle alignment is strengthened while the child pair, parked bicycles, and café context are suppressed."
+    reviewer_notes: "Very strong competing-pair story; storefront text and already-clear riding state are the main risks."
+
+  - candidate_id: "test:HICO_test2015_00005109:p130399"
+    alternative_plausible_actions: [read, type_on]
+    decisive_evidence: "The target hands are aligned with the left keyboard."
+    scene_evidence: "Shared work desk at night."
+    potential_distractors: "Second laptop and person, newspaper, stationery, notebooks, medicine bottle, lamp, and window."
+    visible_context_count: 9
+    long_range_relation: "No."
+    manual_decisive_bboxes: [[35, 155, 260, 333]]
+    manual_distractor_bboxes: [[397, 100, 640, 325], [250, 150, 640, 360], [215, 75, 430, 225]]
+    scores: {ambiguity: 22, decisive_evidence: 19, distractor: 15, topology: 15, cropability: 6, composition: 3, long_range: 1, source: 5}
+    figure_node_H: "Left user's hands and forearms"
+    figure_node_A: "person–laptop anchor; GT action type_on"
+    figure_node_O: "Left laptop"
+    figure_node_S: "Shared work desk"
+    figure_node_D: "Hands on the left keyboard"
+    figure_node_C: "Second user/laptop, newspaper, stationery, notebooks, lamp"
+    generic_aggregation_story: "Two users, two laptops, printed material, and desk objects create strong cross-person and cross-object interference."
+    evidencehoi_story: "The type_on prototype selects the left-hand–left-keyboard path and suppresses the second user/laptop and desk clutter."
+    reviewer_notes: "Excellent context competition, but the target person's face and full body are not visible."
+
+  - candidate_id: "trainval:HICO_train2015_00019793:p58348"
+    alternative_plausible_actions: [read, type_on]
+    decisive_evidence: "The foreground woman's hands and attention are aligned with her laptop."
+    scene_evidence: "Group classroom / workshop."
+    potential_distractors: "Other people, second laptop, TV, tables, chairs, bottles, cups, papers, and bags."
+    visible_context_count: 10
+    long_range_relation: "No."
+    manual_decisive_bboxes: [[225, 205, 472, 370]]
+    manual_distractor_bboxes: [[0, 80, 640, 270], [0, 250, 640, 480]]
+    scores: {ambiguity: 20, decisive_evidence: 17, distractor: 15, topology: 15, cropability: 7, composition: 4, long_range: 2, source: 5}
+    figure_node_H: "Foreground seated woman"
+    figure_node_A: "person–laptop anchor; GT action type_on"
+    figure_node_O: "Foreground laptop"
+    figure_node_S: "Classroom / workshop"
+    figure_node_D: "Target hand and gaze alignment"
+    figure_node_C: "Other people, second laptop, TV, furniture, bottles, papers, bags"
+    generic_aggregation_story: "A dense classroom supplies many plausible but pair-inappropriate cues."
+    evidencehoi_story: "Target-specific hand/gaze alignment is retained while other people, devices, furniture, and table objects are suppressed."
+    reviewer_notes: "Richest laptop context, but the scene is close to the upper clutter limit."
+
+  - candidate_id: "trainval:HICO_train2015_00020198:p59431"
+    alternative_plausible_actions: [hold, cut_with, wield]
+    decisive_evidence: "The knife tip is directed toward the wedding cake and the partner stabilizes the action."
+    scene_evidence: "Wedding cake-cutting area."
+    potential_distractors: "Partner, lamp, flowers, cabinet, decorations, cake topper, and table."
+    visible_context_count: 8
+    long_range_relation: "No."
+    manual_decisive_bboxes: [[345, 247, 600, 420]]
+    manual_distractor_bboxes: [[0, 0, 378, 420], [360, 65, 540, 300], [420, 255, 640, 427]]
+    scores: {ambiguity: 21, decisive_evidence: 18, distractor: 14, topology: 14, cropability: 8, composition: 4, long_range: 1, source: 5}
+    figure_node_H: "Cake-cutting person and hand posture"
+    figure_node_A: "person–knife anchor; GT action wield"
+    figure_node_O: "Knife directed toward cake"
+    figure_node_S: "Wedding reception"
+    figure_node_D: "Cake and knife-tip alignment"
+    figure_node_C: "Partner, lamp, flowers, cabinet, decorations"
+    generic_aggregation_story: "Partner, furniture, flowers, decorations, and cake all mix around the person–knife anchor."
+    evidencehoi_story: "Cake alignment verifies the action path while partner and room decoration context is down-weighted."
+    reviewer_notes: "Rich, readable scene; GT label wield is less natural for the intended non-aggressive narrative."
+
+  - candidate_id: "trainval:HICO_train2015_00029133:p85411"
+    alternative_plausible_actions: [hold, swing]
+    decisive_evidence: "A tennis ball is visible above the target, but a background player creates deliberate pair-assignment ambiguity."
+    scene_evidence: "Tennis court and fence."
+    potential_distractors: "Background player and racket, second court, fence, trees, lamps, and court lines."
+    visible_context_count: 7
+    long_range_relation: "Moderate."
+    manual_decisive_bboxes: [[243, 76, 270, 103]]
+    manual_distractor_bboxes: [[345, 120, 560, 355], [0, 0, 640, 175]]
+    scores: {ambiguity: 24, decisive_evidence: 12, distractor: 14, topology: 13, cropability: 9, composition: 4, long_range: 2, source: 5}
+    figure_node_H: "Foreground player state"
+    figure_node_A: "foreground person–racket anchor; GT action swing"
+    figure_node_O: "Foreground racket"
+    figure_node_S: "Tennis courts / fence"
+    figure_node_D: "Ball above the foreground target"
+    figure_node_C: "Background player/racket, second court, trees, lamps"
+    generic_aggregation_story: "Generic association can easily copy the background player's strong swing evidence into the foreground pair."
+    evidencehoi_story: "Pair-specific topology must test whether the ball and pose belong to the foreground pair before writing evidence back."
+    reviewer_notes: "Excellent failure-case illustration, but the decisive evidence is intentionally less certain than in the top candidates."
+
+  - candidate_id: "trainval:HICO_train2015_00018187:p53712"
+    alternative_plausible_actions: [carry, hold, swing]
+    decisive_evidence: "Foreground body/racket orientation is separated from balls and a background player."
+    scene_evidence: "Outdoor tennis court."
+    potential_distractors: "Background player, loose tennis balls, fence, houses, lamp post, shadows, and second racket."
+    visible_context_count: 8
+    long_range_relation: "Moderate."
+    manual_decisive_bboxes: [[118, 265, 307, 542]]
+    manual_distractor_bboxes: [[90, 190, 255, 390], [0, 0, 559, 245]]
+    scores: {ambiguity: 20, decisive_evidence: 13, distractor: 13, topology: 13, cropability: 9, composition: 4, long_range: 2, source: 5}
+    figure_node_H: "Foreground player lunge"
+    figure_node_A: "person–racket anchor; GT action carry"
+    figure_node_O: "Foreground racket"
+    figure_node_S: "Outdoor tennis court"
+    figure_node_D: "Foreground body/racket state"
+    figure_node_C: "Background player, loose balls, fence, houses, lamp, shadows"
+    generic_aggregation_story: "Background player and loose-ball evidence can contaminate the foreground pair."
+    evidencehoi_story: "Foreground pose/racket correspondence is checked separately from background-player and loose-ball context."
+    reviewer_notes: "Good competing-pair context, but the GT carry label conflicts with the visually dynamic pose."
+
+  - candidate_id: "trainval:HICO_train2015_00010256:p30319"
+    alternative_plausible_actions: [carry, hold]
+    decisive_evidence: "Walking posture and downward racket orientation support carry."
+    scene_evidence: "Tennis practice/event area."
+    potential_distractors: "Three other people, multiple rackets, bags, bottles, net frame, plant pots, tent, and parked vehicles."
+    visible_context_count: 11
+    long_range_relation: "No."
+    manual_decisive_bboxes: [[185, 190, 336, 414]]
+    manual_distractor_bboxes: [[0, 70, 180, 410], [315, 60, 640, 410], [0, 0, 640, 180]]
+    scores: {ambiguity: 20, decisive_evidence: 12, distractor: 15, topology: 13, cropability: 8, composition: 4, long_range: 1, source: 5}
+    figure_node_H: "Walking central player"
+    figure_node_A: "person–racket anchor; GT action carry"
+    figure_node_O: "Downward racket"
+    figure_node_S: "Practice/event area"
+    figure_node_D: "Walking gait plus racket orientation"
+    figure_node_C: "Other people/rackets, bags, bottles, net, pots, tent, vehicles"
+    generic_aggregation_story: "Many highly tennis-related entities surround the target but do not all verify the central person's carry action."
+    evidencehoi_story: "Target gait/racket state is retained; other players, rackets, bags, bottles, and event structures are suppressed."
+    reviewer_notes: "Rich context, but obvious watermark/branding prevents final Figure 1 use; retained as a diagnostic control only."

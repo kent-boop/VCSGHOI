@@ -1,0 +1,5 @@
+top_0001_3761	/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00003761.jpg
+top_0002_11747	/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00011747.jpg
+top_0003_19218	/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00019218.jpg
+top_0004_22722	/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00022722.jpg
+top_0005_16479	/share/share/Datasets/hico_20160224_det/images/train2015/HICO_train2015_00016479.jpg

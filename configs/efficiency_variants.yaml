@@ -1,0 +1,302 @@
+schema_version: 1
+baseline_variant: baseline_r50_vitb
+
+# Paths are repository-relative or environment placeholders.  No personal
+# absolute paths are stored here.  A formal runtime run requires each variant's
+# own trained checkpoint.
+variants:
+  baseline_r50_vitb:
+    display_name: Baseline
+    enabled: true
+    paper_components: {VET: false, KPT: false, SETM: false}
+    backbone: resnet50
+    visual_encoder: vit_base
+    model_file: src/models/stip.py
+    config_args:
+      use_visual_scene_graph: false
+      graph_enable_candidate_evidence: false
+      graph_enable_text_graph: false
+      graph_enable_sync_evidence_matching: false
+      graph_enable_layerwise_sync_evidence_matching: false
+      graph_num_layers: 2
+      graph_k_oo: 3
+      graph_evidence_topk: 4
+      graph_text_topk: 3
+      graph_text_pre_topk: 20
+      graph_text_dynamic_retrieval: false
+      graph_store_dense_debug_tensors: false
+      graph_debug: false
+    resources: {}
+    checkpoint: $EVIDENCEHOI_BASELINE_R50_VITB_CHECKPOINT
+    expected: {d: 256, L: 2, k_oo: 3, M: 4, K: 3, coarse_pool: 20}
+    paper_configuration_verified: true
+    notes: >-
+      Official stip.py forward with the visual graph disabled. The constructor
+      still instantiates its base graph object; parameter tables therefore count
+      every parameter actually owned by the model, including inactive modules.
+
+  vet_r50_vitb:
+    display_name: VET
+    enabled: true
+    paper_components: {VET: true, KPT: false, SETM: false}
+    backbone: resnet50
+    visual_encoder: vit_base
+    model_file: src/models/stip.py
+    config_args:
+      use_visual_scene_graph: true
+      graph_enable_candidate_evidence: true
+      graph_enable_text_graph: false
+      graph_enable_sync_evidence_matching: false
+      graph_enable_layerwise_sync_evidence_matching: false
+      graph_num_layers: 2
+      graph_num_heads: 8
+      graph_k_oo: 3
+      graph_oo_mode: spatial
+      graph_enable_path_context: true
+      graph_path_topk: 3
+      graph_evidence_topk: 4
+      graph_text_topk: 3
+      graph_text_pre_topk: 20
+      graph_text_dynamic_retrieval: false
+      graph_store_dense_debug_tensors: false
+      graph_debug: false
+    resources: {}
+    checkpoint: $EVIDENCEHOI_VET_R50_VITB_CHECKPOINT
+    expected: {d: 256, L: 2, k_oo: 3, M: 4, K: 3, coarse_pool: 20}
+    paper_configuration_verified: true
+    notes: Visual node-relation reasoning plus Top-M candidate evidence topology; no KPT or SETM.
+
+  kpt_r50_vitb:
+    display_name: KPT
+    enabled: true
+    paper_components: {VET: false, KPT: true, SETM: false}
+    backbone: resnet50
+    visual_encoder: vit_base
+    model_file: src/models/stip.py
+    config_args:
+      use_visual_scene_graph: true
+      graph_enable_candidate_evidence: false
+      graph_enable_text_graph: true
+      graph_enable_sync_evidence_matching: false
+      graph_enable_layerwise_sync_evidence_matching: false
+      graph_num_layers: 2
+      graph_num_heads: 8
+      graph_k_oo: 3
+      graph_oo_mode: text_hybrid
+      graph_oo_lambda_text: 0.5
+      graph_text_sync_mode: posthoc
+      graph_text_dense_injection: false
+      graph_text_final_pair_injection: false
+      graph_text_topk: 3
+      graph_text_pre_topk: 20
+      graph_text_num_layers: 2
+      graph_text_dynamic_retrieval: false
+      graph_text_prior_injection: none
+      graph_store_dense_debug_tensors: false
+      graph_debug: false
+    resources:
+      graph_oo_prior_path: oo_affordance_prior_80.npy
+      graph_text_features_path: hico_text_graph_blip256/hico_hoi_graph_blip256_text_features_6x256.npy
+      graph_text_mask_path: hico_text_graph_blip256/hico_hoi_graph_blip256_text_mask_6.npy
+      graph_text_hoi_ids_path: hico_text_graph_blip256/hico_hoi_graph_blip256_hoi_ids.json
+      graph_text_object_to_hoi_indices_path: hico_text_graph_blip256/hico_hoi_graph_blip256_object_to_hoi_indices.json
+      graph_text_field_order_path: hico_text_graph_blip256/hico_hoi_graph_blip256_field_order.json
+    checkpoint: $EVIDENCEHOI_KPT_R50_VITB_CHECKPOINT
+    expected: {d: 256, L: 2, k_oo: 3, M: 4, K: 3, coarse_pool: 20}
+    paper_configuration_verified: false
+    notes: >-
+      BLOCKED FOR FORMAL USE: stip.py only calls KPT from inside the visual graph
+      forward, so the repository currently has no verified switch that executes
+      KPT while completely bypassing VET message passing. Confirm the exact
+      Table 4(a) implementation before setting paper_configuration_verified=true.
+
+  cross_attention_r50_vitb:
+    display_name: Cross-Attention Fusion
+    enabled: true
+    paper_components: {VET: true, KPT: true, SETM: false}
+    backbone: resnet50
+    visual_encoder: vit_base
+    model_file: src/models/stip.py
+    config_args:
+      use_visual_scene_graph: true
+      graph_enable_candidate_evidence: true
+      graph_enable_text_graph: true
+      graph_enable_sync_evidence_matching: false
+      graph_enable_layerwise_sync_evidence_matching: false
+      graph_num_layers: 2
+      graph_num_heads: 8
+      graph_k_oo: 3
+      graph_oo_mode: text_hybrid
+      graph_oo_lambda_text: 0.5
+      graph_enable_path_context: true
+      graph_path_topk: 3
+      graph_evidence_topk: 4
+      graph_text_sync_mode: posthoc
+      graph_text_dense_injection: false
+      graph_text_final_pair_injection: false
+      graph_text_topk: 3
+      graph_text_pre_topk: 20
+      graph_text_num_layers: 2
+      graph_text_dynamic_retrieval: false
+      graph_text_prior_injection: none
+      graph_store_dense_debug_tensors: false
+      graph_debug: false
+    resources:
+      graph_oo_prior_path: oo_affordance_prior_80.npy
+      graph_text_features_path: hico_text_graph_blip256/hico_hoi_graph_blip256_text_features_6x256.npy
+      graph_text_mask_path: hico_text_graph_blip256/hico_hoi_graph_blip256_text_mask_6.npy
+      graph_text_hoi_ids_path: hico_text_graph_blip256/hico_hoi_graph_blip256_hoi_ids.json
+      graph_text_object_to_hoi_indices_path: hico_text_graph_blip256/hico_hoi_graph_blip256_object_to_hoi_indices.json
+      graph_text_field_order_path: hico_text_graph_blip256/hico_hoi_graph_blip256_field_order.json
+    checkpoint: $EVIDENCEHOI_CROSS_ATTENTION_R50_VITB_CHECKPOINT
+    expected: {d: 256, L: 2, k_oo: 3, M: 4, K: 3, coarse_pool: 20}
+    paper_configuration_verified: false
+    notes: >-
+      Uses the repository's post-hoc visual-to-KPT cross-attention and explicitly
+      disables both SETM switches. Confirm that this is the exact final Table
+      4(a) training configuration before formal use.
+
+  evidencehoi_r50_vitb:
+    display_name: EvidenceHOI
+    enabled: true
+    paper_components: {VET: true, KPT: true, SETM: true}
+    backbone: resnet50
+    visual_encoder: vit_base
+    model_file: src/models/stip.py
+    config_args:
+      use_visual_scene_graph: true
+      graph_enable_candidate_evidence: true
+      graph_enable_text_graph: true
+      graph_enable_sync_evidence_matching: true
+      graph_enable_layerwise_sync_evidence_matching: true
+      graph_layerwise_sync_write_visual: true
+      graph_layerwise_sync_write_text: true
+      graph_layerwise_sync_final_matching: false
+      graph_layerwise_sync_disable_old_dense_injection: true
+      graph_layerwise_sync_write_reverse_edge: false
+      graph_layerwise_sync_detach_text_update: false
+      graph_num_layers: 2
+      graph_num_heads: 8
+      graph_k_oo: 3
+      graph_oo_mode: text_hybrid
+      graph_oo_lambda_text: 0.5
+      graph_enable_path_context: true
+      graph_path_topk: 3
+      graph_evidence_topk: 4
+      graph_text_sync_mode: layerwise
+      graph_text_dense_injection: true
+      graph_text_final_pair_injection: false
+      graph_text_topk: 1
+      graph_text_pre_topk: 20
+      graph_text_num_layers: null
+      graph_text_sync_layers_with_visual: true
+      graph_text_dynamic_retrieval: false
+      graph_text_prior_injection: all
+      graph_text_use_ho_edge_prior: true
+      graph_text_use_human_node_prior: true
+      graph_text_use_object_node_prior: true
+      graph_text_use_discriminative_prior: true
+      graph_text_use_scene_prior: true
+      graph_text_use_oo_prior: true
+      graph_store_dense_debug_tensors: false
+      graph_debug: false
+    resources:
+      graph_oo_prior_path: oo_affordance_prior_80.npy
+      graph_text_features_path: hico_text_graph_blip256/hico_hoi_graph_blip256_text_features_6x256.npy
+      graph_text_mask_path: hico_text_graph_blip256/hico_hoi_graph_blip256_text_mask_6.npy
+      graph_text_hoi_ids_path: hico_text_graph_blip256/hico_hoi_graph_blip256_hoi_ids.json
+      graph_text_object_to_hoi_indices_path: hico_text_graph_blip256/hico_hoi_graph_blip256_object_to_hoi_indices.json
+      graph_text_field_order_path: hico_text_graph_blip256/hico_hoi_graph_blip256_field_order.json
+    checkpoint: checkpoints/EvidenceHOI-base/STIP_opensource/hico_run_graph6_base/best.pth
+    expected: {d: 256, L: 2, k_oo: 3, M: 4, K: 1, coarse_pool: 20}
+    paper_configuration_verified: true
+    notes: Full VET+KPT+layerwise SETM from the confirmed checkpoint; M=4, K=1, coarse pool=20, and retrieval runs once before L=2 reasoning layers.
+
+  baseline_r101_vitl:
+    display_name: Baseline (R101+ViT-L)
+    enabled: false
+    paper_components: {VET: false, KPT: false, SETM: false}
+    backbone: resnet101
+    visual_encoder: vit_large
+    model_file: src/models/stip.py
+    config_args:
+      use_visual_scene_graph: false
+      graph_enable_candidate_evidence: false
+      graph_enable_text_graph: false
+      graph_enable_sync_evidence_matching: false
+      graph_enable_layerwise_sync_evidence_matching: false
+      graph_num_layers: 2
+      graph_k_oo: 3
+      graph_evidence_topk: 4
+      graph_text_topk: 3
+      graph_text_pre_topk: 20
+      graph_text_dynamic_retrieval: false
+      graph_store_dense_debug_tensors: false
+      graph_debug: false
+    resources: {}
+    checkpoint: $EVIDENCEHOI_BASELINE_R101_VITL_CHECKPOINT
+    expected: {d: 256, L: 2, k_oo: 3, M: 4, K: 3, coarse_pool: 20}
+    paper_configuration_verified: false
+    notes: Disabled until the builder exposes/validates ViT-L instead of its current hard-coded ViT-B construction.
+
+  evidencehoi_r101_vitl:
+    display_name: EvidenceHOI (R101+ViT-L)
+    enabled: true
+    paper_components: {VET: true, KPT: true, SETM: true}
+    backbone: resnet101
+    visual_encoder: vit_large
+    model_file: src/models/stip.py
+    config_args:
+      blip_vit: large
+      use_visual_scene_graph: true
+      graph_enable_candidate_evidence: true
+      graph_enable_text_graph: true
+      graph_enable_sync_evidence_matching: true
+      graph_enable_layerwise_sync_evidence_matching: true
+      graph_layerwise_sync_write_visual: true
+      graph_layerwise_sync_write_text: true
+      graph_layerwise_sync_final_matching: false
+      graph_layerwise_sync_disable_old_dense_injection: true
+      graph_layerwise_sync_write_reverse_edge: false
+      graph_layerwise_sync_detach_text_update: false
+      graph_text_dynamic_retrieval: false
+      graph_num_layers: 2
+      graph_num_heads: 8
+      graph_k_oo: 3
+      graph_oo_mode: text_hybrid
+      graph_oo_lambda_text: 0.5
+      graph_enable_path_context: true
+      graph_path_topk: 3
+      graph_evidence_topk: 1
+      graph_text_sync_mode: layerwise
+      graph_text_dense_injection: true
+      graph_text_final_pair_injection: false
+      graph_text_topk: 3
+      graph_text_pre_topk: 20
+      graph_text_num_layers: null
+      graph_text_sync_layers_with_visual: true
+      graph_text_prior_injection: all
+      graph_text_use_ho_edge_prior: true
+      graph_text_use_human_node_prior: true
+      graph_text_use_object_node_prior: true
+      graph_text_use_discriminative_prior: true
+      graph_text_use_scene_prior: true
+      graph_text_use_oo_prior: true
+      graph_store_dense_debug_tensors: false
+      graph_debug: false
+    resources:
+      detr_weights: $EVIDENCEHOI_R101_DETR_WEIGHTS
+      blip_pretrained: $EVIDENCEHOI_BLIP_LARGE_WEIGHTS
+      graph_oo_prior_path: oo_affordance_prior_80.npy
+      graph_text_features_path: hico_text_graph_blip256/hico_hoi_graph_blip256_text_features_6x256.npy
+      graph_text_mask_path: hico_text_graph_blip256/hico_hoi_graph_blip256_text_mask_6.npy
+      graph_text_hoi_ids_path: hico_text_graph_blip256/hico_hoi_graph_blip256_hoi_ids.json
+      graph_text_object_to_hoi_indices_path: hico_text_graph_blip256/hico_hoi_graph_blip256_object_to_hoi_indices.json
+      graph_text_field_order_path: hico_text_graph_blip256/hico_hoi_graph_blip256_field_order.json
+    checkpoint: checkpoints/EvidenceHOI-Large/STIP_opensource/hico_run_graph6_base/best.pth
+    expected: {d: 256, L: 2, k_oo: 3, M: 1, K: 3, coarse_pool: 20}
+    paper_configuration_verified: true
+    notes: >-
+      Confirmed from the correct R101 training log and checkpoint Namespace:
+      BLIP-L, evidence Top-R=1, prototype Top-K=3, coarse pool=20, and
+      retrieval-once before L=2 layerwise SETM reasoning.

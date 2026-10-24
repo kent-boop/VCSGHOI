@@ -1,0 +1,13 @@
+{
+  "input_candidates": 0,
+  "bucket_counts": {
+    "A": 0,
+    "B": 0,
+    "C": 0
+  },
+  "thresholds": {
+    "A": 4.8,
+    "B": 4.0,
+    "C": 2.4
+  }
+}

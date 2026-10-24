@@ -1,0 +1,172 @@
+schema_version: evidencehoi.figure1_scene_mining.dual_ambiguity.v3
+reviewed_at: 2026-07-14
+score_dimensions:
+  pair_assignment: 20
+  interaction_ambiguity: 20
+  decisive_relation: 20
+  chain_contrast: 15
+  single_column_clarity: 10
+  topology_completeness: 10
+  source: 5
+
+candidates:
+  - file_name: HICO_train2015_00020387.jpg
+    target_candidate_id: "trainval:HICO_train2015_00020387:p59946"
+    competitor_candidate_id: "trainval:HICO_train2015_00020387:p59944"
+    target_role: batter
+    competitor_role: wicketkeeper
+    target_object: sports ball
+    target_actions: [hit]
+    competitor_actions: [catch]
+    target_human_bbox: [393, 6, 635, 377]
+    competitor_human_bbox: [1, 80, 154, 371]
+    shared_object_bbox: [448, 166, 474, 196]
+    decisive_relation_bbox: [285, 79, 493, 188]
+    context_bboxes: [[216, 221, 260, 376], [0, 320, 640, 426]]
+    pair_assignment_story: "The same ball forms batter–ball and wicketkeeper–ball candidate pairs."
+    interaction_hypotheses: "For the batter–ball pair, hit, throw, and catch have superficial support if the bat is hidden."
+    decisive_relation: "batter → cricket bat → ball"
+    mismatch_relation: "The wicketkeeper has a catch-ready state, but the ball is not in the glove/hand region and lies on the bat path."
+    shared_cues: "Cricket pitch, sports uniforms, wicket, and ball in flight."
+    suppressible_cues: "Wicketkeeper pose and glove/hand evidence are meaningful for the competing pair but must not be copied into the batter pair."
+    figure_nodes: "H1=batter; H2=wicketkeeper; A=batter–ball; O=ball; D=bat–ball relation; S=cricket pitch; C=wicketkeeper catch chain and wicket."
+    risk: "The red ball is visible but still small; preserve its original resolution and avoid aggressive downscaling."
+    scores: {pair_assignment: 20, interaction_ambiguity: 18, decisive_relation: 20, chain_contrast: 15, single_column_clarity: 9, topology_completeness: 10, source: 5}
+
+  - file_name: HICO_train2015_00007880.jpg
+    target_candidate_id: "trainval:HICO_train2015_00007880:p23221"
+    competitor_candidate_id: "trainval:HICO_train2015_00007880:p23222"
+    target_role: batter
+    competitor_role: pitcher
+    target_object: sports ball
+    target_actions: [hit]
+    competitor_actions: [throw]
+    target_human_bbox: [251, 84, 377, 358]
+    competitor_human_bbox: [73, 129, 204, 278]
+    shared_object_bbox: [239, 116, 257, 138]
+    decisive_relation_bbox: [263, 30, 389, 151]
+    context_bboxes: [[0, 58, 480, 250], [404, 72, 480, 360]]
+    pair_assignment_story: "One ball is simultaneously relevant to pitcher–ball and batter–ball candidate pairs."
+    interaction_hypotheses: "For the batter, hit competes with catch/hold if the approaching ball is considered without the bat."
+    decisive_relation: "batter → baseball bat → approaching ball"
+    mismatch_relation: "The pitcher has the release/throw chain, while the batter has the bat-mediated hit chain; the two chains must not be shared."
+    shared_cues: "Baseball field, ball in flight, sports posture, and fence."
+    suppressible_cues: "Pitcher's release posture and the partial umpire are not evidence for the batter's hit relation."
+    figure_nodes: "H1=batter; H2=pitcher; A=batter–ball; O=ball; D=bat–ball trajectory; S=baseball field; C=pitcher release chain and partial umpire."
+    risk: "The pitcher is smaller than the batter, but remains readable at single-column scale."
+    scores: {pair_assignment: 20, interaction_ambiguity: 18, decisive_relation: 20, chain_contrast: 15, single_column_clarity: 8, topology_completeness: 9, source: 5}
+
+  - file_name: HICO_test2015_00003288.jpg
+    target_candidate_id: "test:HICO_test2015_00003288:p124601"
+    competitor_candidate_id: "test:HICO_test2015_00003288:p124599"
+    target_role: active tennis player
+    competitor_role: waiting tennis player
+    target_object: tennis racket
+    target_actions: [swing]
+    competitor_actions: [carry]
+    target_human_bbox: [223, 190, 339, 423]
+    competitor_human_bbox: [426, 218, 536, 422]
+    shared_object_bbox: [250, 196, 287, 283]
+    decisive_relation_bbox: [302, 5, 326, 30]
+    context_bboxes: [[466, 350, 612, 414], [0, 347, 640, 427], [102, 145, 176, 363]]
+    pair_assignment_story: "Two similarly sized players and two rackets share the same visible ball and court."
+    interaction_hypotheses: "The active player's isolated person–racket pair could be swing, hold, or carry; the ball/racket trajectory resolves swing."
+    decisive_relation: "active player → raised racket → tossed ball"
+    mismatch_relation: "The waiting player's racket is low and far from the ball trajectory, so shared court/ball context is insufficient for swing."
+    shared_cues: "Tennis court, net, fence, sports clothing, and one visible ball."
+    suppressible_cues: "Waiting player and low racket, net, scoreboard, and fence are not decisive for the active pair."
+    figure_nodes: "H1=active player; H2=waiting player; A=H1–racket; O=active racket; D=ball near service trajectory; S=court/net; C=waiting-player racket chain and scoreboard."
+    risk: "The active racket is partly behind the body and the passive racket is partly occluded by the net."
+    scores: {pair_assignment: 20, interaction_ambiguity: 19, decisive_relation: 16, chain_contrast: 14, single_column_clarity: 9, topology_completeness: 9, source: 5}
+
+  - file_name: HICO_train2015_00028758.jpg
+    target_candidate_id: "trainval:HICO_train2015_00028758:p84303"
+    competitor_candidate_id: "trainval:HICO_train2015_00028758:p84304"
+    target_role: batter
+    competitor_role: pitcher
+    target_object: sports ball
+    target_actions: [hit]
+    competitor_actions: [throw]
+    target_human_bbox: [223, 205, 303, 382]
+    competitor_human_bbox: [482, 66, 558, 209]
+    shared_object_bbox: [316, 190, 326, 203]
+    decisive_relation_bbox: [235, 180, 313, 266]
+    context_bboxes: [[131, 297, 210, 417], [105, 270, 225, 427], [0, 0, 640, 427]]
+    pair_assignment_story: "The ball participates in pitcher–ball, batter–ball, and catcher–ball candidate pairs."
+    interaction_hypotheses: "Hit, throw, and catch are all scene-compatible until pair-specific bat/release/glove relations are checked."
+    decisive_relation: "batter → bat → ball"
+    mismatch_relation: "Pitcher release and catcher glove chains support different pairs and must not be broadcast to the batter."
+    shared_cues: "Baseball diamond, ball in flight, field layout, and sports uniforms."
+    suppressible_cues: "Pitcher, catcher, umpire, protective net, and distant fielder."
+    figure_nodes: "H1=batter; H2=pitcher; H3=catcher; A=batter–ball; O=ball; D=bat path; S=diamond; C=pitcher/catcher chains."
+    risk: "The ball is very small and the protective net reduces visual cleanliness."
+    scores: {pair_assignment: 20, interaction_ambiguity: 18, decisive_relation: 19, chain_contrast: 15, single_column_clarity: 6, topology_completeness: 8, source: 5}
+
+  - file_name: HICO_train2015_00011202.jpg
+    target_candidate_id: "trainval:HICO_train2015_00011202:p33206"
+    competitor_candidate_id: "trainval:HICO_train2015_00011202:p33205"
+    target_role: batter
+    competitor_role: catcher
+    target_object: sports ball
+    target_actions: [hit]
+    competitor_actions: [catch]
+    target_human_bbox: [370, 73, 552, 290]
+    competitor_human_bbox: [166, 162, 327, 294]
+    shared_object_bbox: [570, 169, 599, 190]
+    decisive_relation_bbox: [380, 118, 607, 211]
+    context_bboxes: [[80, 145, 176, 305], [0, 0, 640, 150], [132, 145, 345, 315]]
+    pair_assignment_story: "Batter–ball and catcher–ball share the same pitch and near-contact ball."
+    interaction_hypotheses: "The target ball could support hit or catch unless bat contact and catcher glove distance are evaluated."
+    decisive_relation: "batter → bat → ball at contact"
+    mismatch_relation: "The catcher is ready but the ball is beyond the glove and aligned with the bat."
+    shared_cues: "Baseball field, uniforms, ball, catcher equipment, and home plate."
+    suppressible_cues: "Catcher, umpire, dugout players, and bench context."
+    figure_nodes: "H1=batter; H2=catcher; A=batter–ball; O=ball; D=bat contact; S=home plate; C=catcher/umpire/dugout."
+    risk: "Action is already close to explicit contact and the dugout contains many people."
+    scores: {pair_assignment: 18, interaction_ambiguity: 16, decisive_relation: 20, chain_contrast: 14, single_column_clarity: 7, topology_completeness: 8, source: 5}
+
+  - file_name: HICO_test2015_00006112.jpg
+    target_candidate_id: "test:HICO_test2015_00006112:p134131"
+    competitor_candidate_id: "test:HICO_test2015_00006112:p134132"
+    target_role: active volleyball player
+    competitor_role: waiting volleyball player
+    target_object: sports ball
+    target_actions: [hit]
+    competitor_actions: [hold]
+    target_human_bbox: [160, 133, 279, 590]
+    competitor_human_bbox: [37, 276, 194, 618]
+    shared_object_bbox: [223, 49, 276, 102]
+    decisive_relation_bbox: [145, 104, 295, 310]
+    context_bboxes: [[0, 151, 400, 302], [64, 397, 117, 447]]
+    pair_assignment_story: "Two players and two same-class balls form active hit/serve and passive hold pairs."
+    interaction_hypotheses: "The airborne ball may support hit, throw, or serve; arm extension plus net relation supports hit/serve."
+    decisive_relation: "active player → extended hand → airborne ball across net"
+    mismatch_relation: "The waiting player holds a different ball and lacks an airborne contact path."
+    shared_cues: "Volleyball court, net, uniforms, and two balls."
+    suppressible_cues: "Waiting player and held ball are valid for another pair but mismatched to the airborne ball."
+    figure_nodes: "H1=active player; H2=waiting player; A=H1–airborne ball; O=airborne ball; D=hand/net relation; S=court; C=held-ball pair."
+    risk: "The two candidate pairs use different ball instances, so shared-object ambiguity is weaker than in the top baseball/cricket images."
+    scores: {pair_assignment: 15, interaction_ambiguity: 17, decisive_relation: 14, chain_contrast: 13, single_column_clarity: 9, topology_completeness: 8, source: 5}
+
+  - file_name: HICO_train2015_00029133.jpg
+    target_candidate_id: "trainval:HICO_train2015_00029133:p85411"
+    competitor_candidate_id: "trainval:HICO_train2015_00029133:p85407"
+    target_role: foreground tennis player
+    competitor_role: background tennis player
+    target_object: tennis racket
+    target_actions: [swing]
+    competitor_actions: [carry]
+    target_human_bbox: [156, 126, 315, 426]
+    competitor_human_bbox: [367, 137, 521, 338]
+    shared_object_bbox: [49, 352, 208, 427]
+    decisive_relation_bbox: [243, 76, 270, 103]
+    context_bboxes: [[329, 181, 410, 293], [0, 0, 640, 180]]
+    pair_assignment_story: "Foreground and background tennis pairs share the same court and visible ball."
+    interaction_hypotheses: "Foreground swing/hold and background swing/carry remain visually confusable."
+    decisive_relation: "candidate-specific player pose → racket → ball relation"
+    mismatch_relation: "The strongest swing evidence visually belongs to the background player rather than the foreground target."
+    shared_cues: "Court, fence, ball, rackets, and sports clothing."
+    suppressible_cues: "Background player's swing chain should not be copied into the foreground pair."
+    figure_nodes: "H1=foreground player; H2=background player; A=foreground pair; O=foreground racket; D=ball/pose assignment; S=court; C=background swing chain."
+    risk: "The target positive interaction is visually weaker and the background racket is small."
+    scores: {pair_assignment: 18, interaction_ambiguity: 20, decisive_relation: 12, chain_contrast: 12, single_column_clarity: 7, topology_completeness: 8, source: 5}

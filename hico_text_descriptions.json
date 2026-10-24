@@ -1,0 +1,4117 @@
+{
+  "4_4": {
+    "hoi_id": "4_4",
+    "verb_phrase": "boarding",
+    "obj_phrase": "an airplane",
+    "background": "Airport tarmac / Boarding gate / Airplane cabin",
+    "human_object": "Person standing upright, one hand gripping suitcase handle, other hand free.",
+    "interaction": "Hand pulling suitcase up steps into plane, feet ascending stairs."
+  },
+  "17_4": {
+    "hoi_id": "17_4",
+    "verb_phrase": "directing",
+    "obj_phrase": "an airplane",
+    "background": "Airport tarmac",
+    "human_object": "Arms extended, palms facing outward, signaling with hands; plane stationary",
+    "interaction": "Hands direct plane's movement along runway path"
+  },
+  "25_4": {
+    "hoi_id": "25_4",
+    "verb_phrase": "exiting",
+    "obj_phrase": "an airplane",
+    "background": "Airport tarmac / Boarding gate area / Airplane door",
+    "human_object": "Person standing upright, one hand gripping suitcase handle",
+    "interaction": "Hand pulling suitcase down steps from plane door"
+  },
+  "30_4": {
+    "hoi_id": "30_4",
+    "verb_phrase": "flying",
+    "obj_phrase": "an airplane",
+    "background": "Sky with clouds / Airfield runway / Mountain landscape",
+    "human_object": "Hands gripping control yoke, arms extended forward, seated upright",
+    "interaction": "Yoke tilted slightly upward, guiding plane's ascent"
+  },
+  "41_4": {
+    "hoi_id": "41_4",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "an airplane",
+    "background": "Airport tarmac / Hangar interior / Maintenance facility",
+    "human_object": "Person standing upright, hands flat against airplane fuselage, fingers spread wide.",
+    "interaction": "Hands gliding along smooth metal surface, tracing contours of aircraft."
+  },
+  "52_4": {
+    "hoi_id": "52_4",
+    "verb_phrase": "loading",
+    "obj_phrase": "an airplane",
+    "background": "Airport tarmac / Hangar interior / Cargo ramp",
+    "human_object": "Hands gripping suitcase handles, leaning forward slightly, legs bent.",
+    "interaction": "Suitcase lifted off ground, moving towards open cargo hold."
+  },
+  "76_4": {
+    "hoi_id": "76_4",
+    "verb_phrase": "riding",
+    "obj_phrase": "an airplane",
+    "background": "Sky with clouds",
+    "human_object": "Person seated upright, hands loosely gripping armrests",
+    "interaction": "Body pressed against seat back, feet flat on floor"
+  },
+  "87_4": {
+    "hoi_id": "87_4",
+    "verb_phrase": "sitting on",
+    "obj_phrase": "an airplane",
+    "background": "Inside commercial aircraft cabin",
+    "human_object": "Person seated upright with hands resting on armrests, seatbelt fastened across lap",
+    "interaction": "Body pressed against back of chair, feet flat on floor ahead"
+  },
+  "111_4": {
+    "hoi_id": "111_4",
+    "verb_phrase": "washing",
+    "obj_phrase": "an airplane",
+    "background": "Airport tarmac / Hangar interior / Outdoor maintenance area",
+    "human_object": "Person standing with arms extended, hands gripping sponge; airplane wet from water spray",
+    "interaction": "Sponge making contact along fuselage, wiping motion cleaning exterior surfaces"
+  },
+  "8_1": {
+    "hoi_id": "8_1",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a bicycle",
+    "background": "City sidewalk / Park path / Garage entrance",
+    "human_object": "Both hands gripping frame, shoulders hunched forward, bike lifted off ground.",
+    "interaction": "Hands at top tube, lifting upwards, legs slightly bent for balance."
+  },
+  "36_1": {
+    "hoi_id": "36_1",
+    "verb_phrase": "holding",
+    "obj_phrase": "a bicycle",
+    "background": "Park path / City sidewalk / Garage",
+    "human_object": "Both hands gripping frame, standing upright.",
+    "interaction": "Hands at top tube, bike steady against torso."
+  },
+  "41_1": {
+    "hoi_id": "41_1",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a bicycle",
+    "background": "Bicycle shop / Park pathway / Garage",
+    "human_object": "Person crouched, hands gripping bike frame firmly, legs slightly bent.",
+    "interaction": "Hands move along frame, checking bolts and tires."
+  },
+  "43_1": {
+    "hoi_id": "43_1",
+    "verb_phrase": "jumping",
+    "obj_phrase": "a bicycle",
+    "background": "Outdoor park / City sidewalk / Gravel path",
+    "human_object": "Hands gripping bike handles, feet on pedals, body leaning forward.",
+    "interaction": "Legs pushing down, wheels spinning, airborne trajectory over ground."
+  },
+  "37_1": {
+    "hoi_id": "37_1",
+    "verb_phrase": "hopping on",
+    "obj_phrase": "a bicycle",
+    "background": "City park path / Quiet suburban road / Busy urban sidewalk",
+    "human_object": "Person standing with one foot on pedal, hands gripping handlebars firmly.",
+    "interaction": "Foot pushing down on pedal, initiating forward motion."
+  },
+  "62_1": {
+    "hoi_id": "62_1",
+    "verb_phrase": "parking",
+    "obj_phrase": "a bicycle",
+    "background": "City sidewalk / Bike rack area / Park path",
+    "human_object": "Hand gripping bike handlebars, foot touching ground for balance.",
+    "interaction": "Person guiding bicycle into parking slot, aligning with stand."
+  },
+  "71_1": {
+    "hoi_id": "71_1",
+    "verb_phrase": "pushing",
+    "obj_phrase": "a bicycle",
+    "background": "City sidewalk / Park path / Rural road",
+    "human_object": "Hands gripping bike handles, body leaning slightly forward, bicycle upright.",
+    "interaction": "Palms pressing down on grips, arms extended, guiding bicycle forward."
+  },
+  "75_1": {
+    "hoi_id": "75_1",
+    "verb_phrase": "repairing",
+    "obj_phrase": "a bicycle",
+    "background": "Garage workshop / Park bench / Sidewalk",
+    "human_object": "Hands gripping wrench, leaning over bike frame, tool engaged with bolt.",
+    "interaction": "Wrench turning counterclockwise, loosening nut on wheel axle."
+  },
+  "76_1": {
+    "hoi_id": "76_1",
+    "verb_phrase": "riding",
+    "obj_phrase": "a bicycle",
+    "background": "City park path / Rural countryside road / Urban bike lane",
+    "human_object": "Legs pedaling, hands gripping handlebars, back slightly bent forward.",
+    "interaction": "Feet pushing pedals in circular motion, hands steering handlebars."
+  },
+  "87_1": {
+    "hoi_id": "87_1",
+    "verb_phrase": "sitting on",
+    "obj_phrase": "a bicycle",
+    "background": "City park path / Rural dirt road / Urban bike lane",
+    "human_object": "Person seated upright, hands gripping handlebars, feet on pedals",
+    "interaction": "Hands firmly hold handlebars, legs positioned to pedal"
+  },
+  "98_1": {
+    "hoi_id": "98_1",
+    "verb_phrase": "straddling",
+    "obj_phrase": "a bicycle",
+    "background": "City park path / Quiet suburban road / Busy urban sidewalk",
+    "human_object": "Legs spread apart gripping pedals, hands firmly on handlebars",
+    "interaction": "Feet pushing down alternately, legs cycling in circular motion"
+  },
+  "110_1": {
+    "hoi_id": "110_1",
+    "verb_phrase": "walking",
+    "obj_phrase": "a bicycle",
+    "background": "City sidewalk / Park path / Quiet suburban road",
+    "human_object": "Hand loosely gripping bike handlebars, arm extended slightly forward, body upright.",
+    "interaction": "Hands steady on handles, feet pushing ground alternately to propel bicycle."
+  },
+  "111_1": {
+    "hoi_id": "111_1",
+    "verb_phrase": "washing",
+    "obj_phrase": "a bicycle",
+    "background": "Outdoor garden hose / Garage with tools / Park water fountain",
+    "human_object": "Hands gripping sponge, fingers spread; leaning over bike frame",
+    "interaction": "Sponge rubbing along bicycle's metal surfaces"
+  },
+  "10_14": {
+    "hoi_id": "10_14",
+    "verb_phrase": "chasing",
+    "obj_phrase": "a bird",
+    "background": "Park with trees / Open field / Backyard garden",
+    "human_object": "Person running, arms outstretched, fingers splayed wide",
+    "interaction": "Hands reaching towards flying bird, legs in rapid forward motion"
+  },
+  "26_14": {
+    "hoi_id": "26_14",
+    "verb_phrase": "feeding",
+    "obj_phrase": "a bird",
+    "background": "Park bench / Garden path / City square",
+    "human_object": "Hand loosely cupped, fingers slightly spread, palm upturned; bird perched lightly.",
+    "interaction": "Bird's feet touching human’s fingertips, beak dipping into offered food."
+  },
+  "36_14": {
+    "hoi_id": "36_14",
+    "verb_phrase": "holding",
+    "obj_phrase": "a bird",
+    "background": "Park bench / Living room window / Outdoor garden",
+    "human_object": "Gentle cradle with open palm, fingers slightly curved, arm extended gently.",
+    "interaction": "Palm supporting bird's belly, fingertips lightly touching wings."
+  },
+  "65_14": {
+    "hoi_id": "65_14",
+    "verb_phrase": "petting",
+    "obj_phrase": "a bird",
+    "background": "Indoor living room / Outdoor park bench / Cozy bedroom",
+    "human_object": "Hand gently cupped, fingers slightly curved, bird perched calmly",
+    "interaction": "Palm supporting bird's underside, finger tips lightly touching feathers"
+  },
+  "74_14": {
+    "hoi_id": "74_14",
+    "verb_phrase": "releasing",
+    "obj_phrase": "a bird",
+    "background": "Outdoor park / Forest clearing / Backyard garden",
+    "human_object": "Hands cupped gently, arms extended upward, bird perched lightly.",
+    "interaction": "Fingertips touching wings, gentle push upwards, bird ascending."
+  },
+  "112_14": {
+    "hoi_id": "112_14",
+    "verb_phrase": "watching",
+    "obj_phrase": "a bird",
+    "background": "Park with trees / Backyard garden / Forest trail",
+    "human_object": "Person standing still, head tilted upward, hands relaxed at sides",
+    "interaction": "Eyes focused on bird, no direct contact, gaze directed upwards"
+  },
+  "4_8": {
+    "hoi_id": "4_8",
+    "verb_phrase": "boarding",
+    "obj_phrase": "a boat",
+    "background": "Dockside marina / Calm lake shore / Riverbank",
+    "human_object": "Person stepping onto boat with one foot, hands gripping gunwale.",
+    "interaction": "Foot pressing down on deck, hands pulling to stabilize entry."
+  },
+  "21_8": {
+    "hoi_id": "21_8",
+    "verb_phrase": "driving",
+    "obj_phrase": "a boat",
+    "background": "Open water / Riverbank / Marina",
+    "human_object": "Hands gripping steering wheel, torso leaning slightly forward.",
+    "interaction": "Steering wheel turning, guiding boat's direction."
+  },
+  "25_8": {
+    "hoi_id": "25_8",
+    "verb_phrase": "exiting",
+    "obj_phrase": "a boat",
+    "background": "Dock / Riverbank / Beach",
+    "human_object": "Person stepping off with one foot extended, hands gripping sides of boat for balance.",
+    "interaction": "Foot touching ground while other leg remains inside boat, body leaning forward slightly."
+  },
+  "41_8": {
+    "hoi_id": "41_8",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a boat",
+    "background": "Dock / Boatyard / Marina",
+    "human_object": "Person leaning over, hands spread wide on hull.",
+    "interaction": "Palms pressing firmly against smooth fiberglass."
+  },
+  "43_8": {
+    "hoi_id": "43_8",
+    "verb_phrase": "jumping",
+    "obj_phrase": "a boat",
+    "background": "Lake / Riverbank / Ocean shore",
+    "human_object": "Person mid-air with legs spread, hands gripping boat sides firmly.",
+    "interaction": "Feet pushing off ground, body arching over boat edge."
+  },
+  "47_8": {
+    "hoi_id": "47_8",
+    "verb_phrase": "launching",
+    "obj_phrase": "a boat",
+    "background": "Waterfront dock / Sandy beach shore / Riverbank",
+    "human_object": "Person pushing boat with both hands, leaning forward",
+    "interaction": "Hands pressing against stern, propelling boat into water"
+  },
+  "75_8": {
+    "hoi_id": "75_8",
+    "verb_phrase": "repairing",
+    "obj_phrase": "a boat",
+    "background": "Dockyard / Boat repair shop / Lakeside",
+    "human_object": "Hands gripping tools firmly, leaning over damaged hull.",
+    "interaction": "Tools scraping, hammering against boat's worn planks."
+  },
+  "76_8": {
+    "hoi_id": "76_8",
+    "verb_phrase": "riding",
+    "obj_phrase": "a boat",
+    "background": "Waterway / Lake / Ocean",
+    "human_object": "Person seated, hands gripping oars firmly.",
+    "interaction": "Oars dipping into water, pushing backward with rhythmic strokes."
+  },
+  "77_8": {
+    "hoi_id": "77_8",
+    "verb_phrase": "rowing",
+    "obj_phrase": "a boat",
+    "background": "Calm lake / River with gentle current / Ocean bay",
+    "human_object": "Hands gripping oars firmly, arms extended, back slightly arched",
+    "interaction": "Oar blades dipping into water, pushing backward creating ripples"
+  },
+  "79_8": {
+    "hoi_id": "79_8",
+    "verb_phrase": "sailing",
+    "obj_phrase": "a boat",
+    "background": "Open water with waves",
+    "human_object": "Hands gripping steering wheel, body leaning forward slightly",
+    "interaction": "Steering wheel turning left to right, guiding boat's direction"
+  },
+  "87_8": {
+    "hoi_id": "87_8",
+    "verb_phrase": "sitting on",
+    "obj_phrase": "a boat",
+    "background": "Lake / River / Ocean",
+    "human_object": "Person seated with legs extended, hands resting on sides of boat.",
+    "interaction": "Buttocks contact seat, back leans against rear support."
+  },
+  "93_8": {
+    "hoi_id": "93_8",
+    "verb_phrase": "standing on",
+    "obj_phrase": "a boat",
+    "background": "Open water / Dockside marina / Calm lake",
+    "human_object": "Person standing upright, feet shoulder-width apart, hands resting on sides of boat.",
+    "interaction": "Feet firmly planted on deck, no visible movement."
+  },
+  "105_8": {
+    "hoi_id": "105_8",
+    "verb_phrase": "tying",
+    "obj_phrase": "a boat",
+    "background": "Dock / Riverbank / Marina",
+    "human_object": "Hands pulling rope taut, fingers interlaced; standing with slight bend at waist.",
+    "interaction": "Rope looped around cleat, hands pushing to secure knot."
+  },
+  "111_8": {
+    "hoi_id": "111_8",
+    "verb_phrase": "washing",
+    "obj_phrase": "a boat",
+    "background": "Dockside marina",
+    "human_object": "Person standing, one hand gripping sponge, other hand braced against boat side.",
+    "interaction": "Sponge moves back and forth across boat's hull."
+  },
+  "8_39": {
+    "hoi_id": "8_39",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a bottle",
+    "background": "Kitchen counter / Park bench / Busy sidewalk",
+    "human_object": "Hand loosely gripping bottle neck, arm relaxed at side.",
+    "interaction": "Bottle held upright against palm, slight tilt towards mouth."
+  },
+  "20_39": {
+    "hoi_id": "20_39",
+    "verb_phrase": "drinking with",
+    "obj_phrase": "a bottle",
+    "background": "Kitchen counter / Park bench / Office cubicle",
+    "human_object": "Hand wrapped around bottle neck, head tilted back slightly.",
+    "interaction": "Lips pressed to rim of bottle, liquid being consumed."
+  },
+  "36_39": {
+    "hoi_id": "36_39",
+    "verb_phrase": "holding",
+    "obj_phrase": "a bottle",
+    "background": "Kitchen counter / Park bench / Bar table",
+    "human_object": "Hand loosely gripping bottle neck, fingers relaxed, arm slightly bent.",
+    "interaction": "Palm cradles bottom of bottle, wrist tilted for pouring."
+  },
+  "41_39": {
+    "hoi_id": "41_39",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a bottle",
+    "background": "Kitchen counter / Laboratory table / Wine cellar",
+    "human_object": "Hand gently cradling the bottle neck, fingers splayed slightly, body leaning forward.",
+    "interaction": "Fingertips touching glass, tilting bottle to read label."
+  },
+  "48_39": {
+    "hoi_id": "48_39",
+    "verb_phrase": "licking",
+    "obj_phrase": "a bottle",
+    "background": "Kitchen counter / Park bench / Living room table",
+    "human_object": "Person's lips touching bottle rim, hand loosely gripping neck.",
+    "interaction": "Lips pressing against glass, tongue extending to lick."
+  },
+  "58_39": {
+    "hoi_id": "58_39",
+    "verb_phrase": "opening",
+    "obj_phrase": "a bottle",
+    "background": "Kitchen counter / Restaurant table / Picnic blanket",
+    "human_object": "Hand gripping cap firmly, fingers spread wide, arm extended slightly.",
+    "interaction": "Thumb pressing down on cap edge, twisting counterclockwise to loosen."
+  },
+  "69_39": {
+    "hoi_id": "69_39",
+    "verb_phrase": "pouring",
+    "obj_phrase": "a bottle",
+    "background": "Kitchen counter / Bar table / Outdoor picnic",
+    "human_object": "Hand gripping bottleneck, fingers wrapped firmly, arm extended slightly forward, bottle tilted downwards.",
+    "interaction": "Liquid flowing from bottle's spout into an open container below."
+  },
+  "4_5": {
+    "hoi_id": "4_5",
+    "verb_phrase": "boarding",
+    "obj_phrase": "a bus",
+    "background": "Bus stop / City sidewalk / Suburban road",
+    "human_object": "Hand gripping bus rail, arm extended forward, feet stepping up.",
+    "interaction": "Fingertips pressing against metal bar, body leaning into upward movement."
+  },
+  "17_5": {
+    "hoi_id": "17_5",
+    "verb_phrase": "directing",
+    "obj_phrase": "a bus",
+    "background": "Bus stop / City intersection / School zone",
+    "human_object": "Arm extended, palm facing outward toward bus.",
+    "interaction": "Hand signals for stopping, arm motions guiding direction."
+  },
+  "21_5": {
+    "hoi_id": "21_5",
+    "verb_phrase": "driving",
+    "obj_phrase": "a bus",
+    "background": "City streets / Bus depot / Rural road",
+    "human_object": "Hands gripping steering wheel, seated upright, feet near pedals",
+    "interaction": "Fingers controlling wheel, foot pressing pedal, vehicle in forward motion"
+  },
+  "25_5": {
+    "hoi_id": "25_5",
+    "verb_phrase": "exiting",
+    "obj_phrase": "a bus",
+    "background": "City street / Bus stop / Urban intersection",
+    "human_object": "Hand gripping bus door handle, body leaning forward",
+    "interaction": "Foot stepping down onto pavement, arm pulling to close door"
+  },
+  "41_5": {
+    "hoi_id": "41_5",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a bus",
+    "background": "Bus depot / City street corner / School parking lot",
+    "human_object": "Person standing upright, one hand resting lightly on bus door frame, other hand touching side panel.",
+    "interaction": "Fingertips pressing gently against metal, head tilted slightly for closer inspection."
+  },
+  "52_5": {
+    "hoi_id": "52_5",
+    "verb_phrase": "loading",
+    "obj_phrase": "a bus",
+    "background": "Bus stop / City curb / Parking lot",
+    "human_object": "Person standing, hands gripping luggage handles, legs slightly bent.",
+    "interaction": "Lifting suitcase into open bus compartment."
+  },
+  "76_5": {
+    "hoi_id": "76_5",
+    "verb_phrase": "riding",
+    "obj_phrase": "a bus",
+    "background": "City streets / Bus station / Urban landscape",
+    "human_object": "Person seated upright, hands loosely gripping seat handles",
+    "interaction": "Hands resting on plastic grips, body stationary with slight swaying"
+  },
+  "87_5": {
+    "hoi_id": "87_5",
+    "verb_phrase": "sitting on",
+    "obj_phrase": "a bus",
+    "background": "City streets / Bus station platform / Inside a bus",
+    "human_object": "Person seated upright, hands resting on thighs, legs bent at knees.",
+    "interaction": "Buttocks in contact with seat cushion, back leaning against chair rest."
+  },
+  "111_5": {
+    "hoi_id": "111_5",
+    "verb_phrase": "washing",
+    "obj_phrase": "a bus",
+    "background": "Bus depot / Car wash station / Street side",
+    "human_object": "Person standing with sponge in outstretched arm, bus wet and soapy",
+    "interaction": "Sponge rubbing against bus surface, water streaming down sides"
+  },
+  "113_5": {
+    "hoi_id": "113_5",
+    "verb_phrase": "waving",
+    "obj_phrase": "a bus",
+    "background": "Bus stop / City sidewalk / School entrance",
+    "human_object": "Arm extended, palm open, fingers spread wide; bus stationary.",
+    "interaction": "Hand moves side to side, signaling the bus."
+  },
+  "4_2": {
+    "hoi_id": "4_2",
+    "verb_phrase": "boarding",
+    "obj_phrase": "a car",
+    "background": "Parking lot / Driveway / Street",
+    "human_object": "Hand gripping door handle, body leaning forward, car door slightly open.",
+    "interaction": "Hand pulling door outward, foot stepping into car interior."
+  },
+  "17_2": {
+    "hoi_id": "17_2",
+    "verb_phrase": "directing",
+    "obj_phrase": "a car",
+    "background": "Parking lot / City street / Driveway",
+    "human_object": "Arm extended, palm facing outward, fingers splayed slightly, standing upright.",
+    "interaction": "Hand guiding direction, arm indicating path for car to follow."
+  },
+  "21_2": {
+    "hoi_id": "21_2",
+    "verb_phrase": "driving",
+    "obj_phrase": "a car",
+    "background": "City road / Rural highway / Parking lot",
+    "human_object": "Hands gripping steering wheel, arms slightly bent, seated upright.",
+    "interaction": "Fingertips pressing into the steering wheel, guiding its rotation."
+  },
+  "38_2": {
+    "hoi_id": "38_2",
+    "verb_phrase": "hosing",
+    "obj_phrase": "a car",
+    "background": "Driveway / Car wash station / Outdoor parking lot",
+    "human_object": "Hand gripping hose nozzle, arm extended forward, water flowing from hose.",
+    "interaction": "Water stream directed at car's exterior, washing away dirt."
+  },
+  "41_2": {
+    "hoi_id": "41_2",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a car",
+    "background": "Car dealership lot / Garage with tools / Street parking",
+    "human_object": "Hand resting on hood, leaning forward slightly, eyes focused intently.",
+    "interaction": "Fingers tapping lightly on metal, head tilting to examine different angles."
+  },
+  "43_2": {
+    "hoi_id": "43_2",
+    "verb_phrase": "jumping",
+    "obj_phrase": "a car",
+    "background": "Urban street with parked cars / Rural dirt road / Empty parking lot",
+    "human_object": "Person mid-air, legs bent, arms extended forward for balance",
+    "interaction": "Feet leaving ground, trajectory over hood of stationary car"
+  },
+  "52_2": {
+    "hoi_id": "52_2",
+    "verb_phrase": "loading",
+    "obj_phrase": "a car",
+    "background": "Driveway / Parking lot / Garage",
+    "human_object": "Person standing, hands gripping suitcase handles, trunk open.",
+    "interaction": "Suitcase being lifted into the car's trunk."
+  },
+  "62_2": {
+    "hoi_id": "62_2",
+    "verb_phrase": "parking",
+    "obj_phrase": "a car",
+    "background": "Parking lot / Driveway / Street",
+    "human_object": "Hand gripping steering wheel, foot pressing brake pedal, body leaning forward slightly.",
+    "interaction": "Hands turning steering wheel to align with parking space, feet shifting between gas and brake pedals."
+  },
+  "76_2": {
+    "hoi_id": "76_2",
+    "verb_phrase": "riding",
+    "obj_phrase": "a car",
+    "background": "City streets / Highway / Parking lot",
+    "human_object": "Hands gripping steering wheel, seated upright with feet on pedals",
+    "interaction": "Steering wheel turned, vehicle moving forward along road"
+  },
+  "111_2": {
+    "hoi_id": "111_2",
+    "verb_phrase": "washing",
+    "obj_phrase": "a car",
+    "background": "Driveway with hose / Car wash station / Street curb",
+    "human_object": "Hand gripping sponge, arm extended, car wet and soapy",
+    "interaction": "Sponge rubbing against car's surface, water streaming down"
+  },
+  "22_15": {
+    "hoi_id": "22_15",
+    "verb_phrase": "drying",
+    "obj_phrase": "a cat",
+    "background": "Bathroom with towels / Living room couch / Outdoor porch",
+    "human_object": "Hands gently cradling the cat, fingers spread for support",
+    "interaction": "Towel rubbing against the cat's fur from head to tail"
+  },
+  "26_15": {
+    "hoi_id": "26_15",
+    "verb_phrase": "feeding",
+    "obj_phrase": "a cat",
+    "background": "Kitchen counter / Living room floor / Outdoor patio",
+    "human_object": "Hand gently cupped, fingers loosely holding food, slightly bent arm.",
+    "interaction": "Food touching cat's mouth, slight forward motion from human to feline."
+  },
+  "36_15": {
+    "hoi_id": "36_15",
+    "verb_phrase": "holding",
+    "obj_phrase": "a cat",
+    "background": "Living room couch / Outdoor park bench / Kitchen counter",
+    "human_object": "Arms cradling cat, hands gently supporting torso.",
+    "interaction": "Cat nestled against chest, head resting under chin."
+  },
+  "39_15": {
+    "hoi_id": "39_15",
+    "verb_phrase": "hugging",
+    "obj_phrase": "a cat",
+    "background": "Living room couch / Bedroom floor / Kitchen corner",
+    "human_object": "Arms wrapped loosely around feline, hands gentle, cat relaxed",
+    "interaction": "Chest to fur contact, slight squeeze, no visible movement"
+  },
+  "45_15": {
+    "hoi_id": "45_15",
+    "verb_phrase": "kissing",
+    "obj_phrase": "a cat",
+    "background": "Cozy living room / Outdoor garden bench / Bedroom with soft lighting",
+    "human_object": "Person leaning down, lips pursed, one arm gently cradling the cat",
+    "interaction": "Lips touching fur on top of cat's head, gentle pressure applied"
+  },
+  "65_15": {
+    "hoi_id": "65_15",
+    "verb_phrase": "petting",
+    "obj_phrase": "a cat",
+    "background": "Cozy living room / Quiet park bench / Calm bedroom",
+    "human_object": "Hand gently resting on cat's fur, fingers slightly curved",
+    "interaction": "Palm pressing softly against back of seated cat"
+  },
+  "80_15": {
+    "hoi_id": "80_15",
+    "verb_phrase": "scratching",
+    "obj_phrase": "a cat",
+    "background": "Living room couch / Kitchen floor / Outdoor porch",
+    "human_object": "Hand gently curved, fingers lightly touching fur, relaxed arm position, cat sitting still.",
+    "interaction": "Fingertips softly brushing against cat's back, slight up-and-down movement along spine."
+  },
+  "111_15": {
+    "hoi_id": "111_15",
+    "verb_phrase": "washing",
+    "obj_phrase": "a cat",
+    "background": "Bathroom sink / Kitchen countertop / Outdoor tub",
+    "human_object": "Hands cupping water, fingers spread slightly; cat held gently but firmly under one arm",
+    "interaction": "Water pouring over cat's fur from hands to back, cat resisting with slight squirming"
+  },
+  "10_15": {
+    "hoi_id": "10_15",
+    "verb_phrase": "chasing",
+    "obj_phrase": "a cat",
+    "background": "Living room with furniture / Backyard garden / City alleyway",
+    "human_object": "Person running, arms outstretched towards fleeing cat.",
+    "interaction": "Hands reaching forward, legs striding rapidly to close distance."
+  },
+  "8_56": {
+    "hoi_id": "8_56",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a chair",
+    "background": "Cluttered room / Empty hallway / Outdoor patio",
+    "human_object": "Both hands gripping chair legs, arms extended downwards, back straight.",
+    "interaction": "Hands firmly hold chair legs, lifting upwards from ground level."
+  },
+  "36_56": {
+    "hoi_id": "36_56",
+    "verb_phrase": "holding",
+    "obj_phrase": "a chair",
+    "background": "Living room / Kitchen corner / Outdoor patio",
+    "human_object": "Both hands gripping chair back, arms extended slightly forward, chair tilted backward.",
+    "interaction": "Hands firmly hold top of chair, lifting it off ground."
+  },
+  "49_56": {
+    "hoi_id": "49_56",
+    "verb_phrase": "lying on",
+    "obj_phrase": "a chair",
+    "background": "Living room / Beach lounge area / Park bench",
+    "human_object": "Person reclined with legs up, arms relaxed at sides; chair tilted back.",
+    "interaction": "Back of head touching top of chair, feet resting on footrest."
+  },
+  "87_56": {
+    "hoi_id": "87_56",
+    "verb_phrase": "sitting on",
+    "obj_phrase": "a chair",
+    "background": "Cluttered office desk / Dimly lit living room / Park bench",
+    "human_object": "Person seated upright, hands resting on armrests, legs bent at knees.",
+    "interaction": "Buttocks pressing into seat cushion, back leaning against chair back."
+  },
+  "93_56": {
+    "hoi_id": "93_56",
+    "verb_phrase": "standing on",
+    "obj_phrase": "a chair",
+    "background": "Kitchen / Living room / Bedroom",
+    "human_object": "Person's feet flat on chair seat, hands gripping edges of backrest.",
+    "interaction": "Feet pressing down firmly, body weight balanced above chair."
+  },
+  "8_57": {
+    "hoi_id": "8_57",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a couch",
+    "background": "Moving truck interior / Empty living room / Sidewalk near apartment building",
+    "human_object": "Both hands gripping under couch edges, back bent, legs slightly crouched",
+    "interaction": "Hands pressing into underside of couch, lifting upwards towards chest level"
+  },
+  "49_57": {
+    "hoi_id": "49_57",
+    "verb_phrase": "lying on",
+    "obj_phrase": "a couch",
+    "background": "Living room with TV / Bedroom with bookshelf / Cozy study nook",
+    "human_object": "Person reclined, head resting on armrest, legs stretched out; couch cushions slightly indented under weight.",
+    "interaction": "Body fully supported by cushioning, minimal movement, relaxed contact along entire length of back and thighs."
+  },
+  "87_57": {
+    "hoi_id": "87_57",
+    "verb_phrase": "sitting on",
+    "obj_phrase": "a couch",
+    "background": "Living room with TV / Cozy reading nook / Family gathering space",
+    "human_object": "Person seated upright, legs crossed, hands resting on lap; couch cushions slightly indented under weight.",
+    "interaction": "Buttocks pressing into cushion, back leaning against armrest, feet flat on floor."
+  },
+  "26_19": {
+    "hoi_id": "26_19",
+    "verb_phrase": "feeding",
+    "obj_phrase": "a cow",
+    "background": "Barn interior / Pasture field / Rural farmyard",
+    "human_object": "Hand loosely cupped, fingers extended, palm up; body slightly bent forward; feed held in open hand.",
+    "interaction": "Feed gently placed into cow's mouth, arm extending towards animal."
+  },
+  "34_19": {
+    "hoi_id": "34_19",
+    "verb_phrase": "herding",
+    "obj_phrase": "a cow",
+    "background": "Pasture field",
+    "human_object": "Person standing with outstretched arms, using stick to guide cow.",
+    "interaction": "Stick touching cow's side, guiding movement forward."
+  },
+  "36_19": {
+    "hoi_id": "36_19",
+    "verb_phrase": "holding",
+    "obj_phrase": "a cow",
+    "background": "Barn interior / Pasture field / Rural farmyard",
+    "human_object": "Both hands gripping cow's neck firmly, standing close to animal.",
+    "interaction": "Hands pressed against fur, guiding cow gently forward."
+  },
+  "39_19": {
+    "hoi_id": "39_19",
+    "verb_phrase": "hugging",
+    "obj_phrase": "a cow",
+    "background": "Farm field / Barn interior / Rural landscape",
+    "human_object": "Arms wrapped fully around cow's neck, hands clasped together behind its head.",
+    "interaction": "Chest pressed against cow’s side, face nuzzled into fur near shoulder."
+  },
+  "45_19": {
+    "hoi_id": "45_19",
+    "verb_phrase": "kissing",
+    "obj_phrase": "a cow",
+    "background": "Farm setting",
+    "human_object": "Person leaning forward, lips pursed, hands gently cradling cow's head",
+    "interaction": "Lips touching cow’s snout, gentle pressure applied"
+  },
+  "46_19": {
+    "hoi_id": "46_19",
+    "verb_phrase": "lassoing",
+    "obj_phrase": "a cow",
+    "background": "Ranch setting",
+    "human_object": "Hand gripping lasso rope, arm extended overhead, legs spread for balance",
+    "interaction": "Lasso loop flying towards cow's neck, rope taut between human and target"
+  },
+  "55_19": {
+    "hoi_id": "55_19",
+    "verb_phrase": "milking",
+    "obj_phrase": "a cow",
+    "background": "Barn interior / Rural farm setting / Pasture",
+    "human_object": "Hands gripping udders, fingers spread wide, leaning forward slightly.",
+    "interaction": "Fingers squeezing udder teats, milk flowing into bucket below."
+  },
+  "65_19": {
+    "hoi_id": "65_19",
+    "verb_phrase": "petting",
+    "obj_phrase": "a cow",
+    "background": "Barn interior / Pasture field / Rural farmyard",
+    "human_object": "Hand gently resting on cow's back, fingers spread wide, palm flat.",
+    "interaction": "Palm pressing softly against fur, gentle stroking from neck to tail."
+  },
+  "76_19": {
+    "hoi_id": "76_19",
+    "verb_phrase": "riding",
+    "obj_phrase": "a cow",
+    "background": "Rural farm setting",
+    "human_object": "Legs straddling cow's back, hands gripping reins firmly",
+    "interaction": "Knees pressing into flanks, guiding direction"
+  },
+  "110_19": {
+    "hoi_id": "110_19",
+    "verb_phrase": "walking",
+    "obj_phrase": "a cow",
+    "background": "Rural path / Open field / Farmyard",
+    "human_object": "Hand loosely holds rope, arm extended forward, cow follows closely.",
+    "interaction": "Rope taut between human's grip and cow’s halter, both move steadily."
+  },
+  "12_60": {
+    "hoi_id": "12_60",
+    "verb_phrase": "cleaning",
+    "obj_phrase": "a dining table",
+    "background": "Dining room / Kitchen area / Living space",
+    "human_object": "Hand flat, fingers spread slightly; body leaning forward; table clear of items.",
+    "interaction": "Palm wiping across tabletop, arm moving horizontally."
+  },
+  "24_60": {
+    "hoi_id": "24_60",
+    "verb_phrase": "eating at",
+    "obj_phrase": "a dining table",
+    "background": "Dining room with chairs / Kitchen nook / Restaurant booth",
+    "human_object": "Hand grasping fork, fingers slightly curved; torso leaning forward over plate.",
+    "interaction": "Fork tines piercing food, lifting towards mouth."
+  },
+  "86_60": {
+    "hoi_id": "86_60",
+    "verb_phrase": "sitting at",
+    "obj_phrase": "a dining table",
+    "background": "Dining room with chairs / Kitchen nook / Restaurant setting",
+    "human_object": "Person seated upright, hands resting on lap or table edge, plate and utensils present but not in use.",
+    "interaction": "Hands near but not touching the objects; stationary position."
+  },
+  "8_16": {
+    "hoi_id": "8_16",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a dog",
+    "background": "Park path / Living room floor / Sidewalk",
+    "human_object": "Arms cradling the dog, hands supporting its torso.",
+    "interaction": "Dog's paws resting lightly on human’s chest, head near shoulder."
+  },
+  "22_16": {
+    "hoi_id": "22_16",
+    "verb_phrase": "drying",
+    "obj_phrase": "a dog",
+    "background": "Bathroom with towels / Laundry room / Outdoor patio",
+    "human_object": "Hands cupping water, fingers spread wide; dog standing still, fur damp",
+    "interaction": "Water dripping from hands onto dog's back, smoothing down wet fur"
+  },
+  "26_16": {
+    "hoi_id": "26_16",
+    "verb_phrase": "feeding",
+    "obj_phrase": "a dog",
+    "background": "Park bench / Kitchen floor / Living room carpet",
+    "human_object": "Hand cupped, fingers loosely holding kibble, slightly bent over",
+    "interaction": "Kibble dropping from palm into open mouth of dog"
+  },
+  "33_16": {
+    "hoi_id": "33_16",
+    "verb_phrase": "grooming",
+    "obj_phrase": "a dog",
+    "background": "Pet salon / Living room with pet supplies / Outdoor park bench",
+    "human_object": "Hand gently holds brush, fingers spread wide, leaning slightly forward",
+    "interaction": "Brush strokes along dog's fur from head to tail"
+  },
+  "36_16": {
+    "hoi_id": "36_16",
+    "verb_phrase": "holding",
+    "obj_phrase": "a dog",
+    "background": "Park bench / Living room floor / Sidewalk",
+    "human_object": "Arms cradling small dog, hands gently supporting torso.",
+    "interaction": "Hands under chest and hind legs, lifting slightly off ground."
+  },
+  "38_16": {
+    "hoi_id": "38_16",
+    "verb_phrase": "hosing",
+    "obj_phrase": "a dog",
+    "background": "Backyard with grass / Outdoor patio / Garden hose nearby",
+    "human_object": "Hand gripping nozzle firmly, arm extended, standing upright",
+    "interaction": "Water stream directed at wet dog's fur, splashing outward"
+  },
+  "39_16": {
+    "hoi_id": "39_16",
+    "verb_phrase": "hugging",
+    "obj_phrase": "a dog",
+    "background": "Living room with couch / Park bench / Bedroom",
+    "human_object": "Arms wrapped around dog's torso, hands clasped together, leaning forward slightly.",
+    "interaction": "Chest pressed against dog’s back, head tilted towards the dog, gentle pressure from arms."
+  },
+  "41_16": {
+    "hoi_id": "41_16",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a dog",
+    "background": "Vet clinic / Park bench / Living room",
+    "human_object": "Person crouching, hands gently touching dog's fur",
+    "interaction": "Fingers stroking along the dog’s back, head tilted for inspection"
+  },
+  "45_16": {
+    "hoi_id": "45_16",
+    "verb_phrase": "kissing",
+    "obj_phrase": "a dog",
+    "background": "Living room / Park bench / Kitchen floor",
+    "human_object": "Person leaning down, lips puckered, hands gently cradling dog's head",
+    "interaction": "Lips touching top of dog’s head, gentle pressure applied"
+  },
+  "65_16": {
+    "hoi_id": "65_16",
+    "verb_phrase": "petting",
+    "obj_phrase": "a dog",
+    "background": "Living room with couch / Park bench / Sidewalk near trees",
+    "human_object": "Hand gently resting on dog's fur, fingers spread wide",
+    "interaction": "Palm pressing softly against back of sitting dog"
+  },
+  "78_16": {
+    "hoi_id": "78_16",
+    "verb_phrase": "running",
+    "obj_phrase": "a dog",
+    "background": "Park path / Sidewalk / Open field",
+    "human_object": "Person's arm extended, leash taut, dog pulling forward",
+    "interaction": "Leash connecting human to dog, both moving in same direction"
+  },
+  "80_16": {
+    "hoi_id": "80_16",
+    "verb_phrase": "scratching",
+    "obj_phrase": "a dog",
+    "background": "Living room / Park bench / Sidewalk",
+    "human_object": "Hand gently curved, fingers lightly touching fur, relaxed stance",
+    "interaction": "Fingertips rubbing along dog's back, gentle circular motions"
+  },
+  "98_16": {
+    "hoi_id": "98_16",
+    "verb_phrase": "straddling",
+    "obj_phrase": "a dog",
+    "background": "Living room floor / Park grass / Bedroom carpet",
+    "human_object": "Person's legs spread wide over dog, hands gripping sides of torso",
+    "interaction": "Knees pressing into flanks, chest close to back, gentle hold"
+  },
+  "107_16": {
+    "hoi_id": "107_16",
+    "verb_phrase": "training",
+    "obj_phrase": "a dog",
+    "background": "Park with green grass / Living room floor / Outdoor training field",
+    "human_object": "Person standing, leash taut in hand, arm extended forward",
+    "interaction": "Leash pulling gently, guiding dog's movement direction"
+  },
+  "110_16": {
+    "hoi_id": "110_16",
+    "verb_phrase": "walking",
+    "obj_phrase": "a dog",
+    "background": "Park path / City sidewalk / Residential neighborhood",
+    "human_object": "Hand loosely holds leash, arm slightly bent, dog collar attached.",
+    "interaction": "Leash taut between human's hand and dog’s neck, both moving forward."
+  },
+  "111_16": {
+    "hoi_id": "111_16",
+    "verb_phrase": "washing",
+    "obj_phrase": "a dog",
+    "background": "Bathroom / Outdoor hose area / Grooming salon",
+    "human_object": "Hands cupping water, fingers splayed; dog standing still, fur wet",
+    "interaction": "Water flowing from hands over dog's back, soapy lather forming"
+  },
+  "10_16": {
+    "hoi_id": "10_16",
+    "verb_phrase": "chasing",
+    "obj_phrase": "a dog",
+    "background": "Park with trees / Residential neighborhood / Open field",
+    "human_object": "Person running, arms extended forward, legs in full stride; dog bounding ahead.",
+    "interaction": "Hands reaching towards the dog's tail, both moving rapidly in the same direction."
+  },
+  "26_17": {
+    "hoi_id": "26_17",
+    "verb_phrase": "feeding",
+    "obj_phrase": "a horse",
+    "background": "Stable yard / Open field / Barn interior",
+    "human_object": "Hand flat, palm up, fingers slightly curved; standing upright, horse's head lowered towards hand.",
+    "interaction": "Horse’s lips touching human’s open palm, gentle upward movement of food from hand to mouth."
+  },
+  "33_17": {
+    "hoi_id": "33_17",
+    "verb_phrase": "grooming",
+    "obj_phrase": "a horse",
+    "background": "Stable interior / Open field with fence / Barn doorway",
+    "human_object": "Hand gently brushing mane, standing close to horse's neck",
+    "interaction": "Fingertips gliding along hair strands, smoothing from top of head down"
+  },
+  "36_17": {
+    "hoi_id": "36_17",
+    "verb_phrase": "holding",
+    "obj_phrase": "a horse",
+    "background": "Stable yard / Open field / Riding arena",
+    "human_object": "Hand loosely gripping reins, standing upright beside the horse",
+    "interaction": "Reins held taut between human's hands and horse’s bridle"
+  },
+  "39_17": {
+    "hoi_id": "39_17",
+    "verb_phrase": "hugging",
+    "obj_phrase": "a horse",
+    "background": "Stable yard / Open field / Riding arena",
+    "human_object": "Arms wrapped fully around horse's neck, hands clasped together, leaning into the embrace",
+    "interaction": "Chest pressed against horse’s side, head resting near mane, no visible movement"
+  },
+  "43_17": {
+    "hoi_id": "43_17",
+    "verb_phrase": "jumping",
+    "obj_phrase": "a horse",
+    "background": "Equestrian arena / Open field with jumps / Indoor riding stable",
+    "human_object": "Rider's legs gripping sides of horse, hands firmly holding reins, body leaning forward slightly.",
+    "interaction": "Legs applying pressure to flanks, hands guiding direction, rider synchronized with horse’s upward jump."
+  },
+  "45_17": {
+    "hoi_id": "45_17",
+    "verb_phrase": "kissing",
+    "obj_phrase": "a horse",
+    "background": "Stable yard / Rural field / Horse stable",
+    "human_object": "Person leaning forward, hands gently cradling horse's head",
+    "interaction": "Lips touching horse’s muzzle, gentle pressure applied"
+  },
+  "52_17": {
+    "hoi_id": "52_17",
+    "verb_phrase": "loading",
+    "obj_phrase": "a horse",
+    "background": "Barn interior / Open field with stable / Rural dirt path",
+    "human_object": "Hands gripping reins firmly, legs straddling horse's back",
+    "interaction": "Reins taut, guiding head direction, feet pressing into flanks"
+  },
+  "37_17": {
+    "hoi_id": "37_17",
+    "verb_phrase": "hopping on",
+    "obj_phrase": "a horse",
+    "background": "Stable yard / Open field / Riding arena",
+    "human_object": "Legs gripping sides of horse, hands firmly hold reins, body leans forward slightly.",
+    "interaction": "Feet press into stirrups, hands pull gently on reins, torso moves with horse's rhythm."
+  },
+  "65_17": {
+    "hoi_id": "65_17",
+    "verb_phrase": "petting",
+    "obj_phrase": "a horse",
+    "background": "Stable interior / Open field with fence / Rural barn",
+    "human_object": "Hand gently resting on horse's neck, fingers spread wide, relaxed stance",
+    "interaction": "Palm pressing lightly against fur, stroking from shoulder to mane"
+  },
+  "72_17": {
+    "hoi_id": "72_17",
+    "verb_phrase": "racing",
+    "obj_phrase": "a horse",
+    "background": "Racetrack with spectators / Open field with fences / Desert landscape",
+    "human_object": "Rider gripping reins firmly, legs tight against horse's flanks",
+    "interaction": "Reins taut, guiding horse at high speed, synchronized movement"
+  },
+  "76_17": {
+    "hoi_id": "76_17",
+    "verb_phrase": "riding",
+    "obj_phrase": "a horse",
+    "background": "Open field / Forest trail / Beach",
+    "human_object": "Legs gripping sides of horse, hands loosely holding reins.",
+    "interaction": "Hips move with horse's gait, feet in stirrups, guiding direction."
+  },
+  "78_17": {
+    "hoi_id": "78_17",
+    "verb_phrase": "running",
+    "obj_phrase": "a horse",
+    "background": "Open field / Riding arena / Rural trail",
+    "human_object": "Person seated upright, hands gripping reins firmly, legs pressed against horse's sides.",
+    "interaction": "Hands pulling gently on reins, guiding direction; lower body synchronized with horse’s gallop."
+  },
+  "98_17": {
+    "hoi_id": "98_17",
+    "verb_phrase": "straddling",
+    "obj_phrase": "a horse",
+    "background": "Open field / Stable interior / Riding arena",
+    "human_object": "Legs gripping sides of horse, hands loosely holding reins, upright torso.",
+    "interaction": "Knees pressed into flanks, feet in stirrups, slight forward lean."
+  },
+  "107_17": {
+    "hoi_id": "107_17",
+    "verb_phrase": "training",
+    "obj_phrase": "a horse",
+    "background": "Open field with fence / Indoor riding arena / Forest trail",
+    "human_object": "Person standing upright, hands loosely gripping reins, legs slightly bent at knees.",
+    "interaction": "Hands guiding reins, directing horse's head; gentle pull to steer direction."
+  },
+  "110_17": {
+    "hoi_id": "110_17",
+    "verb_phrase": "walking",
+    "obj_phrase": "a horse",
+    "background": "Rural path / Open field / Stable yard",
+    "human_object": "Hand loosely holds reins, arm extended forward, relaxed stance.",
+    "interaction": "Reins connect to bridle, guiding horse's head direction."
+  },
+  "111_17": {
+    "hoi_id": "111_17",
+    "verb_phrase": "washing",
+    "obj_phrase": "a horse",
+    "background": "Stable yard / Outdoor paddock / Wash bay",
+    "human_object": "Hands splayed over horse's flank, fingers spread wide, body leaning slightly forward, hose held loosely with water flowing.",
+    "interaction": "Water stream making contact from hands to horse’s coat, moving in smooth strokes down the animal."
+  },
+  "36_3": {
+    "hoi_id": "36_3",
+    "verb_phrase": "holding",
+    "obj_phrase": "a motorcycle",
+    "background": "Garage with tools / Street corner at night / Open field",
+    "human_object": "Both hands gripping handlebars, feet flat on ground, leaning slightly forward.",
+    "interaction": "Hands firmly grasping handlebar grips, torso aligned over bike's center of gravity."
+  },
+  "41_3": {
+    "hoi_id": "41_3",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a motorcycle",
+    "background": "Garage workshop / Street curb / Motorcycle showroom",
+    "human_object": "Person crouched, hands resting on engine, fingers spread wide.",
+    "interaction": "Hands pressing down gently, examining parts closely."
+  },
+  "43_3": {
+    "hoi_id": "43_3",
+    "verb_phrase": "jumping",
+    "obj_phrase": "a motorcycle",
+    "background": "Dirt track with jumps / Desert landscape / Urban obstacle course",
+    "human_object": "Rider gripping handlebars firmly, leaning forward, bike airborne",
+    "interaction": "Hands steady on controls, rider's weight shifting back for balance"
+  },
+  "37_3": {
+    "hoi_id": "37_3",
+    "verb_phrase": "hopping on",
+    "obj_phrase": "a motorcycle",
+    "background": "City street / Rural road / Parking lot",
+    "human_object": "Person with one foot off ground, hands gripping handlebars firmly.",
+    "interaction": "Foot pushing off from ground, body leaning forward onto seat."
+  },
+  "62_3": {
+    "hoi_id": "62_3",
+    "verb_phrase": "parking",
+    "obj_phrase": "a motorcycle",
+    "background": "Parking lot / Street curb / Garage",
+    "human_object": "Hand gripping handlebar, foot extended to ground, leaning slightly forward.",
+    "interaction": "Foot touching pavement, guiding motorcycle into stable position."
+  },
+  "71_3": {
+    "hoi_id": "71_3",
+    "verb_phrase": "pushing",
+    "obj_phrase": "a motorcycle",
+    "background": "Garage floor / City sidewalk / Rural dirt path",
+    "human_object": "Hands firmly gripping handlebars, leaning forward slightly, legs straightened behind motorcycle.",
+    "interaction": "Pushing force from hands to handlebars, linear motion of motorcycle along ground."
+  },
+  "72_3": {
+    "hoi_id": "72_3",
+    "verb_phrase": "racing",
+    "obj_phrase": "a motorcycle",
+    "background": "Racetrack with spectators / Desert dunes / City streets",
+    "human_object": "Hands gripping handlebars, leaning forward, knees bent outwards, bike tilted.",
+    "interaction": "Throttle twisted, wheels spinning fast, dust trailing behind."
+  },
+  "76_3": {
+    "hoi_id": "76_3",
+    "verb_phrase": "riding",
+    "obj_phrase": "a motorcycle",
+    "background": "City streets / Rural roads / Highway",
+    "human_object": "Hands gripping handlebars, feet on footpegs, leaning forward slightly.",
+    "interaction": "Legs straddling seat, hands controlling throttle and brakes, body aligned with bike's direction."
+  },
+  "87_3": {
+    "hoi_id": "87_3",
+    "verb_phrase": "sitting on",
+    "obj_phrase": "a motorcycle",
+    "background": "Urban street / Rural road / Parking lot",
+    "human_object": "Person seated with legs straddling motorcycle, hands gripping handles.",
+    "interaction": "Hands firmly grasp handlebars, body leans slightly forward."
+  },
+  "98_3": {
+    "hoi_id": "98_3",
+    "verb_phrase": "straddling",
+    "obj_phrase": "a motorcycle",
+    "background": "Open road / Urban street corner / Motorcycle showroom",
+    "human_object": "Legs spread wide gripping fuel tank, hands firmly on handlebars.",
+    "interaction": "Thighs pressing against motorcycle sides, torso leaning slightly forward."
+  },
+  "108_3": {
+    "hoi_id": "108_3",
+    "verb_phrase": "turning",
+    "obj_phrase": "a motorcycle",
+    "background": "Garage / Street corner / Driveway",
+    "human_object": "Hand gripping throttle, leg straddling seat, torso leaning slightly forward.",
+    "interaction": "Throttle twisted, front wheel turned to one side."
+  },
+  "110_3": {
+    "hoi_id": "110_3",
+    "verb_phrase": "walking",
+    "obj_phrase": "a motorcycle",
+    "background": "City sidewalk / Rural road / Parking lot",
+    "human_object": "Hand loosely gripping handlebar, upright stance, motorcycle tilted slightly forward.",
+    "interaction": "Person's hands steady on handlebars, guiding motorcycle with slight push."
+  },
+  "111_3": {
+    "hoi_id": "111_3",
+    "verb_phrase": "washing",
+    "obj_phrase": "a motorcycle",
+    "background": "Outdoor garage / Driveway with tools / Street side",
+    "human_object": "Hands gripping sponge, leaning over bike; legs slightly bent.",
+    "interaction": "Sponge rubbing against motorcycle's painted surface."
+  },
+  "8_0": {
+    "hoi_id": "8_0",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a person",
+    "background": "Emergency room / Beach shore / Hiking trail",
+    "human_object": "Arms wrapped securely under armpits, back straight, legs bent slightly for support.",
+    "interaction": "Carried person's weight distributed across carrier’s arms, steady forward movement."
+  },
+  "31_0": {
+    "hoi_id": "31_0",
+    "verb_phrase": "greeting",
+    "obj_phrase": "a person",
+    "background": "Office hallway / Park bench / Restaurant entrance",
+    "human_object": "Hand extended, palm open, slight lean forward",
+    "interaction": "Hands meet briefly, heads nod slightly"
+  },
+  "36_0": {
+    "hoi_id": "36_0",
+    "verb_phrase": "holding",
+    "obj_phrase": "a person",
+    "background": "Living room / Park bench / Hospital corridor",
+    "human_object": "Arms wrapped securely, hands clasped behind back, bodies close together.",
+    "interaction": "Chest to chest contact, slight upward lift from ground."
+  },
+  "39_0": {
+    "hoi_id": "39_0",
+    "verb_phrase": "hugging",
+    "obj_phrase": "a person",
+    "background": "Living room with warm lighting / Park bench under a tree / Beach at sunset",
+    "human_object": "Arms wrapped fully around each other's back, bodies close together",
+    "interaction": "Chests touching, heads leaning towards one another"
+  },
+  "45_0": {
+    "hoi_id": "45_0",
+    "verb_phrase": "kissing",
+    "obj_phrase": "a person",
+    "background": "Romantic restaurant / Cozy living room / Quiet park bench",
+    "human_object": "Lips pressed together, bodies close, arms wrapped around each other",
+    "interaction": "Faces tilted towards each other, lips meeting gently"
+  },
+  "92_0": {
+    "hoi_id": "92_0",
+    "verb_phrase": "stabbing",
+    "obj_phrase": "a person",
+    "background": "Dark alley / Abandoned warehouse / Deserted park",
+    "human_object": "Fists clenched, one gripping a sharp blade, arm extended.",
+    "interaction": "Blade piercing torso, blood splattering."
+  },
+  "100_0": {
+    "hoi_id": "100_0",
+    "verb_phrase": "tagging",
+    "obj_phrase": "a person",
+    "background": "Urban graffiti wall / Busy nightclub / Street protest",
+    "human_object": "Hand forming a loose fist, fingers extended to hold marker; standing upright",
+    "interaction": "Marker tip touching skin, steady horizontal movement across arm"
+  },
+  "102_0": {
+    "hoi_id": "102_0",
+    "verb_phrase": "teaching",
+    "obj_phrase": "a person",
+    "background": "Classroom / Library study area / Home living room",
+    "human_object": "One person standing, pointing at a book; other sitting, looking attentive",
+    "interaction": "Pointing finger touching page, both heads tilted towards the book"
+  },
+  "48_0": {
+    "hoi_id": "48_0",
+    "verb_phrase": "licking",
+    "obj_phrase": "a person",
+    "background": "Bedroom / Living room / Park",
+    "human_object": "Person's tongue extended towards another person’s face, both standing close.",
+    "interaction": "Tongue making contact with skin, gentle upward motion."
+  },
+  "8_58": {
+    "hoi_id": "8_58",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a potted plant",
+    "background": "Cluttered garden shed / Bright living room / Outdoor pathway",
+    "human_object": "Both hands cradling pot base, arms slightly bent, plant upright.",
+    "interaction": "Hands supporting bottom of pot, steady upward lift."
+  },
+  "36_58": {
+    "hoi_id": "36_58",
+    "verb_phrase": "holding",
+    "obj_phrase": "a potted plant",
+    "background": "Indoor living room / Outdoor garden / Urban balcony",
+    "human_object": "Both hands cradling pot, fingers spread for support, standing upright.",
+    "interaction": "Hands encircle base of pot, lifting slightly off ground."
+  },
+  "38_58": {
+    "hoi_id": "38_58",
+    "verb_phrase": "hosing",
+    "obj_phrase": "a potted plant",
+    "background": "Garden / Patio / Backyard",
+    "human_object": "Hand loosely gripping hose nozzle, arm extended forward, water flowing from hose.",
+    "interaction": "Water stream directed at base of potted plant."
+  },
+  "8_18": {
+    "hoi_id": "8_18",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a sheep",
+    "background": "Rural farm setting",
+    "human_object": "Arms wrapped under sheep's torso, hands gripping firmly behind front legs; sheep held close to chest",
+    "interaction": "Sheep’s body pressed against human’s upper body, head resting near shoulder"
+  },
+  "26_18": {
+    "hoi_id": "26_18",
+    "verb_phrase": "feeding",
+    "obj_phrase": "a sheep",
+    "background": "Rural farm setting",
+    "human_object": "Hand loosely cupped, fingers extended slightly, holding feed; body leaning forward",
+    "interaction": "Feed being poured from palm into sheep's mouth, gentle downward motion"
+  },
+  "34_18": {
+    "hoi_id": "34_18",
+    "verb_phrase": "herding",
+    "obj_phrase": "a sheep",
+    "background": "Open field with scattered rocks / Rolling hills under cloudy sky / Enclosed pasture",
+    "human_object": "Person standing upright, one arm extended forward, fingers slightly curved",
+    "interaction": "Hand gently guiding sheep's back, directing movement towards desired direction"
+  },
+  "36_18": {
+    "hoi_id": "36_18",
+    "verb_phrase": "holding",
+    "obj_phrase": "a sheep",
+    "background": "Farmyard setting",
+    "human_object": "Arms wrapped around sheep's torso, hands gently clasped together",
+    "interaction": "Chest pressed against wooly back, head close to sheep's neck"
+  },
+  "39_18": {
+    "hoi_id": "39_18",
+    "verb_phrase": "hugging",
+    "obj_phrase": "a sheep",
+    "background": "Farm field / Barn interior / Rural landscape",
+    "human_object": "Arms wrapped around wooly body, hands clasped behind sheep's back.",
+    "interaction": "Chest pressed against fluffy side, head tilted towards sheep’s neck."
+  },
+  "45_18": {
+    "hoi_id": "45_18",
+    "verb_phrase": "kissing",
+    "obj_phrase": "a sheep",
+    "background": "Rural farm setting",
+    "human_object": "Person leaning down, hands gently cradling sheep's head",
+    "interaction": "Lips touching top of sheep’s head, gentle pressure applied"
+  },
+  "65_18": {
+    "hoi_id": "65_18",
+    "verb_phrase": "petting",
+    "obj_phrase": "a sheep",
+    "background": "Farm field / Petting zoo enclosure / Rural barn",
+    "human_object": "Hand gently resting on wooly fleece, fingers spread wide",
+    "interaction": "Palm pressing softly against the sheep's back, stroking from head to tail"
+  },
+  "76_18": {
+    "hoi_id": "76_18",
+    "verb_phrase": "riding",
+    "obj_phrase": "a sheep",
+    "background": "Rural field / Barn interior / Grassland",
+    "human_object": "Person straddling sheep, hands gripping wool firmly",
+    "interaction": "Legs clamped around sheep's torso, guiding forward movement"
+  },
+  "83_18": {
+    "hoi_id": "83_18",
+    "verb_phrase": "shearing",
+    "obj_phrase": "a sheep",
+    "background": "Barn interior / Open field with fence / Rural shed",
+    "human_object": "Hands gripping electric clippers, arms extended, leaning over sheep",
+    "interaction": "Clippers gliding along wool, removing thick tufts smoothly"
+  },
+  "110_18": {
+    "hoi_id": "110_18",
+    "verb_phrase": "walking",
+    "obj_phrase": "a sheep",
+    "background": "Rural field / City park / Country road",
+    "human_object": "Hand loosely holds leash, arm extended forward, sheep follows closely.",
+    "interaction": "Leash taut between human's grip and sheep’s collar, both move in same direction."
+  },
+  "111_18": {
+    "hoi_id": "111_18",
+    "verb_phrase": "washing",
+    "obj_phrase": "a sheep",
+    "background": "Barnyard setting",
+    "human_object": "Hands gripping soap, fingers spread wide; leaning over sheep",
+    "interaction": "Soap rubbing against wool, hands moving in circular motions"
+  },
+  "4_6": {
+    "hoi_id": "4_6",
+    "verb_phrase": "boarding",
+    "obj_phrase": "a train",
+    "background": "Train platform / Subway station / Railway crossing",
+    "human_object": "Hand gripping suitcase handle, arm extended forward.",
+    "interaction": "Foot stepping onto train, body leaning slightly inward."
+  },
+  "21_6": {
+    "hoi_id": "21_6",
+    "verb_phrase": "driving",
+    "obj_phrase": "a train",
+    "background": "Train cabin interior",
+    "human_object": "Hands gripping control levers, seated upright",
+    "interaction": "Levers pulled back, feet pressing pedals forward"
+  },
+  "25_6": {
+    "hoi_id": "25_6",
+    "verb_phrase": "exiting",
+    "obj_phrase": "a train",
+    "background": "Train station platform",
+    "human_object": "Person standing upright, one foot stepping out of train door",
+    "interaction": "Foot making contact with platform, body leaning forward slightly"
+  },
+  "52_6": {
+    "hoi_id": "52_6",
+    "verb_phrase": "loading",
+    "obj_phrase": "a train",
+    "background": "Train station platform",
+    "human_object": "Person standing, hands gripping suitcase handles firmly, legs slightly bent.",
+    "interaction": "Suitcase being lifted into open train door."
+  },
+  "76_6": {
+    "hoi_id": "76_6",
+    "verb_phrase": "riding",
+    "obj_phrase": "a train",
+    "background": "Train station platform / Inside passenger car / Passing landscape",
+    "human_object": "Person seated upright, hands resting lightly on armrests",
+    "interaction": "Body sways slightly with train's movement, feet flat on floor"
+  },
+  "87_6": {
+    "hoi_id": "87_6",
+    "verb_phrase": "sitting on",
+    "obj_phrase": "a train",
+    "background": "Train interior with seats / Busy station platform / Quiet countryside view",
+    "human_object": "Person seated upright, hands resting on thighs, legs bent at knees",
+    "interaction": "Buttocks in contact with seat cushion, back leaning against chair rest"
+  },
+  "111_6": {
+    "hoi_id": "111_6",
+    "verb_phrase": "washing",
+    "obj_phrase": "a train",
+    "background": "Train station platform",
+    "human_object": "Person standing with sponge in outstretched arm, train wet and soapy",
+    "interaction": "Sponge making circular motions against train's side"
+  },
+  "13_62": {
+    "hoi_id": "13_62",
+    "verb_phrase": "controlling",
+    "obj_phrase": "a tv",
+    "background": "Living room with TV stand / Bedroom with mounted TV / Cozy den",
+    "human_object": "Hand loosely gripping remote, relaxed arm, sitting posture, TV powered on",
+    "interaction": "Thumb pressing button, signal directed towards TV receiver"
+  },
+  "75_62": {
+    "hoi_id": "75_62",
+    "verb_phrase": "repairing",
+    "obj_phrase": "a tv",
+    "background": "Living room with tools scattered / Workbench in garage / Small repair shop",
+    "human_object": "Hands gripping screwdriver, leaning over TV set, back bent slightly",
+    "interaction": "Screwdriver tip turning screws, hands pressing down firmly"
+  },
+  "112_62": {
+    "hoi_id": "112_62",
+    "verb_phrase": "watching",
+    "obj_phrase": "a tv",
+    "background": "Living room with couch / Bedroom with bed / Kitchen counter",
+    "human_object": "Person sitting upright, hands relaxed on lap, TV screen illuminated",
+    "interaction": "Eyes directed towards the glowing screen, no direct contact"
+  },
+  "7_47": {
+    "hoi_id": "7_47",
+    "verb_phrase": "buying",
+    "obj_phrase": "an apple",
+    "background": "Grocery store aisle / Farmers market stand / Fruit vendor cart",
+    "human_object": "Hand extended, fingers loosely gripping the apple, arm slightly bent.",
+    "interaction": "Fingertips touching the smooth skin of the apple, lifting it from the display."
+  },
+  "15_47": {
+    "hoi_id": "15_47",
+    "verb_phrase": "cutting",
+    "obj_phrase": "an apple",
+    "background": "Kitchen counter / Wooden dining table / Outdoor picnic blanket",
+    "human_object": "Hand firmly gripping knife, fingers spread for control; other hand stabilizing apple.",
+    "interaction": "Blade pressing into apple flesh, downward cut dividing fruit."
+  },
+  "23_47": {
+    "hoi_id": "23_47",
+    "verb_phrase": "eating",
+    "obj_phrase": "an apple",
+    "background": "Kitchen counter / Park bench / Office break room",
+    "human_object": "Hand cupping the apple, fingers spread slightly, elbow bent.",
+    "interaction": "Teeth biting into the fruit's flesh, juice dripping down chin."
+  },
+  "36_47": {
+    "hoi_id": "36_47",
+    "verb_phrase": "holding",
+    "obj_phrase": "an apple",
+    "background": "Kitchen counter / Park bench / Market stall",
+    "human_object": "Palm cradling the apple, fingers gently curved.",
+    "interaction": "Apple resting securely in palm, no visible movement."
+  },
+  "41_47": {
+    "hoi_id": "41_47",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "an apple",
+    "background": "Kitchen counter / Farmers market stall / Living room table",
+    "human_object": "Hand gently cradling apple, fingers spread slightly apart, arm extended forward.",
+    "interaction": "Fingertips lightly touching apple skin, rotating slowly to examine all sides."
+  },
+  "64_47": {
+    "hoi_id": "64_47",
+    "verb_phrase": "peeling",
+    "obj_phrase": "an apple",
+    "background": "Kitchen counter / Living room table / Outdoor picnic",
+    "human_object": "Fingers pinching apple skin, other hand steady with paring tool.",
+    "interaction": "Blade gliding along fruit's curve, separating peel from flesh."
+  },
+  "66_47": {
+    "hoi_id": "66_47",
+    "verb_phrase": "picking",
+    "obj_phrase": "an apple",
+    "background": "Orchard with trees / Farmer's market stand / Kitchen counter",
+    "human_object": "Hand extended upward, fingers wrapped around apple stem, arm slightly bent.",
+    "interaction": "Fingertips pressing into fruit, lifting gently from branch."
+  },
+  "89_47": {
+    "hoi_id": "89_47",
+    "verb_phrase": "smelling",
+    "obj_phrase": "an apple",
+    "background": "Kitchen counter / Picnic blanket / Market stall",
+    "human_object": "Hand cupping the apple, fingers slightly curved, head tilted towards fruit.",
+    "interaction": "Nose close to apple's skin, no visible movement."
+  },
+  "111_47": {
+    "error": "API调用失败"
+  },
+  "8_24": {
+    "error": "API调用失败"
+  },
+  "36_24": {
+    "error": "API调用失败"
+  },
+  "41_24": {
+    "error": "API调用失败"
+  },
+  "58_24": {
+    "error": "API调用失败"
+  },
+  "114_24": {
+    "error": "API调用失败"
+  },
+  "7_46": {
+    "hoi_id": "7_46",
+    "verb_phrase": "buying",
+    "obj_phrase": "a banana",
+    "background": "Supermarket aisle / Outdoor market stall / Convenience store counter",
+    "human_object": "Hand extended, fingers loosely gripping ripe yellow banana",
+    "interaction": "Fingertips touching smooth peel, arm lifting fruit towards cashier"
+  },
+  "8_46": {
+    "hoi_id": "8_46",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a banana",
+    "background": "Kitchen counter / Market aisle / Picnic table",
+    "human_object": "Hand loosely cradling ripe yellow banana, fingers slightly curved.",
+    "interaction": "Banana resting in palm, no significant movement."
+  },
+  "15_46": {
+    "hoi_id": "15_46",
+    "verb_phrase": "cutting",
+    "obj_phrase": "a banana",
+    "background": "Kitchen counter / Dining table / Outdoor picnic",
+    "human_object": "Hand gripping knife, fingers spread; other hand stabilizing banana.",
+    "interaction": "Knife blade pressing into banana peel, sliding down to separate flesh."
+  },
+  "23_46": {
+    "hoi_id": "23_46",
+    "verb_phrase": "eating",
+    "obj_phrase": "a banana",
+    "background": "Kitchen counter / Park bench / Office break room",
+    "human_object": "Hand loosely gripping banana peel, fingers slightly curved; sitting upright with elbow bent.",
+    "interaction": "Peel being pulled back from top of banana, revealing fruit underneath."
+  },
+  "36_46": {
+    "hoi_id": "36_46",
+    "verb_phrase": "holding",
+    "obj_phrase": "a banana",
+    "background": "Kitchen counter / Park bench / Market stall",
+    "human_object": "Fingers loosely cradling ripe yellow banana, arm relaxed at side.",
+    "interaction": "Hand gripping midsection of banana, no visible movement."
+  },
+  "41_46": {
+    "hoi_id": "41_46",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a banana",
+    "background": "Kitchen counter / Market stall / Dining table",
+    "human_object": "Fingers gently cradling banana, arm slightly bent.",
+    "interaction": "Hand turning banana, eyes closely examining peel for blemishes."
+  },
+  "64_46": {
+    "hoi_id": "64_46",
+    "verb_phrase": "peeling",
+    "obj_phrase": "a banana",
+    "background": "Kitchen counter / Living room table / Outdoor picnic",
+    "human_object": "Fingertips pinching banana peel, other hand supporting fruit.",
+    "interaction": "Peel separating from flesh, fingers pulling downwards."
+  },
+  "66_46": {
+    "hoi_id": "66_46",
+    "verb_phrase": "picking",
+    "obj_phrase": "a banana",
+    "background": "Tropical plantation / Grocery store aisle / Kitchen counter",
+    "human_object": "Hand grasping banana stem, fingers spread slightly, arm extended upward.",
+    "interaction": "Fingertips pulling banana away from bunch, slight bending of stalk."
+  },
+  "89_46": {
+    "hoi_id": "89_46",
+    "verb_phrase": "smelling",
+    "obj_phrase": "a banana",
+    "background": "Kitchen counter / Market stall / Living room table",
+    "human_object": "Hand cupping the banana, fingers slightly curved, head tilted towards fruit.",
+    "interaction": "Nose close to banana peel, inhaling gently."
+  },
+  "5_34": {
+    "hoi_id": "5_34",
+    "verb_phrase": "breaking",
+    "obj_phrase": "a baseball bat",
+    "background": "Baseball field / Wood workshop / Backyard",
+    "human_object": "Hands gripping bat firmly, arms raised overhead, bat angled for impact.",
+    "interaction": "Bat striking against hard surface, splintering at contact point."
+  },
+  "8_34": {
+    "hoi_id": "8_34",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a baseball bat",
+    "background": "Baseball field / Park with trees / Urban sidewalk",
+    "human_object": "Hand gripping bat near middle, arm extended forward, bat parallel to ground.",
+    "interaction": "Bat held steady, no visible movement, contact at palm and fingers."
+  },
+  "36_34": {
+    "hoi_id": "36_34",
+    "verb_phrase": "holding",
+    "obj_phrase": "a baseball bat",
+    "background": "Baseball field / Backyard lawn / Indoor batting cage",
+    "human_object": "Fists gripping bat firmly, arms extended, stance wide.",
+    "interaction": "Bat held horizontally at shoulder height, ready to swing."
+  },
+  "84_34": {
+    "hoi_id": "84_34",
+    "verb_phrase": "signing",
+    "obj_phrase": "a baseball bat",
+    "background": "Sports memorabilia store / Baseball field dugout / Home study",
+    "human_object": "Hand gripping pen, arm extended, bat horizontal",
+    "interaction": "Pen tip touching bat barrel, steady writing motion"
+  },
+  "99_34": {
+    "hoi_id": "99_34",
+    "verb_phrase": "swinging",
+    "obj_phrase": "a baseball bat",
+    "background": "Baseball field / Park with batting cage / Backyard setup",
+    "human_object": "Both hands gripping bat firmly, feet shoulder-width apart, knees slightly bent.",
+    "interaction": "Bat swings forward horizontally, connecting with ball mid-air."
+  },
+  "104_34": {
+    "hoi_id": "104_34",
+    "verb_phrase": "throwing",
+    "obj_phrase": "a baseball bat",
+    "background": "Baseball field / Backyard lawn / Indoor gym",
+    "human_object": "Hand gripping end of bat, arm extended back, feet shoulder-width apart.",
+    "interaction": "Bat released from hand, flying forward away from thrower."
+  },
+  "115_34": {
+    "hoi_id": "115_34",
+    "verb_phrase": "wielding",
+    "obj_phrase": "a baseball bat",
+    "background": "Baseball field / Backyard with makeshift base markers / Indoor batting cage",
+    "human_object": "Both hands gripping the bat, feet shoulder-width apart, knees slightly bent.",
+    "interaction": "Bat held horizontally at waist level, ready to swing forward."
+  },
+  "36_35": {
+    "hoi_id": "36_35",
+    "verb_phrase": "holding",
+    "obj_phrase": "a baseball glove",
+    "background": "Baseball field / Park bench / Backyard lawn",
+    "human_object": "Hand open, fingers spread over glove, arm relaxed at side.",
+    "interaction": "Palm pressing into pocket of glove, no visible motion."
+  },
+  "114_35": {
+    "hoi_id": "114_35",
+    "verb_phrase": "wearing",
+    "obj_phrase": "a baseball glove",
+    "background": "Baseball field / Park with grassy area / Backyard",
+    "human_object": "Hand open, fingers spread over glove, arm slightly bent.",
+    "interaction": "Glove held steady, palm facing up, ready to catch."
+  },
+  "26_21": {
+    "hoi_id": "26_21",
+    "verb_phrase": "feeding",
+    "obj_phrase": "a bear",
+    "background": "Forest clearing / Zoo enclosure / Mountainous area",
+    "human_object": "Hand extended, palm up, fingers slightly curved; bear's snout close to human’s open hand.",
+    "interaction": "Food transferring from human’s fingertips into bear’s mouth."
+  },
+  "40_21": {
+    "hoi_id": "40_21",
+    "verb_phrase": "hunting",
+    "obj_phrase": "a bear",
+    "background": "Dense forest / Snowy mountainside / Camouflaged hideout",
+    "human_object": "Hand gripping rifle stock, finger on trigger, shoulder braced against buttstock",
+    "interaction": "Rifle aimed at bear, barrel pointing directly towards target"
+  },
+  "112_21": {
+    "hoi_id": "112_21",
+    "verb_phrase": "watching",
+    "obj_phrase": "a bear",
+    "background": "Forest clearing / Zoo enclosure / Mountain trail",
+    "human_object": "Person standing with arms relaxed at sides, eyes focused forward.",
+    "interaction": "Eyes directed towards stationary bear, no direct contact."
+  },
+  "12_59": {
+    "hoi_id": "12_59",
+    "verb_phrase": "cleaning",
+    "obj_phrase": "a bed",
+    "background": "Bedroom / Hotel room / Dormitory",
+    "human_object": "Hands spread wide, pressing down; back bent slightly forward; bed sheets smooth.",
+    "interaction": "Palms smoothing out wrinkles, moving from head to foot of the bed."
+  },
+  "49_59": {
+    "hoi_id": "49_59",
+    "verb_phrase": "lying on",
+    "obj_phrase": "a bed",
+    "background": "Bedroom with soft lighting / Hotel room / Cozy cabin",
+    "human_object": "Person reclined, head resting on pillow, arms relaxed at sides",
+    "interaction": "Body fully supported by mattress, no visible movement"
+  },
+  "87_59": {
+    "hoi_id": "87_59",
+    "verb_phrase": "sitting on",
+    "obj_phrase": "a bed",
+    "background": "Bedroom / Hotel room / Dormitory",
+    "human_object": "Person seated with legs crossed, back relaxed against headboard.",
+    "interaction": "Buttocks pressing into mattress, upper body leaning slightly backward."
+  },
+  "41_13": {
+    "hoi_id": "41_13",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a bench",
+    "background": "Park / Street corner / Indoor lobby",
+    "human_object": "Person standing, one hand resting lightly on backrest, other hand touching seat edge.",
+    "interaction": "Fingers gently pressing down on wooden slats, palm flat against smooth surface."
+  },
+  "49_13": {
+    "hoi_id": "49_13",
+    "verb_phrase": "lying on",
+    "obj_phrase": "a bench",
+    "background": "Park with trees / City sidewalk / Quiet courtyard",
+    "human_object": "Person reclined fully, arms relaxed at sides, legs stretched out along bench length.",
+    "interaction": "Body in full contact with flat wooden surface, no visible movement."
+  },
+  "87_13": {
+    "hoi_id": "87_13",
+    "verb_phrase": "sitting on",
+    "obj_phrase": "a bench",
+    "background": "Park with trees / City sidewalk / Indoor lobby",
+    "human_object": "Person seated upright, hands relaxed on thighs, bench stable.",
+    "interaction": "Buttocks in contact with flat wooden seat, legs bent at knees."
+  },
+  "8_73": {
+    "hoi_id": "8_73",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a book",
+    "background": "Library aisle / Coffee shop table / Park bench",
+    "human_object": "Hand flat under the book, fingers spread for support; arm bent at elbow.",
+    "interaction": "Book resting on palm, slight upward pressure to keep level."
+  },
+  "36_73": {
+    "hoi_id": "36_73",
+    "verb_phrase": "holding",
+    "obj_phrase": "a book",
+    "background": "Library shelf / Cozy living room / Quiet park bench",
+    "human_object": "Hand flat, fingers spread over cover, arm relaxed at side.",
+    "interaction": "Palm pressing gently against book spine, no movement."
+  },
+  "58_73": {
+    "hoi_id": "58_73",
+    "verb_phrase": "opening",
+    "obj_phrase": "a book",
+    "background": "Library shelf / Coffee shop table / Bedroom nightstand",
+    "human_object": "Fingertips gently prying open cover, spine bending slightly.",
+    "interaction": "Hands pulling pages apart, revealing text inside."
+  },
+  "73_73": {
+    "hoi_id": "73_73",
+    "verb_phrase": "reading",
+    "obj_phrase": "a book",
+    "background": "Cozy living room / Quiet library corner / Comfortable bedroom",
+    "human_object": "Fingers gently hold open pages, relaxed sitting pose.",
+    "interaction": "Eyes scanning text, hands occasionally turning page."
+  },
+  "36_45": {
+    "hoi_id": "36_45",
+    "verb_phrase": "holding",
+    "obj_phrase": "a bowl",
+    "background": "Kitchen countertop / Dining table / Living room couch",
+    "human_object": "Both hands cradling the bowl, fingers spread for support.",
+    "interaction": "Bowl resting securely against palms, no visible movement."
+  },
+  "96_45": {
+    "hoi_id": "96_45",
+    "verb_phrase": "stirring",
+    "obj_phrase": "a bowl",
+    "background": "Kitchen counter / Dining table / Outdoor picnic",
+    "human_object": "Hand loosely gripping spoon, arm slightly bent, bowl steady.",
+    "interaction": "Spoon rotating clockwise within the bowl's contents."
+  },
+  "111_45": {
+    "hoi_id": "111_45",
+    "verb_phrase": "washing",
+    "obj_phrase": "a bowl",
+    "background": "Kitchen sink / Dining table / Outdoor picnic area",
+    "human_object": "Fingers spread over bowl rim, slight bend at waist.",
+    "interaction": "Hands rotating bowl under running water."
+  },
+  "48_45": {
+    "hoi_id": "48_45",
+    "verb_phrase": "licking",
+    "obj_phrase": "a bowl",
+    "background": "Kitchen counter / Living room couch / Outdoor picnic table",
+    "human_object": "Person's tongue extended to rim of tilted bowl, hands cradling sides.",
+    "interaction": "Tongue touching inner edge of bowl, head slightly bent forward."
+  },
+  "15_50": {
+    "hoi_id": "15_50",
+    "verb_phrase": "cutting",
+    "obj_phrase": "a broccoli",
+    "background": "Kitchen counter / Wooden table / Outdoor picnic",
+    "human_object": "Hand firmly gripping knife, fingers spread for control; other hand stabilizing broccoli stem.",
+    "interaction": "Knife blade pressing into broccoli head, steady downward force splitting florets."
+  },
+  "23_50": {
+    "hoi_id": "23_50",
+    "verb_phrase": "eating",
+    "obj_phrase": "a broccoli",
+    "background": "Kitchen table / Restaurant booth / Park bench",
+    "human_object": "Hand loosely gripping broccoli floret, arm raised to mouth.",
+    "interaction": "Florets touching lips, slight jaw movement while chewing."
+  },
+  "36_50": {
+    "hoi_id": "36_50",
+    "verb_phrase": "holding",
+    "obj_phrase": "a broccoli",
+    "background": "Kitchen counter / Farmers market stall / Garden plot",
+    "human_object": "Fingers loosely cradling broccoli stem, arm slightly bent.",
+    "interaction": "Hand supporting base of broccoli, no visible motion."
+  },
+  "89_50": {
+    "hoi_id": "89_50",
+    "verb_phrase": "smelling",
+    "obj_phrase": "a broccoli",
+    "background": "Kitchen counter / Farmers market stand / Garden plot",
+    "human_object": "Hand cupping broccoli, head tilted close to florets",
+    "interaction": "Nose touching top of broccoli, inhaling deeply"
+  },
+  "96_50": {
+    "hoi_id": "96_50",
+    "verb_phrase": "stirring",
+    "obj_phrase": "a broccoli",
+    "background": "Kitchen counter / Dining table / Outdoor grill",
+    "human_object": "Hand loosely gripping spoon, arm slightly bent, broccoli submerged in pot.",
+    "interaction": "Spoon circularly agitating water, touching broccoli florets."
+  },
+  "111_50": {
+    "hoi_id": "111_50",
+    "verb_phrase": "washing",
+    "obj_phrase": "a broccoli",
+    "background": "Kitchen sink / Garden hose area / Outdoor water basin",
+    "human_object": "Fingers loosely gripping broccoli, other hand forming cup to hold water",
+    "interaction": "Hands rubbing broccoli under running water, circular motions cleaning surface"
+  },
+  "3_55": {
+    "hoi_id": "3_55",
+    "verb_phrase": "blowing",
+    "obj_phrase": "a cake",
+    "background": "Kitchen table / Birthday party setting / Cozy living room",
+    "human_object": "Lips pursed, hands clasped together near chest, candle flames flickering",
+    "interaction": "Breath directed at candles, causing them to bend towards the cake center"
+  },
+  "8_55": {
+    "hoi_id": "8_55",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a cake",
+    "background": "Kitchen counter / Party room / Outdoor picnic table",
+    "human_object": "Both hands flat under the cake base, arms extended forward, back slightly bent.",
+    "interaction": "Hands supporting bottom of the cake, steady upward lift from waist level to chest height."
+  },
+  "15_55": {
+    "hoi_id": "15_55",
+    "verb_phrase": "cutting",
+    "obj_phrase": "a cake",
+    "background": "Kitchen counter / Birthday party table / Bakery display",
+    "human_object": "Hand flat against top of cake, fingers gripping knife firmly; other hand steadying side of cake",
+    "interaction": "Knife blade pressing into cake, smooth vertical cut dividing layers"
+  },
+  "23_55": {
+    "hoi_id": "23_55",
+    "verb_phrase": "eating",
+    "obj_phrase": "a cake",
+    "background": "Kitchen table / Birthday party setting / Café",
+    "human_object": "Hand holds fork, fingers slightly curved; mouth open, leaning forward",
+    "interaction": "Fork tines pierce cake slice, lifting to mouth level"
+  },
+  "36_55": {
+    "hoi_id": "36_55",
+    "verb_phrase": "holding",
+    "obj_phrase": "a cake",
+    "background": "Kitchen counter / Birthday party table / Bakery display",
+    "human_object": "Both hands flat under the cake, arms extended slightly forward",
+    "interaction": "Palms supporting bottom of the cake, fingers spread for balance"
+  },
+  "51_55": {
+    "hoi_id": "51_55",
+    "verb_phrase": "lighting",
+    "obj_phrase": "a cake",
+    "background": "Kitchen counter / Dining table with birthday decorations / Living room celebration",
+    "human_object": "Hand cupped, fingers extended to hold matchstick near candle wick",
+    "interaction": "Match tip touching cake's central candle, flame igniting wick"
+  },
+  "54_55": {
+    "hoi_id": "54_55",
+    "verb_phrase": "making",
+    "obj_phrase": "a cake",
+    "background": "Kitchen counter / Baking station / Home kitchen",
+    "human_object": "Hands mixing batter with whisk, fingers spread wide.",
+    "interaction": "Whisk stirring circularly within bowl of liquid ingredients."
+  },
+  "67_55": {
+    "hoi_id": "67_55",
+    "verb_phrase": "picking up",
+    "obj_phrase": "a cake",
+    "background": "Kitchen counter / Birthday party table / Bakery display",
+    "human_object": "Both hands cradling the cake, fingers spread for support, slight bend at waist.",
+    "interaction": "Hands lifting from below, upward motion, maintaining balance."
+  },
+  "8_51": {
+    "hoi_id": "8_51",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a carrot",
+    "background": "Kitchen counter / Farmer's market stall / Garden path",
+    "human_object": "Hand loosely cradling the carrot, arm slightly bent.",
+    "interaction": "Fingertips touching the smooth skin of the carrot, lifting it upwards."
+  },
+  "14_51": {
+    "hoi_id": "14_51",
+    "verb_phrase": "cooking",
+    "obj_phrase": "a carrot",
+    "background": "Kitchen counter / Stove area / Dining table",
+    "human_object": "Hand gripping peeler, fingers spread, arm extended over cutting board; carrot held firmly between thumb and index finger.",
+    "interaction": "Peeler blade scraping along carrot's length, removing thin strips of skin."
+  },
+  "15_51": {
+    "hoi_id": "15_51",
+    "verb_phrase": "cutting",
+    "obj_phrase": "a carrot",
+    "background": "Kitchen counter / Wooden dining table / Outdoor picnic setup",
+    "human_object": "Hand firmly gripping knife, fingers spread for control; carrot held steady with other hand.",
+    "interaction": "Knife blade pressing into carrot, smooth vertical cut downwards."
+  },
+  "23_51": {
+    "hoi_id": "23_51",
+    "verb_phrase": "eating",
+    "obj_phrase": "a carrot",
+    "background": "Kitchen counter / Park bench / Office break room",
+    "human_object": "Hand gripping carrot, fingers spread slightly; sitting upright with elbow bent.",
+    "interaction": "Teeth biting into carrot end, pulling it towards mouth."
+  },
+  "36_51": {
+    "hoi_id": "36_51",
+    "verb_phrase": "holding",
+    "obj_phrase": "a carrot",
+    "background": "Kitchen counter / Farmers market stall / Garden plot",
+    "human_object": "Fingers loosely gripping carrot top, arm extended slightly forward.",
+    "interaction": "Hand cradles carrot, fingers wrapped around green leaves."
+  },
+  "64_51": {
+    "hoi_id": "64_51",
+    "verb_phrase": "peeling",
+    "obj_phrase": "a carrot",
+    "background": "Kitchen counter / Dining table / Outdoor picnic",
+    "human_object": "Fingertips gripping carrot, other hand holding peeler steady.",
+    "interaction": "Peeler blade scraping along carrot's skin, removing thin strips."
+  },
+  "89_51": {
+    "hoi_id": "89_51",
+    "verb_phrase": "smelling",
+    "obj_phrase": "a carrot",
+    "background": "Kitchen counter / Farmers market stall / Garden plot",
+    "human_object": "Hand loosely holds carrot near top, fingers slightly curved; head tilted towards carrot.",
+    "interaction": "Nose close to carrot tip, slight upward tilt of carrot toward face."
+  },
+  "96_51": {
+    "hoi_id": "96_51",
+    "verb_phrase": "stirring",
+    "obj_phrase": "a carrot",
+    "background": "Kitchen counter / Dining table / Outdoor picnic",
+    "human_object": "Hand loosely gripping spoon, arm slightly bent, carrot submerged in pot.",
+    "interaction": "Spoon circularly agitating water around stationary carrot."
+  },
+  "111_51": {
+    "hoi_id": "111_51",
+    "verb_phrase": "washing",
+    "obj_phrase": "a carrot",
+    "background": "Kitchen sink / Garden hose area / Outdoor picnic table",
+    "human_object": "Fingers loosely gripping carrot, other hand cupped under running water",
+    "interaction": "Hands rubbing carrot surface, water flowing over hands and carrot"
+  },
+  "8_67": {
+    "hoi_id": "8_67",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a cell phone",
+    "background": "Cluttered office desk / Dimly lit sofa / Sunny street",
+    "human_object": "Hand loosely cradles phone, fingers slightly curved, arm relaxed at side.",
+    "interaction": "Phone held parallel to ground, thumb swiping screen."
+  },
+  "36_67": {
+    "hoi_id": "36_67",
+    "verb_phrase": "holding",
+    "obj_phrase": "a cell phone",
+    "background": "Cluttered office desk / Dimly lit sofa / Sunny street",
+    "human_object": "Palm flat against back of phone, fingers loosely wrapped, arm relaxed at side.",
+    "interaction": "Thumb swiping across screen, index finger supporting bottom edge."
+  },
+  "73_67": {
+    "hoi_id": "73_67",
+    "verb_phrase": "reading",
+    "obj_phrase": "a cell phone",
+    "background": "Cluttered office desk / Dimly lit sofa / Sunny street",
+    "human_object": "Fingers loosely gripping phone, head tilted down, screen illuminated.",
+    "interaction": "Eyes focused on screen, thumbs tapping lightly."
+  },
+  "75_67": {
+    "hoi_id": "75_67",
+    "verb_phrase": "repairing",
+    "obj_phrase": "a cell phone",
+    "background": "Cluttered workbench / Bright repair shop counter / Home kitchen table",
+    "human_object": "Fingers prying open case, tool held firmly, slight lean over phone",
+    "interaction": "Tool tip pressing into seam, lifting cover off, hands steady"
+  },
+  "101_67": {
+    "hoi_id": "101_67",
+    "verb_phrase": "talking on",
+    "obj_phrase": "a cell phone",
+    "background": "Cluttered office desk / Dimly lit sofa / Sunny street",
+    "human_object": "Hand cradles phone near ear, head tilted slightly.",
+    "interaction": "Phone pressed to cheek, mouth close to microphone."
+  },
+  "103_67": {
+    "hoi_id": "103_67",
+    "verb_phrase": "texting on",
+    "obj_phrase": "a cell phone",
+    "background": "Cluttered office desk / Dimly lit sofa / Sunny street",
+    "human_object": "Fingers tapping screen, thumb extended, slouched posture, phone held at chest level.",
+    "interaction": "Thumb pressing keys, eyes focused on display, slight head tilt towards device."
+  },
+  "11_74": {
+    "hoi_id": "11_74",
+    "verb_phrase": "checking",
+    "obj_phrase": "a clock",
+    "background": "Cluttered office desk / Dimly lit sofa / Busy train station",
+    "human_object": "Hand gently resting on clock face, fingers slightly curved",
+    "interaction": "Fingertips touching glass cover, eyes scanning time display"
+  },
+  "36_74": {
+    "hoi_id": "36_74",
+    "verb_phrase": "holding",
+    "obj_phrase": "a clock",
+    "background": "Living room wall / Antique shop shelf / Office cubicle",
+    "human_object": "Palm flat against back of clock, fingers wrapped securely; arm slightly bent.",
+    "interaction": "Clock face parallel to ground, held steady at chest level."
+  },
+  "75_74": {
+    "hoi_id": "75_74",
+    "verb_phrase": "repairing",
+    "obj_phrase": "a clock",
+    "background": "Workshop table / Living room shelf / Antique store counter",
+    "human_object": "Focused gaze, hands steady with small tools; clock partially disassembled.",
+    "interaction": "Tools touching delicate gears, precise movements adjusting mechanisms."
+  },
+  "82_74": {
+    "hoi_id": "82_74",
+    "verb_phrase": "setting",
+    "obj_phrase": "a clock",
+    "background": "Living room wall / Office cubicle / Bedroom nightstand",
+    "human_object": "Fingers adjusting small dials, arm extended slightly forward.",
+    "interaction": "Hand turning dial clockwise, fingers pressing lightly against clock face."
+  },
+  "8_41": {
+    "hoi_id": "8_41",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a cup",
+    "background": "Kitchen counter / Office break room / Park bench",
+    "human_object": "Hand loosely gripping cup handle, fingers slightly curved.",
+    "interaction": "Fingertips touching top of handle, arm extended forward."
+  },
+  "20_41": {
+    "hoi_id": "20_41",
+    "verb_phrase": "drinking with",
+    "obj_phrase": "a cup",
+    "background": "Kitchen table / Office break room / Park bench",
+    "human_object": "Hand wrapped around cup, fingers slightly curved, body leaning forward.",
+    "interaction": "Lips touching rim of cup, tilting upward to drink."
+  },
+  "36_41": {
+    "hoi_id": "36_41",
+    "verb_phrase": "holding",
+    "obj_phrase": "a cup",
+    "background": "Kitchen counter / Coffee shop table / Living room couch",
+    "human_object": "Fingers loosely wrapped around cup, arm relaxed at side.",
+    "interaction": "Hand cradles base of cup, slight upward tilt for sipping."
+  },
+  "41_41": {
+    "hoi_id": "41_41",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a cup",
+    "background": "Kitchen counter / Coffee shop table / Living room sideboard",
+    "human_object": "Fingers lightly gripping cup rim, arm slightly bent.",
+    "interaction": "Hand tilting cup, eyes closely examining interior."
+  },
+  "69_41": {
+    "hoi_id": "69_41",
+    "verb_phrase": "pouring",
+    "obj_phrase": "a cup",
+    "background": "Kitchen counter / Dining table / Coffee shop",
+    "human_object": "Hand grasping cup rim, arm extended slightly forward, liquid flowing from spout.",
+    "interaction": "Liquid stream connecting pot to cup, steady pour angle."
+  },
+  "85_41": {
+    "hoi_id": "85_41",
+    "verb_phrase": "sipping",
+    "obj_phrase": "a cup",
+    "background": "Cozy cafe / Quiet library corner / Home kitchen table",
+    "human_object": "Fingers lightly cradling the cup, head tilted slightly back",
+    "interaction": "Lips touching rim of cup, slight upward tilt for sip"
+  },
+  "89_41": {
+    "hoi_id": "89_41",
+    "verb_phrase": "smelling",
+    "obj_phrase": "a cup",
+    "background": "Kitchen counter / Coffee shop table / Park bench",
+    "human_object": "Hand cradling cup, fingers slightly curved, head tilted towards cup.",
+    "interaction": "Nose close to rim of cup, inhaling gently."
+  },
+  "27_41": {
+    "hoi_id": "27_41",
+    "verb_phrase": "filling",
+    "obj_phrase": "a cup",
+    "background": "Kitchen counter / Office water cooler / Park picnic table",
+    "human_object": "Hand loosely gripping cup rim, arm extended slightly forward.",
+    "interaction": "Water stream flowing from spout into cup interior."
+  },
+  "111_41": {
+    "hoi_id": "111_41",
+    "verb_phrase": "washing",
+    "obj_phrase": "a cup",
+    "background": "Kitchen sink / Bathroom counter / Outdoor picnic table",
+    "human_object": "Hand loosely gripping cup rim, fingers spread slightly, arm extended over basin.",
+    "interaction": "Cup tilted, water flowing from spout to rinse interior."
+  },
+  "7_54": {
+    "hoi_id": "7_54",
+    "verb_phrase": "buying",
+    "obj_phrase": "a donut",
+    "background": "Donut shop counter / Street vendor stand / Supermarket aisle",
+    "human_object": "Hand extended, fingers loosely gripping donut box, upright stance",
+    "interaction": "Fingertips touching cardboard edges, slight forward lean towards seller"
+  },
+  "8_54": {
+    "hoi_id": "8_54",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a donut",
+    "background": "Cluttered kitchen counter / Busy sidewalk café / Office break room",
+    "human_object": "Hand cradles donut, fingers slightly spread, arm relaxed at side.",
+    "interaction": "Palm supports bottom of donut, fingertips lightly touching top edge."
+  },
+  "23_54": {
+    "hoi_id": "23_54",
+    "verb_phrase": "eating",
+    "obj_phrase": "a donut",
+    "background": "Coffee shop / Kitchen table / Park bench",
+    "human_object": "Fingers pinching donut edge, mouth open slightly.",
+    "interaction": "Teeth biting into frosted top of donut."
+  },
+  "36_54": {
+    "hoi_id": "36_54",
+    "verb_phrase": "holding",
+    "obj_phrase": "a donut",
+    "background": "Coffee shop / Kitchen counter / Park bench",
+    "human_object": "Fingers loosely cradling the donut, palm open, standing upright.",
+    "interaction": "Donut held at chest level, no movement, fingers touching frosting."
+  },
+  "54_54": {
+    "hoi_id": "54_54",
+    "verb_phrase": "making",
+    "obj_phrase": "a donut",
+    "background": "Kitchen counter / Bakery shop interior / Home dining table",
+    "human_object": "Hands shaping dough into ring, fingers slightly curved, body leaning forward",
+    "interaction": "Fingertips pressing and molding dough, circular motion forming donut shape"
+  },
+  "67_54": {
+    "hoi_id": "67_54",
+    "verb_phrase": "picking up",
+    "obj_phrase": "a donut",
+    "background": "Kitchen counter / Coffee shop table / Office break room",
+    "human_object": "Fingers gently pinching donut edge, palm open, slight lean forward.",
+    "interaction": "Thumb and index finger contact top of donut, lifting upward."
+  },
+  "89_54": {
+    "hoi_id": "89_54",
+    "verb_phrase": "smelling",
+    "obj_phrase": "a donut",
+    "background": "Kitchen counter / Coffee shop table / Park bench",
+    "human_object": "Hand cupped under donut, fingers lightly touching edges, head tilted close.",
+    "interaction": "Nose near donut's frosting, inhaling scent directly from top surface."
+  },
+  "26_20": {
+    "hoi_id": "26_20",
+    "verb_phrase": "feeding",
+    "obj_phrase": "an elephant",
+    "background": "Zoo enclosure / Safari park / Wildlife sanctuary",
+    "human_object": "Hand extended, palm up, fingers slightly curved; elephant's trunk reaching down.",
+    "interaction": "Elephant’s trunk touching human's open hand, food being transferred to mouth."
+  },
+  "36_20": {
+    "hoi_id": "36_20",
+    "verb_phrase": "holding",
+    "obj_phrase": "an elephant",
+    "background": "Circus tent interior / Safari park enclosure / Zoo visitor area",
+    "human_object": "Both hands cradling the elephant's trunk, fingers spread wide for support",
+    "interaction": "Trunk resting gently across palms, slight upward lift from human arms"
+  },
+  "38_20": {
+    "hoi_id": "38_20",
+    "verb_phrase": "hosing",
+    "obj_phrase": "an elephant",
+    "background": "Outdoor zoo enclosure / Safari park watering area / Elephant sanctuary grounds",
+    "human_object": "Hand gripping hose nozzle, arm extended forward, water flowing from hose end",
+    "interaction": "Water stream directed at elephant's body, covering large areas of skin"
+  },
+  "39_20": {
+    "hoi_id": "39_20",
+    "verb_phrase": "hugging",
+    "obj_phrase": "an elephant",
+    "background": "Safari park / Zoo enclosure / Wildlife sanctuary",
+    "human_object": "Arms wrapped fully around elephant's trunk, body leaning into the hug.",
+    "interaction": "Person’s chest pressed against elephant’s side, hands gripping the rough skin of the trunk."
+  },
+  "45_20": {
+    "hoi_id": "45_20",
+    "verb_phrase": "kissing",
+    "obj_phrase": "an elephant",
+    "background": "Safari park / Zoo enclosure / Wildlife sanctuary",
+    "human_object": "Person leaning forward, lips puckered towards elephant's trunk",
+    "interaction": "Lips touching tip of raised elephant trunk"
+  },
+  "37_20": {
+    "hoi_id": "37_20",
+    "verb_phrase": "hopping on",
+    "obj_phrase": "an elephant",
+    "background": "Jungle clearing / Safari park enclosure / Rural village",
+    "human_object": "Person standing upright, hands gripping elephant's back, legs bent for balance",
+    "interaction": "Feet pressing into elephant’s side, slight upward movement with each hop"
+  },
+  "65_20": {
+    "hoi_id": "65_20",
+    "verb_phrase": "petting",
+    "obj_phrase": "an elephant",
+    "background": "Safari park / Zoo enclosure / Wildlife sanctuary",
+    "human_object": "Hand gently resting on elephant's trunk, fingers spread wide, standing upright.",
+    "interaction": "Palm pressing lightly against rough skin, arm extended forward."
+  },
+  "76_20": {
+    "hoi_id": "76_20",
+    "verb_phrase": "riding",
+    "obj_phrase": "an elephant",
+    "background": "Jungle trail / Safari park / Festival grounds",
+    "human_object": "Person seated atop elephant, legs straddling sides, hands gripping harness loosely.",
+    "interaction": "Legs pressed against elephant's flanks, slight sway with each step."
+  },
+  "110_20": {
+    "hoi_id": "110_20",
+    "verb_phrase": "walking",
+    "obj_phrase": "an elephant",
+    "background": "Jungle path / Circus arena / Safari park",
+    "human_object": "Hand loosely holds rope attached to elephant's harness, arm extended forward.",
+    "interaction": "Rope taut between human’s grip and elephant’s movement, guiding direction."
+  },
+  "111_20": {
+    "hoi_id": "111_20",
+    "verb_phrase": "washing",
+    "obj_phrase": "an elephant",
+    "background": "Outdoor water source / Elephant enclosure / Riverbank",
+    "human_object": "Hands gripping sponge, arms extended, leaning forward; elephant standing still, wet skin glistening",
+    "interaction": "Sponge rubbing against elephant's flank, back-and-forth motion cleaning the hide"
+  },
+  "112_20": {
+    "hoi_id": "112_20",
+    "verb_phrase": "watching",
+    "obj_phrase": "an elephant",
+    "background": "Safari park / Zoo enclosure / Wildlife reserve",
+    "human_object": "Person standing upright, hands relaxed at sides, eyes focused forward.",
+    "interaction": "Eyes directed towards elephant, no direct contact."
+  },
+  "39_10": {
+    "hoi_id": "39_10",
+    "verb_phrase": "hugging",
+    "obj_phrase": "a fire hydrant",
+    "background": "Urban sidewalk / Park path / Residential street",
+    "human_object": "Arms wrapped fully around red fire hydrant, torso leaning into it.",
+    "interaction": "Chest pressed against hydrant, hands clasped behind it."
+  },
+  "41_10": {
+    "hoi_id": "41_10",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a fire hydrant",
+    "background": "Urban sidewalk / Residential area / City park",
+    "human_object": "Person crouched, fingers spread over red fire hydrant cap.",
+    "interaction": "Hands pressing down, examining details of the hydrant's surface."
+  },
+  "58_10": {
+    "hoi_id": "58_10",
+    "verb_phrase": "opening",
+    "obj_phrase": "a fire hydrant",
+    "background": "Urban sidewalk / Park pathway / Residential street",
+    "human_object": "Hand gripping valve, fingers spread wide, body leaning forward, hydrant cap partially unscrewed.",
+    "interaction": "Fingertips turning valve counterclockwise, water pressure building up."
+  },
+  "61_10": {
+    "hoi_id": "61_10",
+    "verb_phrase": "painting",
+    "obj_phrase": "a fire hydrant",
+    "background": "City sidewalk / Park pathway / Residential street",
+    "human_object": "Hand gripping paintbrush, arm extended, standing bent over",
+    "interaction": "Brush strokes applying paint to hydrant surface"
+  },
+  "36_42": {
+    "hoi_id": "36_42",
+    "verb_phrase": "holding",
+    "obj_phrase": "a fork",
+    "background": "Dining table / Kitchen counter / Restaurant setting",
+    "human_object": "Fingers loosely gripping fork tines, arm slightly raised.",
+    "interaction": "Fork prongs piercing food item, lifting towards mouth level."
+  },
+  "50_42": {
+    "hoi_id": "50_42",
+    "verb_phrase": "lifting",
+    "obj_phrase": "a fork",
+    "background": "Dining table / Kitchen counter / Restaurant setting",
+    "human_object": "Fingers loosely gripping fork tines, arm slightly raised.",
+    "interaction": "Fork prongs piercing food item, upward lift towards mouth."
+  },
+  "95_42": {
+    "hoi_id": "95_42",
+    "verb_phrase": "sticking",
+    "obj_phrase": "a fork",
+    "background": "Kitchen counter / Dining table / Picnic blanket",
+    "human_object": "Hand gripping fork tines, arm extended forward.",
+    "interaction": "Fork prongs piercing food item, slight upward lift."
+  },
+  "48_42": {
+    "hoi_id": "48_42",
+    "verb_phrase": "licking",
+    "obj_phrase": "a fork",
+    "background": "Kitchen counter / Dining table / Living room couch",
+    "human_object": "Tongue extended to tip of tines, fingers loosely gripping fork handle.",
+    "interaction": "Tongue making contact with metal prongs, slight upward flicking motion."
+  },
+  "111_42": {
+    "hoi_id": "111_42",
+    "verb_phrase": "washing",
+    "obj_phrase": "a fork",
+    "background": "Kitchen sink / Dining table / Outdoor picnic",
+    "human_object": "Fingers loosely gripping fork tines, arm extended over basin.",
+    "interaction": "Fork submerged, water flowing over prongs, slight scrubbing motion."
+  },
+  "2_29": {
+    "hoi_id": "2_29",
+    "verb_phrase": "blocking",
+    "obj_phrase": "a frisbee",
+    "background": "Park with grass / Beach sand / Backyard lawn",
+    "human_object": "Hand flat, palm facing outward, fingers spread wide; Frisbee mid-air near fingertips",
+    "interaction": "Palm making contact at edge of flying disc, stopping its trajectory"
+  },
+  "9_29": {
+    "hoi_id": "9_29",
+    "verb_phrase": "catching",
+    "obj_phrase": "a frisbee",
+    "background": "Park with trees / Beach sand / Open field",
+    "human_object": "Hand outstretched, fingers spread wide, body leaning forward, Frisbee mid-air.",
+    "interaction": "Fingertips touching edge of Frisbee, trajectory curving towards palm."
+  },
+  "36_29": {
+    "hoi_id": "36_29",
+    "verb_phrase": "holding",
+    "obj_phrase": "a frisbee",
+    "background": "Park / Beach / Backyard",
+    "human_object": "Hand flat, fingers spread slightly, arm relaxed at side, frisbee held parallel to ground.",
+    "interaction": "Fingertips touching rim of frisbee, ready for throw."
+  },
+  "90_29": {
+    "hoi_id": "90_29",
+    "verb_phrase": "spinning",
+    "obj_phrase": "a frisbee",
+    "background": "Park / Beach / Backyard",
+    "human_object": "Hand flat, fingers spread, arm extended outward, Frisbee balanced on fingertips.",
+    "interaction": "Fingertips applying spin force, Frisbee rotating forward."
+  },
+  "104_29": {
+    "hoi_id": "104_29",
+    "verb_phrase": "throwing",
+    "obj_phrase": "a frisbee",
+    "background": "Park with trees / Beach sand / Open field",
+    "human_object": "Hand flat, fingers extended, arm back, Frisbee held parallel to ground.",
+    "interaction": "Fingertips release edge of Frisbee, disc glides forward horizontally."
+  },
+  "26_23": {
+    "hoi_id": "26_23",
+    "verb_phrase": "feeding",
+    "obj_phrase": "a giraffe",
+    "background": "Zoo enclosure / Safari park / Wildlife reserve",
+    "human_object": "Hand outstretched, palm flat, fingers slightly curved; giraffe's neck extended",
+    "interaction": "Giraffe’s tongue reaching towards human's open palm, food being transferred"
+  },
+  "45_23": {
+    "hoi_id": "45_23",
+    "verb_phrase": "kissing",
+    "obj_phrase": "a giraffe",
+    "background": "Safari park / Zoo enclosure / Wildlife reserve",
+    "human_object": "Person leaning forward, lips puckered, giraffe neck extended",
+    "interaction": "Lips touching giraffe's snout, gentle contact"
+  },
+  "65_23": {
+    "hoi_id": "65_23",
+    "verb_phrase": "petting",
+    "obj_phrase": "a giraffe",
+    "background": "Safari park / Zoo enclosure / Wildlife reserve",
+    "human_object": "Hand gently resting on giraffe's neck, fingers spread wide, body leaning slightly forward",
+    "interaction": "Palm pressing softly against fur, gentle stroking from head to shoulder"
+  },
+  "76_23": {
+    "hoi_id": "76_23",
+    "verb_phrase": "riding",
+    "obj_phrase": "a giraffe",
+    "background": "Safari landscape / Zoo enclosure / Fantasy illustration",
+    "human_object": "Legs straddling giraffe's neck, hands gripping reins loosely",
+    "interaction": "Person seated high, gentle sway with giraffe’s walking gait"
+  },
+  "112_23": {
+    "hoi_id": "112_23",
+    "verb_phrase": "watching",
+    "obj_phrase": "a giraffe",
+    "background": "Zoo enclosure / Safari park / Wildlife reserve",
+    "human_object": "Person standing upright, hands relaxed at sides, giraffe towering nearby.",
+    "interaction": "Eyes directed upward toward giraffe's face, no direct contact."
+  },
+  "36_78": {
+    "hoi_id": "36_78",
+    "verb_phrase": "holding",
+    "obj_phrase": "a hair drier",
+    "background": "Bathroom / Bedroom / Salon",
+    "human_object": "Hand grasping dryer nozzle, arm extended, fingers firm.",
+    "interaction": "Dryer aimed at head, air stream directed towards hair."
+  },
+  "59_78": {
+    "hoi_id": "59_78",
+    "verb_phrase": "operating",
+    "obj_phrase": "a hair drier",
+    "background": "Bathroom with mirror / Bedroom near dresser / Salon chair",
+    "human_object": "Hand holds nozzle, arm extended, body slightly bent forward",
+    "interaction": "Air stream directed at head, fingers adjusting heat setting"
+  },
+  "75_78": {
+    "hoi_id": "75_78",
+    "verb_phrase": "repairing",
+    "obj_phrase": "a hair drier",
+    "background": "Cluttered workshop table / Bright kitchen counter / Cozy living room",
+    "human_object": "Fingers gripping screwdriver, arm extended, hair dryer disassembled",
+    "interaction": "Screwdriver turning clockwise into hair dryer casing"
+  },
+  "8_26": {
+    "hoi_id": "8_26",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a handbag",
+    "background": "Cluttered shopping mall / Busy city sidewalk / Quiet suburban neighborhood",
+    "human_object": "Hand loosely gripping bag strap, arm relaxed at side.",
+    "interaction": "Bag hanging from shoulder, swinging slightly with each step."
+  },
+  "36_26": {
+    "hoi_id": "36_26",
+    "verb_phrase": "holding",
+    "obj_phrase": "a handbag",
+    "background": "Cluttered shopping mall / Busy city sidewalk / Quiet suburban park",
+    "human_object": "Hand loosely gripping bag strap, arm relaxed at side.",
+    "interaction": "Bag hanging from shoulder, swinging slightly with walking motion."
+  },
+  "41_26": {
+    "hoi_id": "41_26",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a handbag",
+    "background": "Retail store / Home bedroom / Outdoor market",
+    "human_object": "Hand gently cradling bag, fingers spread over leather texture.",
+    "interaction": "Fingers tracing seams, thumb pressing lightly on fabric."
+  },
+  "8_52": {
+    "hoi_id": "8_52",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a hot dog",
+    "background": "Street vendor stand / Park picnic area / Busy city sidewalk",
+    "human_object": "Hand loosely cradling bun, fingers slightly spread, arm extended forward.",
+    "interaction": "Bun held parallel to ground, slight upward tilt towards mouth."
+  },
+  "14_52": {
+    "hoi_id": "14_52",
+    "verb_phrase": "cooking",
+    "obj_phrase": "a hot dog",
+    "background": "Kitchen counter / Campfire site / Street food cart",
+    "human_object": "Hand gripping tongs, arm extended over grill; hot dog sizzling.",
+    "interaction": "Tongs clamping hot dog, flipping it on heated griddle."
+  },
+  "15_52": {
+    "hoi_id": "15_52",
+    "verb_phrase": "cutting",
+    "obj_phrase": "a hot dog",
+    "background": "Kitchen counter / Picnic table / Street food cart",
+    "human_object": "Hand gripping knife firmly, fingers spread; other hand steadying bun",
+    "interaction": "Knife blade pressing down into hot dog, dividing it lengthwise"
+  },
+  "23_52": {
+    "hoi_id": "23_52",
+    "verb_phrase": "eating",
+    "obj_phrase": "a hot dog",
+    "background": "Park bench / Street food stand / Kitchen counter",
+    "human_object": "Hand gripping bun, mouth open wide, hot dog held horizontally.",
+    "interaction": "Teeth biting into the center of the hot dog, hands pulling apart to take a bite."
+  },
+  "36_52": {
+    "hoi_id": "36_52",
+    "verb_phrase": "holding",
+    "obj_phrase": "a hot dog",
+    "background": "Street vendor stand / Park bench / Kitchen counter",
+    "human_object": "Fingers loosely gripping bun, arm extended slightly forward.",
+    "interaction": "Hand cradles hot dog horizontally, fingers touching both ends of the bun."
+  },
+  "54_52": {
+    "hoi_id": "54_52",
+    "verb_phrase": "making",
+    "obj_phrase": "a hot dog",
+    "background": "Kitchen counter / Picnic table / Street vendor cart",
+    "human_object": "Fingers spread over bun, other hand gripping mustard bottle firmly.",
+    "interaction": "Hand pressing down to open bun, squeezing bottle to apply condiment."
+  },
+  "8_66": {
+    "hoi_id": "8_66",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a keyboard",
+    "background": "Cluttered office desk / Dimly lit sofa / Sunny street",
+    "human_object": "Both hands flat under the keyboard, arms extended slightly forward, back straight.",
+    "interaction": "Fingertips supporting bottom edge of keyboard, slight upward tilt towards chest."
+  },
+  "12_66": {
+    "hoi_id": "12_66",
+    "verb_phrase": "cleaning",
+    "obj_phrase": "a keyboard",
+    "background": "Cluttered office desk / Dimly lit sofa / Quiet home library",
+    "human_object": "Fingertips lightly pressing keys, wrist slightly raised, keyboard tilted up",
+    "interaction": "Brush gently sweeping across key surfaces, removing dust particles"
+  },
+  "36_66": {
+    "hoi_id": "36_66",
+    "verb_phrase": "holding",
+    "obj_phrase": "a keyboard",
+    "background": "Cluttered office desk / Dimly lit sofa / Sunny street",
+    "human_object": "Fingertips lightly resting on keys, relaxed grip, upright posture.",
+    "interaction": "Hands positioned over center of keyboard, fingers slightly curved."
+  },
+  "109_66": {
+    "hoi_id": "109_66",
+    "verb_phrase": "typing on",
+    "obj_phrase": "a keyboard",
+    "background": "Cluttered office desk / Dimly lit sofa / Quiet library",
+    "human_object": "Fingers extended over keys, wrists slightly raised, upright seated position",
+    "interaction": "Finger tips pressing down on individual key caps, hands gliding smoothly across keyboard surface"
+  },
+  "1_33": {
+    "hoi_id": "1_33",
+    "verb_phrase": "assembling",
+    "obj_phrase": "a kite",
+    "background": "Park with open sky / Living room floor / Backyard grass",
+    "human_object": "Hands spread, fingers manipulating frame pieces; sitting cross-legged",
+    "interaction": "Fingertips pressing parts together, aligning edges for assembly"
+  },
+  "8_33": {
+    "hoi_id": "8_33",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a kite",
+    "background": "Open field / Beach / Park",
+    "human_object": "Hand loosely gripping kite string, arm extended upward, kite folded over shoulder.",
+    "interaction": "String taut between hand and kite, pulling slightly forward."
+  },
+  "30_33": {
+    "hoi_id": "30_33",
+    "verb_phrase": "flying",
+    "obj_phrase": "a kite",
+    "background": "Open field / Beach with light breeze / Park with tall trees",
+    "human_object": "Hand loosely gripping kite string, arm extended upward, body leaning slightly forward",
+    "interaction": "String taut, pulling upwards at an angle, kite soaring high in the sky"
+  },
+  "36_33": {
+    "hoi_id": "36_33",
+    "verb_phrase": "holding",
+    "obj_phrase": "a kite",
+    "background": "Open field / Beach shoreline / Park lawn",
+    "human_object": "Hand loosely gripping kite string, arm extended upward",
+    "interaction": "String taut, leading to airborne kite fluttering in wind"
+  },
+  "41_33": {
+    "hoi_id": "41_33",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a kite",
+    "background": "Open field / Beach with light breeze / Park clearing",
+    "human_object": "Person holds kite string, arm extended upward, head tilted back looking up.",
+    "interaction": "String taut between hands and flying kite, slight pulling motions to adjust flight."
+  },
+  "47_33": {
+    "hoi_id": "47_33",
+    "verb_phrase": "launching",
+    "obj_phrase": "a kite",
+    "background": "Open field with grass / Beach near water / Park with trees",
+    "human_object": "Person holds kite string, arm extended upward, legs apart for balance",
+    "interaction": "String taut, pulling upwards as kite ascends into sky"
+  },
+  "70_33": {
+    "hoi_id": "70_33",
+    "verb_phrase": "pulling",
+    "obj_phrase": "a kite",
+    "background": "Open field with grass / Beach near water / Park with trees",
+    "human_object": "Hand gripping kite string, arm extended upward, body leaning back slightly",
+    "interaction": "String taut between hand and flying kite, wind pulling kite away"
+  },
+  "16_43": {
+    "hoi_id": "16_43",
+    "verb_phrase": "cutting with",
+    "obj_phrase": "a knife",
+    "background": "Kitchen counter / Wooden dining table / Outdoor picnic setup",
+    "human_object": "Hand firmly gripping knife handle, arm extended forward.",
+    "interaction": "Blade pressing into food item, steady downward cut."
+  },
+  "36_43": {
+    "hoi_id": "36_43",
+    "verb_phrase": "holding",
+    "obj_phrase": "a knife",
+    "background": "Kitchen counter / Butcher block table / Outdoor picnic setup",
+    "human_object": "Fingers wrapped firmly around knife grip, arm extended.",
+    "interaction": "Blade pressing into cutting board, slicing through food item."
+  },
+  "95_43": {
+    "hoi_id": "95_43",
+    "verb_phrase": "sticking",
+    "obj_phrase": "a knife",
+    "background": "Kitchen counter / Butcher block table / Outdoor picnic setup",
+    "human_object": "Fingers wrapped firmly around knife grip, arm raised.",
+    "interaction": "Blade pressing into food item, cutting downwards."
+  },
+  "111_43": {
+    "hoi_id": "111_43",
+    "verb_phrase": "washing",
+    "obj_phrase": "a knife",
+    "background": "Kitchen sink / Outdoor camping table / Utility room",
+    "human_object": "Hand gripping knife handle, fingers spread for control; arm extended over basin.",
+    "interaction": "Blade submerged in soapy water, hand scrubbing along its length."
+  },
+  "115_43": {
+    "hoi_id": "115_43",
+    "verb_phrase": "wielding",
+    "obj_phrase": "a knife",
+    "background": "Kitchen counter / Butcher block table / Outdoor picnic setup",
+    "human_object": "Hand firmly gripping knife handle, arm extended forward.",
+    "interaction": "Blade pressing into food item, steady cutting motion."
+  },
+  "48_43": {
+    "hoi_id": "48_43",
+    "verb_phrase": "licking",
+    "obj_phrase": "a knife",
+    "background": "Kitchen counter / Dining table / Outdoor picnic",
+    "human_object": "Tongue extended to blade, fingers loosely gripping knife handle.",
+    "interaction": "Tongue making contact with flat side of the blade."
+  },
+  "36_63": {
+    "hoi_id": "36_63",
+    "verb_phrase": "holding",
+    "obj_phrase": "a laptop",
+    "background": "Cluttered office desk / Dimly lit sofa / Sunny street",
+    "human_object": "Both hands flat, supporting open laptop; torso slightly leaning forward.",
+    "interaction": "Fingertips touching keyboard edges, screen tilted at angle towards face."
+  },
+  "58_63": {
+    "hoi_id": "58_63",
+    "verb_phrase": "opening",
+    "obj_phrase": "a laptop",
+    "background": "Cluttered office desk / Dimly lit sofa / Quiet coffee shop",
+    "human_object": "Fingertips gently lifting screen, hands flat on keyboard, seated upright.",
+    "interaction": "Screen tilting upward from base, hinge smoothly rotating open."
+  },
+  "73_63": {
+    "hoi_id": "73_63",
+    "verb_phrase": "reading",
+    "obj_phrase": "a laptop",
+    "background": "Cluttered office desk / Dimly lit sofa / Quiet library",
+    "human_object": "Hands flat on keyboard, torso leaning slightly forward, screen open.",
+    "interaction": "Fingertips pressing keys, eyes focused on illuminated display."
+  },
+  "75_63": {
+    "hoi_id": "75_63",
+    "verb_phrase": "repairing",
+    "obj_phrase": "a laptop",
+    "background": "Cluttered workbench / Cozy living room with tools / Quiet library corner",
+    "human_object": "Focused gaze, hands steady, fingers prying open laptop casing",
+    "interaction": "Screwdriver tip pressing into screw head, lifting off back cover"
+  },
+  "109_63": {
+    "hoi_id": "109_63",
+    "verb_phrase": "typing on",
+    "obj_phrase": "a laptop",
+    "background": "Cluttered office desk / Dimly lit sofa / Quiet coffee shop",
+    "human_object": "Fingertips lightly touching keyboard, back straight, screen open",
+    "interaction": "Keys depressed with each finger movement, hands gliding over keys"
+  },
+  "12_68": {
+    "hoi_id": "12_68",
+    "verb_phrase": "cleaning",
+    "obj_phrase": "a microwave",
+    "background": "Kitchen counter / Dining table / Utility room",
+    "human_object": "Hand flat against door, fingers spread; standing upright with slight lean forward; microwave open, interior visible.",
+    "interaction": "Palm pressing down to close door; arm extended towards appliance."
+  },
+  "58_68": {
+    "hoi_id": "58_68",
+    "verb_phrase": "opening",
+    "obj_phrase": "a microwave",
+    "background": "Kitchen counter / Office break room / Home dining area",
+    "human_object": "Hand flat against door, fingers spread, body leaning slightly forward, microwave closed.",
+    "interaction": "Palm pressing down, pushing to open the microwave door."
+  },
+  "59_68": {
+    "hoi_id": "59_68",
+    "verb_phrase": "operating",
+    "obj_phrase": "a microwave",
+    "background": "Kitchen counter / Office break room / Home dining area",
+    "human_object": "Hand flat against door, fingers spread, body leaning slightly forward, microwave closed.",
+    "interaction": "Palm pressing down, arm extending to open microwave door."
+  },
+  "13_64": {
+    "hoi_id": "13_64",
+    "verb_phrase": "controlling",
+    "obj_phrase": "a mouse",
+    "background": "Cluttered office desk / Dimly lit sofa / Sunny street",
+    "human_object": "Fingertips lightly resting on mouse buttons, relaxed wrist, upright sitting position.",
+    "interaction": "Index finger pressing left button, slight forward movement of the mouse."
+  },
+  "36_64": {
+    "hoi_id": "36_64",
+    "verb_phrase": "holding",
+    "obj_phrase": "a mouse",
+    "background": "Cluttered office desk / Dimly lit sofa / Sunny street",
+    "human_object": "Fingertips lightly resting on mouse buttons, palm cupping base.",
+    "interaction": "Hand gliding smoothly over flat surface, fingers poised for clicks."
+  },
+  "75_64": {
+    "hoi_id": "75_64",
+    "verb_phrase": "repairing",
+    "obj_phrase": "a mouse",
+    "background": "Cluttered workbench / Home office table / Repair shop counter",
+    "human_object": "Fingers prying open mouse casing, palm steadies device.",
+    "interaction": "Hands separating top cover from base, exposing internal components."
+  },
+  "7_49": {
+    "hoi_id": "7_49",
+    "verb_phrase": "buying",
+    "obj_phrase": "an orange",
+    "background": "Grocery store aisle / Farmers market stall / Fruit stand",
+    "human_object": "Hand extended with open palm, fingers slightly curved; body leaning forward",
+    "interaction": "Fingertips touching the orange's skin, lifting gently towards checkout counter"
+  },
+  "15_49": {
+    "hoi_id": "15_49",
+    "verb_phrase": "cutting",
+    "obj_phrase": "an orange",
+    "background": "Kitchen counter / Dining table / Outdoor picnic",
+    "human_object": "Hand firmly gripping knife, fingers spread for control; other hand stabilizing orange half.",
+    "interaction": "Blade pressing into orange flesh, separating segments with smooth cuts."
+  },
+  "23_49": {
+    "hoi_id": "23_49",
+    "verb_phrase": "eating",
+    "obj_phrase": "an orange",
+    "background": "Kitchen counter / Park bench / Office break room",
+    "human_object": "Fingers peeling segments, thumb pressing juice out.",
+    "interaction": "Mouth closing over segment, teeth biting into flesh."
+  },
+  "36_49": {
+    "hoi_id": "36_49",
+    "verb_phrase": "holding",
+    "obj_phrase": "an orange",
+    "background": "Kitchen counter / Market stall / Park bench",
+    "human_object": "Palm cradling the orange, fingers slightly spread, arm relaxed at side.",
+    "interaction": "Orange resting securely in palm, no visible movement."
+  },
+  "41_49": {
+    "hoi_id": "41_49",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "an orange",
+    "background": "Grocery store aisle / Kitchen counter / Orchard",
+    "human_object": "Fingers gently cradling the orange, palm open, standing upright.",
+    "interaction": "Hand rotating the fruit, fingers pressing lightly to feel texture."
+  },
+  "64_49": {
+    "hoi_id": "64_49",
+    "verb_phrase": "peeling",
+    "obj_phrase": "an orange",
+    "background": "Kitchen counter / Living room table / Outdoor picnic",
+    "human_object": "Fingertips pinching orange peel, other hand supporting fruit base.",
+    "interaction": "Peel separating from flesh, fingers pulling outward."
+  },
+  "66_49": {
+    "hoi_id": "66_49",
+    "verb_phrase": "picking",
+    "obj_phrase": "an orange",
+    "background": "Orchard / Kitchen counter / Market stall",
+    "human_object": "Hand cupped, fingers gently cradling ripe orange.",
+    "interaction": "Fingertips pressing lightly into peel, lifting upward."
+  },
+  "91_49": {
+    "hoi_id": "91_49",
+    "verb_phrase": "squeezing",
+    "obj_phrase": "an orange",
+    "background": "Kitchen counter / Outdoor picnic table / Market stall",
+    "human_object": "Fingers pressing into orange peel, palm cupping fruit, arm slightly bent.",
+    "interaction": "Hands applying pressure, juice squirting from punctured skin."
+  },
+  "111_49": {
+    "hoi_id": "111_49",
+    "verb_phrase": "washing",
+    "obj_phrase": "an orange",
+    "background": "Kitchen sink / Outdoor garden tap / Bathroom basin",
+    "human_object": "Hand cupped under running water, fingers gently cradling the orange.",
+    "interaction": "Water flowing over fingertips onto the orange's pebbled skin."
+  },
+  "12_69": {
+    "hoi_id": "12_69",
+    "verb_phrase": "cleaning",
+    "obj_phrase": "an oven",
+    "background": "Kitchen interior",
+    "human_object": "Hand gripping sponge, arm extended into oven, fingers spread for scrubbing.",
+    "interaction": "Sponge rubbing against greasy oven walls, circular motions."
+  },
+  "36_69": {
+    "hoi_id": "36_69",
+    "verb_phrase": "holding",
+    "obj_phrase": "an oven",
+    "background": "Kitchen countertop / Living room with open box / Garage workbench",
+    "human_object": "Both hands gripping sides of oven, arms extended slightly forward, oven upright.",
+    "interaction": "Hands firmly hold top edges, no visible movement, stable position."
+  },
+  "41_69": {
+    "hoi_id": "41_69",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "an oven",
+    "background": "Kitchen interior",
+    "human_object": "Hand resting on open oven door, fingers spread / Body leaning slightly forward, head tilted down towards oven / Oven light illuminating inside cavity",
+    "interaction": "Fingers touching cool metal edge of oven door / Eyes scanning internal racks and surfaces / Head nodding while assessing cleanliness or condition"
+  },
+  "58_69": {
+    "hoi_id": "58_69",
+    "verb_phrase": "opening",
+    "obj_phrase": "an oven",
+    "background": "Kitchen",
+    "human_object": "Hand gripping oven door handle, arm extended forward.",
+    "interaction": "Pulling down on handle, opening oven door outward."
+  },
+  "75_69": {
+    "hoi_id": "75_69",
+    "verb_phrase": "repairing",
+    "obj_phrase": "an oven",
+    "background": "Kitchen with appliances / Workshop table / Garage setup",
+    "human_object": "Hand gripping screwdriver, arm extended into open oven door.",
+    "interaction": "Screwdriver turning clockwise against a metal panel inside the oven."
+  },
+  "59_69": {
+    "hoi_id": "59_69",
+    "verb_phrase": "operating",
+    "obj_phrase": "an oven",
+    "background": "Kitchen countertop / Dining room with open kitchen / Restaurant kitchen",
+    "human_object": "Hand flat against oven door, fingers spread; standing upright facing appliance.",
+    "interaction": "Palm pressing down on control panel buttons, arm extended forward."
+  },
+  "11_12": {
+    "hoi_id": "11_12",
+    "verb_phrase": "checking",
+    "obj_phrase": "a parking meter",
+    "background": "Urban sidewalk / Downtown street corner / Busy city block",
+    "human_object": "Hand extended, fingers pressing buttons, standing upright",
+    "interaction": "Fingertips touching screen, arm slightly bent towards meter face"
+  },
+  "63_12": {
+    "hoi_id": "63_12",
+    "verb_phrase": "paying",
+    "obj_phrase": "a parking meter",
+    "background": "Urban sidewalk / Parking lot / City street",
+    "human_object": "Hand flat against coin slot, fingers extended, standing upright.",
+    "interaction": "Coins inserted into meter, arm lowering slightly."
+  },
+  "75_12": {
+    "hoi_id": "75_12",
+    "verb_phrase": "repairing",
+    "obj_phrase": "a parking meter",
+    "background": "City sidewalk / Parking lot / Street corner",
+    "human_object": "Hand gripping screwdriver, leaning over with focused expression, meter open.",
+    "interaction": "Screwdriver turning inside exposed mechanism, hands steady against metal casing."
+  },
+  "7_53": {
+    "hoi_id": "7_53",
+    "verb_phrase": "buying",
+    "obj_phrase": "a pizza",
+    "background": "Pizza shop counter / Street food stand / Home kitchen",
+    "human_object": "Hand extended with open palm, fingers slightly curved, body leaning forward; pizza box closed, flat.",
+    "interaction": "Fingertips touching top of pizza box, sliding it towards chest."
+  },
+  "8_53": {
+    "hoi_id": "8_53",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a pizza",
+    "background": "Kitchen counter / Restaurant table / Park bench",
+    "human_object": "Both hands flat under pizza box, fingers spread for support, body slightly bent forward.",
+    "interaction": "Hands lifting pizza box from below, arms extended outward."
+  },
+  "14_53": {
+    "hoi_id": "14_53",
+    "verb_phrase": "cooking",
+    "obj_phrase": "a pizza",
+    "background": "Kitchen with oven / Outdoor grill setup / Pizzeria kitchen",
+    "human_object": "Hands spread, fingers pressing dough, body leaning slightly forward",
+    "interaction": "Fingertips pushing down into soft dough, spreading evenly outward"
+  },
+  "15_53": {
+    "hoi_id": "15_53",
+    "verb_phrase": "cutting",
+    "obj_phrase": "a pizza",
+    "background": "Kitchen counter / Dining table / Pizza parlor",
+    "human_object": "Hand gripping pizza cutter, fingers spread wide; other hand flat pressing down on pizza crust.",
+    "interaction": "Wheel of pizza cutter rolling forward, cutting through cheese and toppings."
+  },
+  "23_53": {
+    "hoi_id": "23_53",
+    "verb_phrase": "eating",
+    "obj_phrase": "a pizza",
+    "background": "Kitchen table / Living room couch / Park bench",
+    "human_object": "Hand flat, fingers spread over slice; leaning forward slightly.",
+    "interaction": "Fingertips pressing into crust, lifting slice towards mouth."
+  },
+  "36_53": {
+    "hoi_id": "36_53",
+    "verb_phrase": "holding",
+    "obj_phrase": "a pizza",
+    "background": "Kitchen counter / Restaurant table / Park picnic blanket",
+    "human_object": "Both hands flat, supporting pizza from underneath, slightly tilted forward.",
+    "interaction": "Fingertips touching crust edge, pizza held steady at chest level."
+  },
+  "54_53": {
+    "hoi_id": "54_53",
+    "verb_phrase": "making",
+    "obj_phrase": "a pizza",
+    "background": "Kitchen counter / Pizzeria workstation / Outdoor grill",
+    "human_object": "Hands flat pressing dough, fingers spread wide",
+    "interaction": "Palms pushing down, spreading dough evenly outward"
+  },
+  "67_53": {
+    "hoi_id": "67_53",
+    "verb_phrase": "picking up",
+    "obj_phrase": "a pizza",
+    "background": "Kitchen counter / Restaurant table / Living room coffee table",
+    "human_object": "Fingers spread wide under the pizza base, palm slightly curved upwards.",
+    "interaction": "Hands lifting pizza from edge to center, tilting slightly towards mouth."
+  },
+  "88_53": {
+    "hoi_id": "88_53",
+    "verb_phrase": "sliding",
+    "obj_phrase": "a pizza",
+    "background": "Kitchen counter / Pizzeria worktable / Outdoor grill",
+    "human_object": "Hand flat, fingers spread, arm extended pushing pizza",
+    "interaction": "Palm pressing dough, sliding across smooth surface"
+  },
+  "89_53": {
+    "error": "API调用失败"
+  },
+  "12_72": {
+    "hoi_id": "12_72",
+    "verb_phrase": "cleaning",
+    "obj_phrase": "a refrigerator",
+    "background": "Kitchen interior",
+    "human_object": "Hand gripping sponge, arm extended, fridge door open",
+    "interaction": "Sponge wiping inside of refrigerator shelves"
+  },
+  "36_72": {
+    "hoi_id": "36_72",
+    "verb_phrase": "holding",
+    "obj_phrase": "a refrigerator",
+    "background": "Kitchen / Moving truck interior / Appliance store",
+    "human_object": "Both hands gripping sides of fridge, arms extended, legs braced wide apart",
+    "interaction": "Hands firmly pressed against smooth metal surfaces, lifting slightly off ground"
+  },
+  "56_72": {
+    "hoi_id": "56_72",
+    "verb_phrase": "moving",
+    "obj_phrase": "a refrigerator",
+    "background": "Kitchen / Garage / Moving truck",
+    "human_object": "Hands gripping sides of fridge, back bent, legs braced wide.",
+    "interaction": "Fridge sliding across floor, hands pushing at mid-height."
+  },
+  "58_72": {
+    "hoi_id": "58_72",
+    "verb_phrase": "opening",
+    "obj_phrase": "a refrigerator",
+    "background": "Kitchen interior",
+    "human_object": "Hand grasping fridge door, arm extended slightly forward, fingers spread wide.",
+    "interaction": "Fingertips pulling door outward, hinge rotating open."
+  },
+  "36_65": {
+    "hoi_id": "36_65",
+    "verb_phrase": "holding",
+    "obj_phrase": "a remote",
+    "background": "Living room with TV / Bedroom at night / Couch during movie",
+    "human_object": "Fingers loosely gripping remote, thumb over buttons, relaxed arm",
+    "interaction": "Thumb pressing button, slight tilt of wrist towards screen"
+  },
+  "68_65": {
+    "hoi_id": "68_65",
+    "verb_phrase": "pointing",
+    "obj_phrase": "a remote",
+    "background": "Living room with TV / Bedroom with entertainment system / Hotel suite",
+    "human_object": "Index finger extended, other fingers loosely curled, arm slightly raised, remote aimed forward.",
+    "interaction": "Finger pressing button, infrared signal directed towards electronic device."
+  },
+  "99_65": {
+    "hoi_id": "99_65",
+    "verb_phrase": "swinging",
+    "obj_phrase": "a remote",
+    "background": "Living room with TV / Bedroom with bed / Family room",
+    "human_object": "Fingers loosely gripping remote, arm extended outward",
+    "interaction": "Remote swings back and forth in gentle arc"
+  },
+  "8_48": {
+    "hoi_id": "8_48",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a sandwich",
+    "background": "Kitchen counter / Park bench / Office cubicle",
+    "human_object": "Hand flat under sandwich base, fingers slightly curved for support; upright stance.",
+    "interaction": "Sandwich held steady at chest level, no visible movement."
+  },
+  "14_48": {
+    "hoi_id": "14_48",
+    "verb_phrase": "cooking",
+    "obj_phrase": "a sandwich",
+    "background": "Kitchen counter / Outdoor grill station / Food truck interior",
+    "human_object": "Hands flat pressing bread slices, fingers spread wide; other hand holds spatula firmly.",
+    "interaction": "Spatula flipping ingredients inside pan, bread being pressed down onto hot surface."
+  },
+  "15_48": {
+    "hoi_id": "15_48",
+    "verb_phrase": "cutting",
+    "obj_phrase": "a sandwich",
+    "background": "Kitchen counter / Picnic table / Office break room",
+    "human_object": "Hand flat against bread, fingers spread; other hand gripping knife firmly.",
+    "interaction": "Knife blade pressing into sandwich, moving in straight line to cut."
+  },
+  "23_48": {
+    "hoi_id": "23_48",
+    "verb_phrase": "eating",
+    "obj_phrase": "a sandwich",
+    "background": "Kitchen counter / Park bench / Office cubicle",
+    "human_object": "Hand grasping sandwich, fingers spread wide, leaning forward slightly.",
+    "interaction": "Mouth biting into sandwich edge, arm lifting food to face."
+  },
+  "36_48": {
+    "hoi_id": "36_48",
+    "verb_phrase": "holding",
+    "obj_phrase": "a sandwich",
+    "background": "Kitchen counter / Park bench / Office cafeteria",
+    "human_object": "Hand loosely gripping sandwich, fingers spread slightly apart, elbow bent.",
+    "interaction": "Fingertips touching bread edges, no visible movement."
+  },
+  "54_48": {
+    "hoi_id": "54_48",
+    "verb_phrase": "making",
+    "obj_phrase": "a sandwich",
+    "background": "Kitchen counter / Picnic table / Deli shop",
+    "human_object": "Hand flat pressing bread, other hand gripping knife firmly",
+    "interaction": "Knife spreading condiments, hands layering ingredients between slices"
+  },
+  "16_76": {
+    "hoi_id": "16_76",
+    "verb_phrase": "cutting with",
+    "obj_phrase": "a scissors",
+    "background": "Craft room table / Kitchen counter / Office workspace",
+    "human_object": "Fingers spread to control scissor handles, arm extended forward.",
+    "interaction": "Scissors blades closing, cutting through paper edge."
+  },
+  "36_76": {
+    "hoi_id": "36_76",
+    "verb_phrase": "holding",
+    "obj_phrase": "a scissors",
+    "background": "Craft room table / Kitchen counter / Office workspace",
+    "human_object": "Fingers spread open, loosely gripping scissor handles, arms relaxed at sides.",
+    "interaction": "Scissors held horizontally, blades slightly apart, no visible cutting motion."
+  },
+  "58_76": {
+    "hoi_id": "58_76",
+    "verb_phrase": "opening",
+    "obj_phrase": "a scissors",
+    "background": "Cluttered craft table / Bright kitchen counter / Cozy living room",
+    "human_object": "Fingers spread apart, gripping each scissor blade; arms extended forward.",
+    "interaction": "Blades separating, pivoting at screw joint, creating V-shape gap."
+  },
+  "12_71": {
+    "hoi_id": "12_71",
+    "verb_phrase": "cleaning",
+    "obj_phrase": "a sink",
+    "background": "Kitchen countertop",
+    "human_object": "Hand gripping sponge, arm extended over sink basin",
+    "interaction": "Sponge scrubbing circular motions against sink surface"
+  },
+  "75_71": {
+    "hoi_id": "75_71",
+    "verb_phrase": "repairing",
+    "obj_phrase": "a sink",
+    "background": "Bathroom / Kitchen / Utility room",
+    "human_object": "Hands gripping wrench, leaning over sink, faucet partially disassembled.",
+    "interaction": "Wrench turning clockwise against pipe threads."
+  },
+  "111_71": {
+    "hoi_id": "111_71",
+    "verb_phrase": "washing",
+    "obj_phrase": "a sink",
+    "background": "Bathroom / Kitchen / Laundry room",
+    "human_object": "Hand flat with fingers spread, leaning over sink; water running from faucet.",
+    "interaction": "Palm pressing against sink basin, circular scrubbing motion."
+  },
+  "8_36": {
+    "hoi_id": "8_36",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a skateboard",
+    "background": "Skate park / City sidewalk / Beach boardwalk",
+    "human_object": "Hand gripping deck edge, arm bent at elbow, skateboard vertical.",
+    "interaction": "Fingertips pressing into grip tape, forearm parallel to ground."
+  },
+  "28_36": {
+    "hoi_id": "28_36",
+    "verb_phrase": "flipping",
+    "obj_phrase": "a skateboard",
+    "background": "Skate park / City sidewalk / Empty parking lot",
+    "human_object": "Feet positioned on board edges, hands relaxed at sides.",
+    "interaction": "Board rotating under feet, pivoting from tail to nose."
+  },
+  "32_36": {
+    "hoi_id": "32_36",
+    "verb_phrase": "grinding",
+    "obj_phrase": "a skateboard",
+    "background": "Skate park / City sidewalk / Empty parking lot",
+    "human_object": "Feet positioned on board, one foot pushing off ground.",
+    "interaction": "Board tilting, feet shifting for balance during grind."
+  },
+  "36_36": {
+    "hoi_id": "36_36",
+    "verb_phrase": "holding",
+    "obj_phrase": "a skateboard",
+    "background": "Skate park / City sidewalk / Suburban driveway",
+    "human_object": "Hand gripping deck near nose, arm extended, board horizontal.",
+    "interaction": "Fingertips pressing into grip tape, slight upward tilt of board."
+  },
+  "43_36": {
+    "error": "API调用失败"
+  },
+  "67_36": {
+    "hoi_id": "67_36",
+    "verb_phrase": "picking up",
+    "obj_phrase": "a skateboard",
+    "background": "Skate park / Sidewalk curb / Empty parking lot",
+    "human_object": "Hand grasping deck edge, fingers spread, slight bend at waist.",
+    "interaction": "Palm pressing underside of board, lifting upward toward chest level."
+  },
+  "76_36": {
+    "hoi_id": "76_36",
+    "verb_phrase": "riding",
+    "obj_phrase": "a skateboard",
+    "background": "Skate park / City sidewalk / Empty parking lot",
+    "human_object": "Feet positioned on board, one foot pushing off ground.",
+    "interaction": "Board rolling forward, feet maintaining balance."
+  },
+  "87_36": {
+    "hoi_id": "87_36",
+    "verb_phrase": "sitting on",
+    "obj_phrase": "a skateboard",
+    "background": "Skate park / Sidewalk / Empty parking lot",
+    "human_object": "Person seated with feet flat, hands resting on thighs, skateboard under buttocks.",
+    "interaction": "Buttocks pressing down on deck, no visible movement."
+  },
+  "93_36": {
+    "hoi_id": "93_36",
+    "verb_phrase": "standing on",
+    "obj_phrase": "a skateboard",
+    "background": "Skate park / City sidewalk / Empty parking lot",
+    "human_object": "Feet flat on board, arms out for balance.",
+    "interaction": "Board parallel to ground, no visible movement."
+  },
+  "0_30": {
+    "hoi_id": "0_30",
+    "verb_phrase": "adjusting",
+    "obj_phrase": "a skis",
+    "background": "Snowy mountain slope",
+    "human_object": "Hands gripping ski edges, knees slightly bent",
+    "interaction": "Adjusting bindings, aligning boots with skis"
+  },
+  "8_30": {
+    "hoi_id": "8_30",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a skis",
+    "background": "Snowy mountain slope",
+    "human_object": "Arms extended, hands gripping ski tips firmly",
+    "interaction": "Skis parallel to ground, held at shoulder height"
+  },
+  "36_30": {
+    "hoi_id": "36_30",
+    "verb_phrase": "holding",
+    "obj_phrase": "a skis",
+    "background": "Snow-covered mountain slope",
+    "human_object": "Both hands gripping ski tips, arms extended forward, skis parallel to ground",
+    "interaction": "Fingertips pressing against top of skis, slight upward tilt at ends"
+  },
+  "41_30": {
+    "hoi_id": "41_30",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a skis",
+    "background": "Snowy mountain slope",
+    "human_object": "Person crouched, hands gripping ski edges firmly, skis upright.",
+    "interaction": "Fingertips pressing along ski sides, eyes scanning for defects."
+  },
+  "43_30": {
+    "hoi_id": "43_30",
+    "verb_phrase": "jumping",
+    "obj_phrase": "a skis",
+    "background": "Snowy mountain slope",
+    "human_object": "Legs bent, arms extended back, skis parallel under feet",
+    "interaction": "Skis gliding forward, body airborne with upward trajectory"
+  },
+  "67_30": {
+    "hoi_id": "67_30",
+    "verb_phrase": "picking up",
+    "obj_phrase": "a skis",
+    "background": "Snowy mountain slope",
+    "human_object": "Fingers gripping ski edges, slight bend at waist",
+    "interaction": "Hands lifting skis off ground, parallel to each other"
+  },
+  "75_30": {
+    "hoi_id": "75_30",
+    "verb_phrase": "repairing",
+    "obj_phrase": "a skis",
+    "background": "Ski shop / Garage with tools / Outdoor ski rack",
+    "human_object": "Focused grip on screwdriver, leaning over skis, tool pressed against binding screws.",
+    "interaction": "Screwdriver turning clockwise into binding, hands steady, applying pressure."
+  },
+  "76_30": {
+    "hoi_id": "76_30",
+    "verb_phrase": "riding",
+    "obj_phrase": "a skis",
+    "background": "Snowy mountain slope",
+    "human_object": "Feet strapped into ski bindings, knees slightly bent, hands gripping poles",
+    "interaction": "Skis gliding parallel over snow, poles planted alternately ahead for balance"
+  },
+  "93_30": {
+    "hoi_id": "93_30",
+    "verb_phrase": "standing on",
+    "obj_phrase": "a skis",
+    "background": "Snowy mountain slope",
+    "human_object": "Feet securely fastened to ski bindings, knees slightly bent.",
+    "interaction": "Skis parallel, gliding over snow."
+  },
+  "114_30": {
+    "hoi_id": "114_30",
+    "verb_phrase": "wearing",
+    "obj_phrase": "a skis",
+    "background": "Snowy mountain slope",
+    "human_object": "Feet securely fastened into ski bindings, knees slightly bent.",
+    "interaction": "Skis gliding parallel over snow, carving turns."
+  },
+  "0_31": {
+    "hoi_id": "0_31",
+    "verb_phrase": "adjusting",
+    "obj_phrase": "a snowboard",
+    "background": "Snow-covered slope",
+    "human_object": "Hands gripping edges of board, knees bent slightly, board tilted",
+    "interaction": "Fingertips pressing down, adjusting bindings, slight twist to align board"
+  },
+  "8_31": {
+    "hoi_id": "8_31",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a snowboard",
+    "background": "Snow-covered slope / Ski resort entrance / Winter forest trail",
+    "human_object": "Both hands gripping edges of snowboard, board vertical against chest",
+    "interaction": "Hands secure at top and bottom edge, board parallel to torso"
+  },
+  "32_31": {
+    "hoi_id": "32_31",
+    "verb_phrase": "grinding",
+    "obj_phrase": "a snowboard",
+    "background": "Snow-covered mountain slope",
+    "human_object": "Feet strapped to board, knees bent, hands out for balance",
+    "interaction": "Board sliding sideways across snow, spraying powder"
+  },
+  "36_31": {
+    "hoi_id": "36_31",
+    "verb_phrase": "holding",
+    "obj_phrase": "a snowboard",
+    "background": "Snow-covered mountain slope",
+    "human_object": "Both hands gripping edges of board, feet strapped in, standing upright",
+    "interaction": "Board parallel to ground, held at chest level"
+  },
+  "43_31": {
+    "hoi_id": "43_31",
+    "verb_phrase": "jumping",
+    "obj_phrase": "a snowboard",
+    "background": "Snow-covered slope",
+    "human_object": "Feet strapped to board, knees bent, arms outstretched",
+    "interaction": "Board gliding along snowy ground, person airborne with forward momentum"
+  },
+  "76_31": {
+    "hoi_id": "76_31",
+    "verb_phrase": "riding",
+    "obj_phrase": "a snowboard",
+    "background": "Snowy mountain slope",
+    "human_object": "Feet strapped to board, knees bent, arms outstretched for balance",
+    "interaction": "Board gliding over snow, carving turns with weight shifts"
+  },
+  "93_31": {
+    "hoi_id": "93_31",
+    "verb_phrase": "standing on",
+    "obj_phrase": "a snowboard",
+    "background": "Snowy mountain slope",
+    "human_object": "Feet strapped to board, knees slightly bent, arms out for balance",
+    "interaction": "Board flat against packed snow, no visible movement"
+  },
+  "114_31": {
+    "hoi_id": "114_31",
+    "verb_phrase": "wearing",
+    "obj_phrase": "a snowboard",
+    "background": "Snow-covered mountain slope",
+    "human_object": "Feet strapped into bindings, knees slightly bent, arms out for balance",
+    "interaction": "Board gliding over snowy terrain, carving turns"
+  },
+  "36_44": {
+    "hoi_id": "36_44",
+    "verb_phrase": "holding",
+    "obj_phrase": "a spoon",
+    "background": "Kitchen counter / Dining table / Living room couch",
+    "human_object": "Fingers loosely gripping spoon handle, arm relaxed at side.",
+    "interaction": "Spoon held steady, slight tilt towards mouth."
+  },
+  "48_44": {
+    "hoi_id": "48_44",
+    "verb_phrase": "licking",
+    "obj_phrase": "a spoon",
+    "background": "Kitchen counter / Dining table / Living room couch",
+    "human_object": "Tongue extended to tip of curved spoon, fingers loosely cradling bowl.",
+    "interaction": "Tongue making contact with underside of spoon's concave surface."
+  },
+  "111_44": {
+    "hoi_id": "111_44",
+    "verb_phrase": "washing",
+    "obj_phrase": "a spoon",
+    "background": "Kitchen sink / Outdoor camping site / Restaurant kitchen",
+    "human_object": "Hand loosely holds spoon under running water, fingers slightly spread.",
+    "interaction": "Water flows over back of spoon, rinsing away residue."
+  },
+  "85_44": {
+    "hoi_id": "85_44",
+    "verb_phrase": "sipping",
+    "obj_phrase": "a spoon",
+    "background": "Kitchen table / Living room couch / Outdoor picnic",
+    "human_object": "Fingers gently cradling spoon bowl, arm slightly bent.",
+    "interaction": "Spoon tilted upwards, liquid touching lips."
+  },
+  "2_32": {
+    "hoi_id": "2_32",
+    "verb_phrase": "blocking",
+    "obj_phrase": "a sports ball",
+    "background": "Sports field / Indoor gymnasium / Beach volleyball court",
+    "human_object": "Arms extended, palms flat facing forward, legs slightly bent",
+    "interaction": "Palms making contact with the ball's surface, pushing it away"
+  },
+  "8_32": {
+    "hoi_id": "8_32",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a sports ball",
+    "background": "Sports field / Gymnasium interior / Outdoor park",
+    "human_object": "Hand cradling the ball, arm bent at elbow, standing upright.",
+    "interaction": "Ball held against chest with both hands, no visible motion."
+  },
+  "9_32": {
+    "hoi_id": "9_32",
+    "verb_phrase": "catching",
+    "obj_phrase": "a sports ball",
+    "background": "Sports field / Park / Gym",
+    "human_object": "Hands outstretched, fingers spread wide, body leaning forward, ball mid-air.",
+    "interaction": "Fingertips making contact with the ball's surface, arms pulling inward to secure catch."
+  },
+  "19_32": {
+    "hoi_id": "19_32",
+    "verb_phrase": "dribbling",
+    "obj_phrase": "a sports ball",
+    "background": "Basketball court / Outdoor field / Indoor gym",
+    "human_object": "Fingers spread, palm down, bouncing basketball rhythmically.",
+    "interaction": "Hand pushing ball downwards, ball rebounding upwards to chest level."
+  },
+  "35_32": {
+    "error": "API调用失败"
+  },
+  "36_32": {
+    "hoi_id": "36_32",
+    "verb_phrase": "holding",
+    "obj_phrase": "a sports ball",
+    "background": "Sports field / Gymnasium interior / Outdoor park",
+    "human_object": "Fingers spread over basketball, arm extended upward",
+    "interaction": "Ball cradled against palm, ready to be thrown"
+  },
+  "41_32": {
+    "hoi_id": "41_32",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a sports ball",
+    "background": "Sports field / Gymnasium / Backyard",
+    "human_object": "Hand cupping the ball, fingers spread slightly, arm extended.",
+    "interaction": "Palm pressing against the ball's surface, rotating to examine."
+  },
+  "44_32": {
+    "hoi_id": "44_32",
+    "verb_phrase": "kicking",
+    "obj_phrase": "a sports ball",
+    "background": "Soccer field / Grass park / Indoor gym",
+    "human_object": "Leg extended, foot making contact with inflated soccer ball.",
+    "interaction": "Foot striking center of the ball, propelling it forward."
+  },
+  "67_32": {
+    "hoi_id": "67_32",
+    "verb_phrase": "picking up",
+    "obj_phrase": "a sports ball",
+    "background": "Sports field / Gymnasium floor / Backyard grass",
+    "human_object": "Hand fully cupped under the ball, fingers spread wide, slight bend at knees.",
+    "interaction": "Ball lifting off ground into palm, upward trajectory."
+  },
+  "81_32": {
+    "hoi_id": "81_32",
+    "verb_phrase": "serving",
+    "obj_phrase": "a sports ball",
+    "background": "Sports field / Indoor gymnasium / Outdoor park",
+    "human_object": "Hand cradling the ball, arm extended forward, legs slightly bent",
+    "interaction": "Ball leaving fingertips with an upward trajectory towards another player"
+  },
+  "84_32": {
+    "hoi_id": "84_32",
+    "verb_phrase": "signing",
+    "obj_phrase": "a sports ball",
+    "background": "Sports field / Autograph session table / Fan's living room",
+    "human_object": "Hand flat against ball, pen held between fingers, arm extended.",
+    "interaction": "Pen tip touching ball surface, writing signature across leather."
+  },
+  "90_32": {
+    "hoi_id": "90_32",
+    "verb_phrase": "spinning",
+    "obj_phrase": "a sports ball",
+    "background": "Sports field / Gymnasium / Outdoor park",
+    "human_object": "Hand cupped, fingers spread slightly, arm extended outward.",
+    "interaction": "Ball rotating rapidly between fingertips, circular motion."
+  },
+  "104_32": {
+    "hoi_id": "104_32",
+    "verb_phrase": "throwing",
+    "obj_phrase": "a sports ball",
+    "background": "Sports field / Park / Backyard",
+    "human_object": "Hand gripping ball firmly, arm extended back, legs slightly bent.",
+    "interaction": "Ball leaving fingertips, arc trajectory towards target."
+  },
+  "36_11": {
+    "hoi_id": "36_11",
+    "verb_phrase": "holding",
+    "obj_phrase": "a stop sign",
+    "background": "Construction site / Busy intersection / School crossing",
+    "human_object": "Both hands gripping the pole firmly, arms extended outward",
+    "interaction": "Hands clasp top and bottom of sign, held vertically stable"
+  },
+  "94_11": {
+    "hoi_id": "94_11",
+    "verb_phrase": "standing under",
+    "obj_phrase": "a stop sign",
+    "background": "Urban intersection / Quiet suburban road / Busy city sidewalk",
+    "human_object": "Person upright, arms relaxed at sides, stop sign pole vertical",
+    "interaction": "No direct contact between person and stop sign"
+  },
+  "97_11": {
+    "hoi_id": "97_11",
+    "verb_phrase": "stopping at",
+    "obj_phrase": "a stop sign",
+    "background": "Urban intersection / Rural road junction / Suburban neighborhood",
+    "human_object": "Hand flat against steering wheel, foot pressing brake pedal, stop sign upright",
+    "interaction": "Foot depressing brake, vehicle halting before stop line"
+  },
+  "8_28": {
+    "hoi_id": "8_28",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a suitcase",
+    "background": "Airport terminal / Hotel lobby / City sidewalk",
+    "human_object": "Hand gripping suitcase handle, arm extended, body slightly leaning forward.",
+    "interaction": "Fingertips secure around handle, pulling suitcase along ground."
+  },
+  "18_28": {
+    "hoi_id": "18_28",
+    "verb_phrase": "dragging",
+    "obj_phrase": "a suitcase",
+    "background": "Airport terminal / Hotel lobby / City sidewalk",
+    "human_object": "Hand gripping suitcase handle, arm extended backward, slight lean forward.",
+    "interaction": "Handle firmly held, suitcase rolling behind, aligned with walking direction."
+  },
+  "36_28": {
+    "hoi_id": "36_28",
+    "verb_phrase": "holding",
+    "obj_phrase": "a suitcase",
+    "background": "Airport terminal / Hotel lobby / City sidewalk",
+    "human_object": "Hand gripping suitcase handle, fingers spread for balance, standing upright.",
+    "interaction": "Palm pressing down on top of the suitcase, pulling towards self."
+  },
+  "39_28": {
+    "hoi_id": "39_28",
+    "verb_phrase": "hugging",
+    "obj_phrase": "a suitcase",
+    "background": "Airport terminal / Hotel lobby / Home bedroom",
+    "human_object": "Arms wrapped fully around suitcase, hands clasped together behind it.",
+    "interaction": "Chest pressed against suitcase side, arms pulling suitcase close to torso."
+  },
+  "52_28": {
+    "hoi_id": "52_28",
+    "verb_phrase": "loading",
+    "obj_phrase": "a suitcase",
+    "background": "Hotel lobby / Airport terminal / Home hallway",
+    "human_object": "Hand gripping suitcase handle, arm extended, body slightly bent forward.",
+    "interaction": "Fingertips pressing into handle, lifting suitcase off ground."
+  },
+  "58_28": {
+    "hoi_id": "58_28",
+    "verb_phrase": "opening",
+    "obj_phrase": "a suitcase",
+    "background": "Hotel room / Airport lobby / Bedroom",
+    "human_object": "Hand grasping zipper, fingers spread, slight lean forward.",
+    "interaction": "Zipper sliding horizontally along case edge."
+  },
+  "60_28": {
+    "hoi_id": "60_28",
+    "verb_phrase": "packing",
+    "obj_phrase": "a suitcase",
+    "background": "Bedroom with open closet / Hotel room floor / Living room couch",
+    "human_object": "Hands flat pressing clothes into suitcase, standing bent over",
+    "interaction": "Fingertips smoothing fabric, pushing items to fit inside luggage"
+  },
+  "67_28": {
+    "hoi_id": "67_28",
+    "verb_phrase": "picking up",
+    "obj_phrase": "a suitcase",
+    "background": "Airport terminal / Hotel lobby / Home hallway",
+    "human_object": "Hand gripping suitcase handle, fingers spread wide, slight bend at waist.",
+    "interaction": "Fingertips pressing into handle, lifting upward from floor."
+  },
+  "116_28": {
+    "hoi_id": "116_28",
+    "verb_phrase": "zipping",
+    "obj_phrase": "a suitcase",
+    "background": "Hotel room / Bedroom at home / Airport lobby",
+    "human_object": "Hand grasping zipper pull, fingers aligned, slight lean forward.",
+    "interaction": "Zipper sliding along teeth, closing suitcase compartment."
+  },
+  "8_37": {
+    "hoi_id": "8_37",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a surfboard",
+    "background": "Beach with waves / Boardwalk near ocean / Surf shop entrance",
+    "human_object": "Both hands gripping surfboard edges, board held horizontally at chest level",
+    "interaction": "Hands firmly placed mid-surfboard, lifting slightly to balance weight"
+  },
+  "18_37": {
+    "hoi_id": "18_37",
+    "verb_phrase": "dragging",
+    "obj_phrase": "a surfboard",
+    "background": "Beach with waves",
+    "human_object": "Hand gripping surfboard edge, arm extended, board flat against ground",
+    "interaction": "Fingertips pressing into foam, pulling backward along sand"
+  },
+  "36_37": {
+    "hoi_id": "36_37",
+    "verb_phrase": "holding",
+    "obj_phrase": "a surfboard",
+    "background": "Beach with waves",
+    "human_object": "Both hands cradling surfboard, arms extended outward",
+    "interaction": "Hands gripping edges of board, lifting slightly above ground"
+  },
+  "41_37": {
+    "hoi_id": "41_37",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a surfboard",
+    "background": "Beach with waves / Surf shop interior / Outdoor board rack",
+    "human_object": "Person crouched, hands spread wide across surfboard's deck, fingers splayed.",
+    "interaction": "Palms pressing down, sliding from nose to tail of the board."
+  },
+  "43_37": {
+    "hoi_id": "43_37",
+    "verb_phrase": "jumping",
+    "obj_phrase": "a surfboard",
+    "background": "Ocean waves",
+    "human_object": "Feet positioned at board's center, knees bent for balance",
+    "interaction": "Board tilting slightly upward as person jumps forward"
+  },
+  "49_37": {
+    "hoi_id": "49_37",
+    "verb_phrase": "lying on",
+    "obj_phrase": "a surfboard",
+    "background": "Ocean waves / Sandy beach",
+    "human_object": "Person prone on board, arms relaxed at sides",
+    "interaction": "Body flat against surfboard, no movement"
+  },
+  "52_37": {
+    "hoi_id": "52_37",
+    "verb_phrase": "loading",
+    "obj_phrase": "a surfboard",
+    "background": "Beach with waves",
+    "human_object": "Both hands gripping surfboard edges, arms extended, board horizontal.",
+    "interaction": "Hands lifting board to shoulder height, preparing for carry."
+  },
+  "76_37": {
+    "hoi_id": "76_37",
+    "verb_phrase": "riding",
+    "obj_phrase": "a surfboard",
+    "background": "Ocean waves",
+    "human_object": "Feet positioned wide apart for balance, hands gripping sides of surfboard.",
+    "interaction": "Body leans forward, board glides over water with slight up-and-down motion."
+  },
+  "93_37": {
+    "hoi_id": "93_37",
+    "verb_phrase": "standing on",
+    "obj_phrase": "a surfboard",
+    "background": "Ocean waves",
+    "human_object": "Feet balanced on board, arms outstretched for balance",
+    "interaction": "Board gliding over water, person maintaining stance"
+  },
+  "87_37": {
+    "hoi_id": "87_37",
+    "verb_phrase": "sitting on",
+    "obj_phrase": "a surfboard",
+    "background": "Ocean waves",
+    "human_object": "Person seated with legs straddling surfboard, hands resting on sides of board.",
+    "interaction": "Buttocks contacting center of surfboard, feet dangling above water."
+  },
+  "111_37": {
+    "hoi_id": "111_37",
+    "verb_phrase": "washing",
+    "obj_phrase": "a surfboard",
+    "background": "Beach with waves / Outdoor shower area / Surf shop",
+    "human_object": "Hands spread wide, gripping edges of wet surfboard",
+    "interaction": "Palms rubbing along board's surface, removing sand and debris"
+  },
+  "8_77": {
+    "hoi_id": "8_77",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a teddy bear",
+    "background": "Cluttered bedroom / Busy shopping mall / Quiet park bench",
+    "human_object": "Arms cradling soft teddy bear, hands gently supporting sides.",
+    "interaction": "Bear pressed against chest, head resting under chin."
+  },
+  "36_77": {
+    "hoi_id": "36_77",
+    "verb_phrase": "holding",
+    "obj_phrase": "a teddy bear",
+    "background": "Bedroom / Living room / Park",
+    "human_object": "Arms cradling soft teddy bear, hands gently cupped.",
+    "interaction": "Bear nestled against chest, head resting under chin."
+  },
+  "39_77": {
+    "hoi_id": "39_77",
+    "verb_phrase": "hugging",
+    "obj_phrase": "a teddy bear",
+    "background": "Bedroom / Living room / Park",
+    "human_object": "Arms wrapped around soft teddy bear, head tilted towards it.",
+    "interaction": "Chest pressed against the teddy's plush body, hands gently squeezing."
+  },
+  "45_77": {
+    "hoi_id": "45_77",
+    "verb_phrase": "kissing",
+    "obj_phrase": "a teddy bear",
+    "background": "Bedroom with soft lighting / Cozy living room / Child's play area",
+    "human_object": "Person cradling the teddy bear, face close to its head",
+    "interaction": "Lips touching the teddy bear’s cheek, gentle pressure applied"
+  },
+  "8_38": {
+    "hoi_id": "8_38",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a tennis racket",
+    "background": "Tennis court / Park with open space / Indoor gym",
+    "human_object": "Hand loosely gripping racket handle, arm relaxed at side.",
+    "interaction": "Racket hanging vertically, slight swing from walking."
+  },
+  "36_38": {
+    "hoi_id": "36_38",
+    "verb_phrase": "holding",
+    "obj_phrase": "a tennis racket",
+    "background": "Tennis court / Park with open space / Indoor gym",
+    "human_object": "Hand firmly gripping racket handle, arm extended forward.",
+    "interaction": "Racket head parallel to ground, ready for swing."
+  },
+  "41_38": {
+    "hoi_id": "41_38",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a tennis racket",
+    "background": "Tennis court / Sports store aisle / Park bench",
+    "human_object": "Hand loosely holds racket grip, arm extended slightly.",
+    "interaction": "Fingers trace along strings, eyes focused on frame."
+  },
+  "99_38": {
+    "hoi_id": "99_38",
+    "verb_phrase": "swinging",
+    "obj_phrase": "a tennis racket",
+    "background": "Tennis court",
+    "human_object": "Hand firmly gripping racket, arm extended back, legs slightly bent.",
+    "interaction": "Racket swings forward, making contact with ball mid-air."
+  },
+  "0_27": {
+    "hoi_id": "0_27",
+    "verb_phrase": "adjusting",
+    "obj_phrase": "a tie",
+    "background": "Cluttered bedroom mirror / Office restroom / Hotel room",
+    "human_object": "Fingers pinching tie knot, other hand smoothing fabric, shoulders straight.",
+    "interaction": "Hands tugging gently to tighten, aligning edges precisely."
+  },
+  "15_27": {
+    "hoi_id": "15_27",
+    "verb_phrase": "cutting",
+    "obj_phrase": "a tie",
+    "background": "Cluttered bedroom / Office with papers / Living room table",
+    "human_object": "Hand gripping scissors firmly, fingers spread wide; tie held taut between thumb and forefinger of other hand.",
+    "interaction": "Scissors blades closing, cutting through fabric near necktie's middle."
+  },
+  "36_27": {
+    "hoi_id": "36_27",
+    "verb_phrase": "holding",
+    "obj_phrase": "a tie",
+    "background": "Cluttered closet / Office with mirror / Hotel room",
+    "human_object": "Fingers loosely gripping tie, arm slightly raised",
+    "interaction": "Tie hanging from fingers, no tension or movement"
+  },
+  "41_27": {
+    "hoi_id": "41_27",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a tie",
+    "background": "Cluttered closet / Well-lit bedroom mirror / Office wardrobe",
+    "human_object": "Fingers gently pinching fabric, neck slightly bent forward",
+    "interaction": "Eyes scanning for imperfections, hands smoothing out wrinkles"
+  },
+  "70_27": {
+    "hoi_id": "70_27",
+    "verb_phrase": "pulling",
+    "obj_phrase": "a tie",
+    "background": "Office setting / Bedroom mirror / Hotel room",
+    "human_object": "Fingers pinching the narrow end of the tie, other hand adjusting knot.",
+    "interaction": "Hands sliding along fabric, tightening and straightening the tie."
+  },
+  "105_27": {
+    "hoi_id": "105_27",
+    "verb_phrase": "tying",
+    "obj_phrase": "a tie",
+    "background": "Cluttered bedroom mirror / Office restroom sink / Hotel room dresser",
+    "human_object": "Fingers pinching tie knot, neck slightly tilted forward",
+    "interaction": "Knot tightening under fingers, fabric sliding against collar"
+  },
+  "114_27": {
+    "hoi_id": "114_27",
+    "verb_phrase": "wearing",
+    "obj_phrase": "a tie",
+    "background": "Office meeting room / Formal dinner setting / Business conference",
+    "human_object": "Tie loosely held between fingers, hands at chest level.",
+    "interaction": "Fingertips adjusting knot, slight upward pull to tighten fit."
+  },
+  "36_70": {
+    "hoi_id": "36_70",
+    "verb_phrase": "holding",
+    "obj_phrase": "a toaster",
+    "background": "Kitchen counter / Dining table / Living room sideboard",
+    "human_object": "Hand grasping toaster sides, fingers spread wide, standing upright.",
+    "interaction": "Hands lift toaster slightly off surface, steady hold without movement."
+  },
+  "59_70": {
+    "hoi_id": "59_70",
+    "verb_phrase": "operating",
+    "obj_phrase": "a toaster",
+    "background": "Kitchen counter / Breakfast nook / Small apartment kitchen",
+    "human_object": "Hand pressing down lever, fingers spread wide, toaster upright",
+    "interaction": "Fingertips contacting top of lever, pushing downwards into slot"
+  },
+  "75_70": {
+    "hoi_id": "75_70",
+    "verb_phrase": "repairing",
+    "obj_phrase": "a toaster",
+    "background": "Kitchen counter / Workshop table / Living room coffee table",
+    "human_object": "Fingers gripping screwdriver, leaning over toaster with open casing",
+    "interaction": "Screwdriver tip turning screws inside toaster mechanism"
+  },
+  "12_61": {
+    "hoi_id": "12_61",
+    "verb_phrase": "cleaning",
+    "obj_phrase": "a toilet",
+    "background": "Bathroom",
+    "human_object": "Hand gripping scrub brush, arm extended, leaning forward slightly.",
+    "interaction": "Brush rubbing against toilet bowl interior."
+  },
+  "29_61": {
+    "hoi_id": "29_61",
+    "verb_phrase": "flushing",
+    "obj_phrase": "a toilet",
+    "background": "Bathroom",
+    "human_object": "Hand pressing flush lever, standing upright",
+    "interaction": "Finger pushing down on lever, water rushing into bowl"
+  },
+  "58_61": {
+    "hoi_id": "58_61",
+    "verb_phrase": "opening",
+    "obj_phrase": "a toilet",
+    "background": "Bathroom",
+    "human_object": "Hand gripping lid, fingers spread wide, slight lean forward.",
+    "interaction": "Lid lifting upward from hinge point."
+  },
+  "75_61": {
+    "hoi_id": "75_61",
+    "verb_phrase": "repairing",
+    "obj_phrase": "a toilet",
+    "background": "Bathroom",
+    "human_object": "Hand gripping wrench, arm extended, leaning over toilet bowl.",
+    "interaction": "Wrench turning pipe under the toilet tank."
+  },
+  "87_61": {
+    "hoi_id": "87_61",
+    "verb_phrase": "sitting on",
+    "obj_phrase": "a toilet",
+    "background": "Bathroom with tiled walls / Small restroom cubicle / Modern bathroom interior",
+    "human_object": "Person seated upright, hands resting on thighs, toilet lid down",
+    "interaction": "Buttocks in contact with closed toilet seat, feet flat on floor"
+  },
+  "93_61": {
+    "hoi_id": "93_61",
+    "verb_phrase": "standing on",
+    "obj_phrase": "a toilet",
+    "background": "Bathroom",
+    "human_object": "Person standing with both feet flat on toilet seat, hands possibly gripping edges for balance.",
+    "interaction": "Feet pressing against the closed lid, no visible motion."
+  },
+  "111_61": {
+    "hoi_id": "111_61",
+    "verb_phrase": "washing",
+    "obj_phrase": "a toilet",
+    "background": "Bathroom",
+    "human_object": "Hand gripping scrub brush, arm extended, leaning over toilet bowl.",
+    "interaction": "Scrubbing motion against inner rim of toilet."
+  },
+  "6_79": {
+    "hoi_id": "6_79",
+    "verb_phrase": "brushing with",
+    "obj_phrase": "a toothbrush",
+    "background": "Bathroom sink / Bedroom mirror / Hotel washroom",
+    "human_object": "Hand gripping toothbrush, fingers spread slightly, arm raised to mouth level.",
+    "interaction": "Toothbrush bristles contacting teeth, back-and-forth motion along gum line."
+  },
+  "36_79": {
+    "hoi_id": "36_79",
+    "verb_phrase": "holding",
+    "obj_phrase": "a toothbrush",
+    "background": "Bathroom sink / Bedroom mirror / Travel bag",
+    "human_object": "Fingers loosely gripping toothbrush, arm raised to mouth level.",
+    "interaction": "Toothbrush bristles touching teeth, slight back-and-forth movement."
+  },
+  "111_79": {
+    "hoi_id": "111_79",
+    "verb_phrase": "washing",
+    "obj_phrase": "a toothbrush",
+    "background": "Bathroom sink / Kitchen faucet / Outdoor water pump",
+    "human_object": "Fingers gripping toothbrush, arm extended over basin.",
+    "interaction": "Hand moves back and forth, bristles scrubbing under running water."
+  },
+  "42_9": {
+    "hoi_id": "42_9",
+    "verb_phrase": "installing",
+    "obj_phrase": "a traffic light",
+    "background": "Urban intersection / Construction site / City sidewalk",
+    "human_object": "Hands gripping tools, arms extended overhead, traffic light partially assembled.",
+    "interaction": "Tools securing wires to fixture, hands adjusting components into place."
+  },
+  "75_9": {
+    "hoi_id": "75_9",
+    "verb_phrase": "repairing",
+    "obj_phrase": "a traffic light",
+    "background": "City intersection / Busy road junction / Urban crosswalk",
+    "human_object": "Hand gripping wrench, arm extended upward, tool aligned with bolt.",
+    "interaction": "Wrench turning clockwise against the traffic light's mounting bracket."
+  },
+  "94_9": {
+    "hoi_id": "94_9",
+    "verb_phrase": "standing under",
+    "obj_phrase": "a traffic light",
+    "background": "Urban intersection / City sidewalk / Busy downtown",
+    "human_object": "Person upright, arms relaxed at sides, no contact with light",
+    "interaction": "Standing directly beneath the hanging traffic signal"
+  },
+  "97_9": {
+    "hoi_id": "97_9",
+    "verb_phrase": "stopping at",
+    "obj_phrase": "a traffic light",
+    "background": "Urban intersection / Suburban road / City sidewalk",
+    "human_object": "Person standing upright, feet parallel to curb, hands relaxed at sides",
+    "interaction": "Eyes focused forward, no contact with objects, stationary position relative to signal"
+  },
+  "17_7": {
+    "hoi_id": "17_7",
+    "verb_phrase": "directing",
+    "obj_phrase": "a truck",
+    "background": "Construction site / Warehouse loading dock / Busy city intersection",
+    "human_object": "Arm extended, palm facing outward, fingers splayed; truck stationary.",
+    "interaction": "Hand gesturing towards direction of movement for the truck."
+  },
+  "21_7": {
+    "hoi_id": "21_7",
+    "verb_phrase": "driving",
+    "obj_phrase": "a truck",
+    "background": "Highway / Construction site / Rural road",
+    "human_object": "Hands gripping steering wheel, back straight against seat.",
+    "interaction": "Fingers turning wheel, feet pressing pedals."
+  },
+  "41_7": {
+    "hoi_id": "41_7",
+    "verb_phrase": "inspecting",
+    "obj_phrase": "a truck",
+    "background": "Industrial garage / Busy construction site / Open highway",
+    "human_object": "Person standing upright, one hand resting on hood, other pointing at tire",
+    "interaction": "Hand pressing down gently on metal, finger directed towards wheel"
+  },
+  "52_7": {
+    "hoi_id": "52_7",
+    "verb_phrase": "loading",
+    "obj_phrase": "a truck",
+    "background": "Loading dock / Residential driveway / City sidewalk",
+    "human_object": "Hands gripping box edges, arms extended, back bent slightly forward.",
+    "interaction": "Box lifted from ground to truck bed level, steady upward movement."
+  },
+  "75_7": {
+    "hoi_id": "75_7",
+    "verb_phrase": "repairing",
+    "obj_phrase": "a truck",
+    "background": "Garage workshop / Roadside breakdown area / Industrial service bay",
+    "human_object": "Hands gripping wrench, leaning over engine compartment, tool engaged with bolt",
+    "interaction": "Wrench turning clockwise, applying torque to loosen rusted fastener"
+  },
+  "76_7": {
+    "hoi_id": "76_7",
+    "verb_phrase": "riding",
+    "obj_phrase": "a truck",
+    "background": "Highway / Construction site / Rural road",
+    "human_object": "Hands gripping steering wheel, seated upright, feet on pedals",
+    "interaction": "Steering with both hands, foot pressing pedal, vehicle in forward motion"
+  },
+  "87_7": {
+    "hoi_id": "87_7",
+    "verb_phrase": "sitting on",
+    "obj_phrase": "a truck",
+    "background": "Construction site / Rural road / City alley",
+    "human_object": "Legs dangling off side of truck bed, hands resting on knees.",
+    "interaction": "Buttocks pressing against metal seat, feet swinging slightly above ground."
+  },
+  "111_7": {
+    "hoi_id": "111_7",
+    "verb_phrase": "washing",
+    "obj_phrase": "a truck",
+    "background": "Outdoor car wash area / Driveway with hose nearby / Parking lot near water source",
+    "human_object": "Hand gripping sponge, arm extended, leaning over truck hood",
+    "interaction": "Sponge rubbing against dirty truck surface, back-and-forth motion"
+  },
+  "8_25": {
+    "hoi_id": "8_25",
+    "verb_phrase": "carrying",
+    "obj_phrase": "a umbrella",
+    "background": "Rainy sidewalk / Crowded market / Park pathway",
+    "human_object": "Hand loosely gripping umbrella handle, arm slightly raised.",
+    "interaction": "Umbrella canopy tilted to shield from raindrops."
+  },
+  "36_25": {
+    "hoi_id": "36_25",
+    "verb_phrase": "holding",
+    "obj_phrase": "a umbrella",
+    "background": "Rainy sidewalk / Crowded market / Park bench",
+    "human_object": "Hand gripping umbrella handle, arm slightly raised, canopy open.",
+    "interaction": "Handle firmly held, canopy shielding upper body from above."
+  },
+  "53_25": {
+    "hoi_id": "53_25",
+    "verb_phrase": "losing",
+    "obj_phrase": "a umbrella",
+    "background": "Rainy city sidewalk / Windy beach boardwalk / Crowded train station",
+    "human_object": "Hand loosely gripping umbrella handle, fingers spread wide.",
+    "interaction": "Umbrella slipping from fingertips, falling towards ground."
+  },
+  "58_25": {
+    "hoi_id": "58_25",
+    "verb_phrase": "opening",
+    "obj_phrase": "a umbrella",
+    "background": "Rainy sidewalk / Crowded park during rain / Outdoor café with umbrellas",
+    "human_object": "Hand gripping umbrella handle, arm extended upward, umbrella partially open",
+    "interaction": "Fingertips pressing button, canopy expanding outward from center rod"
+  },
+  "75_25": {
+    "hoi_id": "75_25",
+    "verb_phrase": "repairing",
+    "obj_phrase": "a umbrella",
+    "background": "Workshop table / Rainy park bench / Home garage",
+    "human_object": "Fingers pinching fabric, other hand gripping metal frame, leaning over",
+    "interaction": "Hands pulling taut material, threading needle into canopy seam"
+  },
+  "82_25": {
+    "hoi_id": "82_25",
+    "verb_phrase": "setting",
+    "obj_phrase": "a umbrella",
+    "background": "Rainy sidewalk / Outdoor café table / Park bench",
+    "human_object": "Hand grasping umbrella handle, arm extended upward",
+    "interaction": "Umbrella opening outward from grip point, canopy unfurling"
+  },
+  "94_25": {
+    "hoi_id": "94_25",
+    "verb_phrase": "standing under",
+    "obj_phrase": "a umbrella",
+    "background": "Rainy sidewalk / Beach during drizzle / Park with puddles",
+    "human_object": "Hand loosely gripping umbrella handle, arm slightly bent overhead",
+    "interaction": "Umbrella canopy shielding head from raindrops, no visible water contact on upper body"
+  },
+  "36_75": {
+    "hoi_id": "36_75",
+    "verb_phrase": "holding",
+    "obj_phrase": "a vase",
+    "background": "Living room shelf / Flower shop counter / Art gallery display",
+    "human_object": "Hand cradles vase base, fingers spread for support, upright stance.",
+    "interaction": "Palm presses against smooth ceramic, arm extended slightly forward."
+  },
+  "54_75": {
+    "hoi_id": "54_75",
+    "verb_phrase": "making",
+    "obj_phrase": "a vase",
+    "background": "Pottery studio / Art classroom / Home workshop",
+    "human_object": "Hands cupped around clay, fingers shaping form, torso leaning forward.",
+    "interaction": "Fingertips pressing into soft clay, rotating wheel beneath hands."
+  },
+  "61_75": {
+    "hoi_id": "61_75",
+    "verb_phrase": "painting",
+    "obj_phrase": "a vase",
+    "background": "Art studio / Living room with easel / Outdoor garden",
+    "human_object": "Hand holds brush, fingers spread slightly; body leans over vase.",
+    "interaction": "Brush strokes across curved vase surface."
+  },
+  "27_40": {
+    "hoi_id": "27_40",
+    "verb_phrase": "filling",
+    "obj_phrase": "a wine glass",
+    "background": "Dining table / Bar counter / Living room",
+    "human_object": "Hand gently cradling stem of wine glass, fingers slightly spread.",
+    "interaction": "Wine pouring from bottle into tilted glass, stream steady."
+  },
+  "36_40": {
+    "hoi_id": "36_40",
+    "verb_phrase": "holding",
+    "obj_phrase": "a wine glass",
+    "background": "Elegant dining room / Cozy living area / Outdoor patio",
+    "human_object": "Fingers gently cradling stem, arm slightly raised, glass half-full.",
+    "interaction": "Hand stabilizing base, wrist tilting to sip from rim."
+  },
+  "85_40": {
+    "hoi_id": "85_40",
+    "verb_phrase": "sipping",
+    "obj_phrase": "a wine glass",
+    "background": "Elegant restaurant / Cozy living room / Outdoor patio",
+    "human_object": "Fingertips gently cradling stem, relaxed arm, upright torso, half-full glass",
+    "interaction": "Lips touching rim, slight tilt of wrist directing flow to mouth"
+  },
+  "106_40": {
+    "hoi_id": "106_40",
+    "verb_phrase": "toasting",
+    "obj_phrase": "a wine glass",
+    "background": "Elegant dining room / Cozy living area / Festive outdoor setting",
+    "human_object": "Hand loosely holds stem of wine glass, arm slightly raised.",
+    "interaction": "Glass tilted upward, clinking against another with gentle force."
+  },
+  "48_40": {
+    "hoi_id": "48_40",
+    "verb_phrase": "licking",
+    "obj_phrase": "a wine glass",
+    "background": "Kitchen counter / Dining table / Bar",
+    "human_object": "Tongue extended to rim of upright wine glass, fingers lightly gripping stem.",
+    "interaction": "Tip of tongue touching edge of glass, slight upward tilt."
+  },
+  "111_40": {
+    "hoi_id": "111_40",
+    "verb_phrase": "washing",
+    "obj_phrase": "a wine glass",
+    "background": "Kitchen sink / Restaurant bar / Home dining area",
+    "human_object": "Hand loosely cupping base of wine glass, fingers spread slightly, arm extended over basin.",
+    "interaction": "Fingertips gently rotating glass under running water, circular motion cleaning interior."
+  },
+  "26_22": {
+    "hoi_id": "26_22",
+    "verb_phrase": "feeding",
+    "obj_phrase": "a zebra",
+    "background": "Safari park / Zoo enclosure / Grassland reserve",
+    "human_object": "Hand extended, palm up, fingers slightly curved; zebra's head lowered towards open palm.",
+    "interaction": "Zebra’s mouth touching human’s palm, gentle upward tilt of hand to offer food."
+  },
+  "36_22": {
+    "hoi_id": "36_22",
+    "verb_phrase": "holding",
+    "obj_phrase": "a zebra",
+    "background": "Safari park / Zoo enclosure / Wildlife reserve",
+    "human_object": "Both hands gently cradling the zebra's neck, fingers spread wide for support.",
+    "interaction": "Hands making contact at multiple points along the zebra’s mane, no visible movement."
+  },
+  "65_22": {
+    "hoi_id": "65_22",
+    "verb_phrase": "petting",
+    "obj_phrase": "a zebra",
+    "background": "Safari park / Zoo enclosure / Wildlife reserve",
+    "human_object": "Hand gently resting on zebra's flank, fingers spread wide.",
+    "interaction": "Palm pressing lightly against striped fur, stroking from neck to back."
+  },
+  "112_22": {
+    "hoi_id": "112_22",
+    "verb_phrase": "watching",
+    "obj_phrase": "a zebra",
+    "background": "Safari park / Zoo enclosure / Wildlife reserve",
+    "human_object": "Person standing upright, hands relaxed at sides, eyes focused forward.",
+    "interaction": "Eyes directed towards zebra, no direct contact."
+  }
+}

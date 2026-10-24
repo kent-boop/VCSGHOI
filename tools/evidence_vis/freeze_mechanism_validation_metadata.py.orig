@@ -1,0 +1,356 @@
+#!/usr/bin/env python3
+"""Freeze reproducibility metadata before EvidenceHOI mechanism validation inference."""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import hashlib
+import json
+import os
+import platform
+import shutil
+import socket
+import subprocess
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Optional
+
+import torch
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--repo-root", type=Path, required=True)
+    parser.add_argument("--checkpoint", type=Path, required=True)
+    parser.add_argument("--detr-weights", type=Path, required=True)
+    parser.add_argument("--blip-pretrained", type=Path, required=True)
+    parser.add_argument("--dataset-root", type=Path, required=True)
+    parser.add_argument("--annotation", type=Path, required=True)
+    parser.add_argument("--image-root", type=Path, required=True)
+    parser.add_argument("--top20-csv", type=Path, required=True)
+    parser.add_argument("--old-trace-dir", type=Path, required=True)
+    parser.add_argument("--prototype-bank", type=Path, required=True)
+    parser.add_argument("--prototype-mask", type=Path, required=True)
+    parser.add_argument("--prototype-prompt-metadata", type=Path, required=True)
+    parser.add_argument("--action-labels", type=Path, required=True)
+    parser.add_argument("--object-labels", type=Path, required=True)
+    parser.add_argument("--gpu-ids", default="")
+    parser.add_argument("--batch-size", type=int, default=1)
+    parser.add_argument("--num-workers", type=int, default=2)
+    parser.add_argument("--seed", type=int, default=3407)
+    parser.add_argument("--trace-float-dtype", default="float32")
+    return parser.parse_args()
+
+
+def sha256_file(path: Path, block_size: int = 16 * 1024 * 1024) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        while True:
+            block = handle.read(block_size)
+            if not block:
+                break
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def run_text(command: List[str], cwd: Optional[Path] = None) -> str:
+    result = subprocess.run(
+        command,
+        cwd=None if cwd is None else str(cwd),
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+    return result.stdout.strip()
+
+
+def write_json(path: Path, value: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp = path.with_suffix(path.suffix + ".tmp")
+    temp.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    os.replace(temp, path)
+
+
+def write_csv(path: Path, rows: Iterable[Dict[str, Any]]) -> None:
+    rows = list(rows)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if not rows:
+        path.write_text("", encoding="utf-8")
+        return
+    fields: List[str] = []
+    for row in rows:
+        for key in row:
+            if key not in fields:
+                fields.append(key)
+    temp = path.with_suffix(path.suffix + ".tmp")
+    with temp.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(rows)
+    os.replace(temp, path)
+
+
+def inspect_checkpoint(path: Path) -> Dict[str, Any]:
+    checkpoint = torch.load(path, map_location="cpu")
+    model_state = checkpoint.get("model", checkpoint)
+    return {
+        "checkpoint_path": str(path),
+        "stored_epoch": checkpoint.get("epoch"),
+        "top_level_keys": sorted(str(key) for key in checkpoint.keys()),
+        "model_parameter_key_count": len(model_state),
+        "model_parameter_numel": int(
+            sum(value.numel() for value in model_state.values() if isinstance(value, torch.Tensor))
+        ),
+        "profile_expected": {
+            "backbone": "resnet101",
+            "graph_evidence_topk": 4,
+            "graph_text_topk": 5,
+            "blip_width": 1024,
+        },
+    }
+
+
+def main() -> None:
+    args = parse_args()
+    output = args.output_dir.resolve()
+    repo = args.repo_root.resolve()
+    output.mkdir(parents=True, exist_ok=True)
+    for relative in (
+        "config/variants",
+        "manifests",
+        "provenance/code_snapshot",
+        "reports",
+        "logs/variants",
+        "labels",
+    ):
+        (output / relative).mkdir(parents=True, exist_ok=True)
+
+    assets = [
+        ("checkpoint", args.checkpoint.resolve()),
+        ("detr_weights", args.detr_weights.resolve()),
+        ("blip_pretrained", args.blip_pretrained.resolve()),
+        ("dataset_annotation", args.annotation.resolve()),
+        ("top20_mapping", args.top20_csv.resolve()),
+        ("prototype_bank", args.prototype_bank.resolve()),
+        ("prototype_mask", args.prototype_mask.resolve()),
+        ("prototype_prompt_metadata", args.prototype_prompt_metadata.resolve()),
+        ("action_labels", args.action_labels.resolve()),
+        ("object_labels", args.object_labels.resolve()),
+    ]
+    missing = [str(path) for _, path in assets if not path.is_file()]
+    if not args.dataset_root.is_dir():
+        missing.append(str(args.dataset_root))
+    if not args.image_root.is_dir():
+        missing.append(str(args.image_root))
+    if not args.old_trace_dir.is_dir():
+        missing.append(str(args.old_trace_dir))
+    if missing:
+        raise FileNotFoundError("Missing required assets:\n" + "\n".join(missing))
+
+    file_hashes: Dict[str, Dict[str, Any]] = {}
+    asset_rows = []
+    for role, path in assets:
+        digest = sha256_file(path)
+        item = {"path": str(path), "size_bytes": path.stat().st_size, "sha256": digest}
+        file_hashes[role] = item
+        asset_rows.append({"role": role, **item})
+
+    checkpoint_report = inspect_checkpoint(args.checkpoint.resolve())
+    write_json(output / "provenance/checkpoint_load_report.json", checkpoint_report)
+
+    git_commit = run_text(["git", "rev-parse", "HEAD"], cwd=repo)
+    git_status = run_text(["git", "status", "--short", "--untracked-files=all"], cwd=repo)
+    now_utc = datetime.now(timezone.utc)
+    now_local = datetime.now().astimezone()
+    gpu_query = run_text(
+        [
+            "nvidia-smi",
+            "--query-gpu=index,name,memory.total,memory.used,utilization.gpu,driver_version",
+            "--format=csv,noheader",
+        ]
+    )
+
+    environment = {
+        "python_executable": sys.executable,
+        "python_version": sys.version,
+        "platform": platform.platform(),
+        "hostname": socket.gethostname(),
+        "torch_version": torch.__version__,
+        "cuda_version": torch.version.cuda,
+        "cudnn_version": torch.backends.cudnn.version(),
+        "cuda_available": torch.cuda.is_available(),
+        "gpu_query": gpu_query.splitlines(),
+        "visible_gpu_ids": args.gpu_ids,
+        "conda_prefix": os.environ.get("CONDA_PREFIX", ""),
+        "pip_freeze": run_text([sys.executable, "-m", "pip", "freeze"]).splitlines(),
+    }
+    write_json(output / "config/environment.json", environment)
+    write_json(output / "config/file_hashes.json", file_hashes)
+    write_csv(output / "manifests/source_asset_manifest.csv", asset_rows)
+
+    top20_rows = list(csv.DictReader(args.top20_csv.open("r", encoding="utf-8")))
+    if len(top20_rows) != 20:
+        raise ValueError(f"Expected 20 Top-20 rows, got {len(top20_rows)}")
+    image_ids = [int(row["image_id"]) for row in top20_rows]
+    if len(set(image_ids)) != 20:
+        raise ValueError("Top-20 must contain 20 unique image IDs")
+    write_csv(output / "manifests/top20_cases.csv", top20_rows)
+    shutil.copy2(args.top20_csv, output / "manifests/top20_source_original.csv")
+
+    code_files = [
+        "STIP_main.py",
+        "src/engine/arg_parser.py",
+        "src/models/detr.py",
+        "src/models/stip_evidence_trace.py",
+        "src/models/stip_graph6.py",
+        "src/models/visual_scene_graph_oov8.py",
+        "src/models/visual_evidence_topology_vet_layerwise_setm.py",
+        "src/models/candidate_evidence_topology.py",
+        "src/models/synchronized_evidence_topology_matcher.py",
+        "src/models/text_scene_graph_oov3.py",
+        "src/models/text_prototype_slots.py",
+        "src/models/evidence_trace_io.py",
+        "run_evidence_trace_stip_final.sh",
+        "run_top20_detailed_vet_setm_trace.sh",
+        "run_top20_mechanism_validation_v2.sh",
+        "tools/evidence_vis/freeze_mechanism_validation_metadata.py",
+        "tools/evidence_vis/validate_mechanism_validation_trace.py",
+        "tools/evidence_vis/check_mechanism_baseline_equivalence.py",
+        "tools/evidence_vis/export_mechanism_validation_v2.py",
+        "tools/evidence_vis/validate_mechanism_validation_package.py",
+        "tests/test_mechanism_validation_trace.py",
+        "docs/EvidenceHOI_Top20机制验证重跑_Codex提示词_v2.md",
+    ]
+    code_hashes = {}
+    for relative in code_files:
+        source = repo / relative
+        if not source.is_file():
+            raise FileNotFoundError(source)
+        destination = output / "provenance/code_snapshot" / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+        code_hashes[relative] = {
+            "path": str(source.resolve()),
+            "size_bytes": source.stat().st_size,
+            "sha256": sha256_file(source),
+        }
+    file_hashes["code_files"] = code_hashes
+    write_json(output / "config/file_hashes.json", file_hashes)
+
+    full_args = {
+        "repository_root": str(repo),
+        "output_dir": str(output),
+        "checkpoint": str(args.checkpoint.resolve()),
+        "detr_weights": str(args.detr_weights.resolve()),
+        "blip_pretrained": str(args.blip_pretrained.resolve()),
+        "blip_vit": "large",
+        "backbone": "resnet101",
+        "dataset_file": "hico-det",
+        "dataset_split": "test",
+        "dataset_root": str(args.dataset_root.resolve()),
+        "annotation": str(args.annotation.resolve()),
+        "image_root": str(args.image_root.resolve()),
+        "top20_csv": str(args.top20_csv.resolve()),
+        "old_trace_dir": str(args.old_trace_dir.resolve()),
+        "graph_evidence_topk": 4,
+        "graph_text_topk": 5,
+        "graph_num_layers": 2,
+        "graph_text_sync_mode": "layerwise",
+        "graph_text_dynamic_retrieval": False,
+        "graph_enable_candidate_evidence": True,
+        "graph_enable_sync_evidence_matching": True,
+        "graph_enable_layerwise_sync_evidence_matching": True,
+        "graph_layerwise_sync_write_visual": True,
+        "graph_layerwise_sync_write_text": True,
+        "graph_layerwise_sync_final_matching": False,
+        "graph_layerwise_sync_disable_old_dense_injection": True,
+        "graph_store_dense_debug_tensors": True,
+        "graph_export_mechanism_validation_trace": True,
+        "mechanism_variants": [
+            "full",
+            "no_anchor_writeback",
+            "no_prototype_state_writeback",
+            "no_setm",
+            "endpoint_only_setm",
+        ],
+        "gpu_ids": args.gpu_ids,
+        "batch_size": args.batch_size,
+        "num_workers": args.num_workers,
+        "seed": args.seed,
+        "trace_float_dtype": args.trace_float_dtype,
+        "eval_mode": True,
+        "no_grad": True,
+    }
+    write_json(output / "config/full_args.json", full_args)
+
+    run_meta = {
+        "run_id": output.name,
+        "timestamp_utc": now_utc.isoformat(),
+        "timestamp_local": now_local.isoformat(),
+        "hostname": socket.gethostname(),
+        "repository_root": str(repo),
+        "git_commit": git_commit,
+        "git_status_dirty": bool(git_status),
+        "git_status_short": git_status.splitlines(),
+        "checkpoint_path": file_hashes["checkpoint"]["path"],
+        "checkpoint_sha256": file_hashes["checkpoint"]["sha256"],
+        "checkpoint_stored_epoch": checkpoint_report["stored_epoch"],
+        "detr_weights_path": file_hashes["detr_weights"]["path"],
+        "detr_weights_sha256": file_hashes["detr_weights"]["sha256"],
+        "blip_pretrained_path": file_hashes["blip_pretrained"]["path"],
+        "blip_pretrained_sha256": file_hashes["blip_pretrained"]["sha256"],
+        "dataset_name": "hico-det",
+        "dataset_split": "test",
+        "dataset_root": str(args.dataset_root.resolve()),
+        "dataset_annotation_path": file_hashes["dataset_annotation"]["path"],
+        "dataset_annotation_sha256": file_hashes["dataset_annotation"]["sha256"],
+        "image_root": str(args.image_root.resolve()),
+        "top20_mapping_path": file_hashes["top20_mapping"]["path"],
+        "top20_mapping_sha256": file_hashes["top20_mapping"]["sha256"],
+        "old_detailed_trace_path": str(args.old_trace_dir.resolve()),
+        "prototype_bank_path": file_hashes["prototype_bank"]["path"],
+        "prototype_bank_sha256_before": file_hashes["prototype_bank"]["sha256"],
+        "prototype_mask_path": file_hashes["prototype_mask"]["path"],
+        "prototype_mask_sha256": file_hashes["prototype_mask"]["sha256"],
+        "prototype_prompt_metadata_path": file_hashes["prototype_prompt_metadata"]["path"],
+        "prototype_prompt_metadata_sha256": file_hashes["prototype_prompt_metadata"]["sha256"],
+        "action_label_source": file_hashes["action_labels"]["path"],
+        "action_label_sha256": file_hashes["action_labels"]["sha256"],
+        "object_label_source": file_hashes["object_labels"]["path"],
+        "object_label_sha256": file_hashes["object_labels"]["sha256"],
+        "random_seed": args.seed,
+        "trace_float_dtype": args.trace_float_dtype,
+        "eval_mode": True,
+        "no_grad": True,
+        "model_entry_file": str((repo / "src/models/stip_evidence_trace.py").resolve()),
+        "visual_graph_file": str((repo / "src/models/visual_scene_graph_oov8.py").resolve()),
+        "setm_file": str((repo / "src/models/synchronized_evidence_topology_matcher.py").resolve()),
+        "visible_gpu_ids": args.gpu_ids,
+        "batch_size": args.batch_size,
+        "num_workers": args.num_workers,
+        "python_version": sys.version,
+        "torch_version": torch.__version__,
+        "cuda_version": torch.version.cuda,
+        "cudnn_version": torch.backends.cudnn.version(),
+    }
+    write_json(output / "run_meta.json", run_meta)
+
+    for source, destination in (
+        (args.action_labels, output / "labels/action_names.json"),
+        (args.object_labels, output / "labels/object_names.json"),
+        (args.prototype_prompt_metadata, output / "labels/prototype_prompt_metadata.json"),
+    ):
+        shutil.copy2(source, destination)
+
+    commands = output / "provenance/commands.txt"
+    if not commands.exists():
+        commands.write_text("# EvidenceHOI mechanism validation commands\n", encoding="utf-8")
+    print(json.dumps({"output_dir": str(output), "run_id": output.name, "status": "PASS"}, indent=2))
+
+
+if __name__ == "__main__":
+    main()

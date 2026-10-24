@@ -1,0 +1,2625 @@
+"""Visual scene graph oov9: Graph4-based lightweight reciprocal visual-language synchronization.
+
+This file starts from visual_scene_graph_oov5.py. It preserves the Graph4 text-to-visual dense injection path.
+Graph6/oov8 complex synchronization logic is not copied here.
+"""
+
+import math
+import importlib.util
+import os
+import sys
+from dataclasses import dataclass, replace
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
+import torch
+from torch import Tensor, nn
+
+
+def _load_text_scene_graph_classes():
+    try:
+        from .text_scene_graph_oov2 import TextGraphFeatureBank, TextHOIRetriever, TextSceneGraphReasoner
+    except ImportError:
+        module_path = Path(__file__).resolve().with_name("text_scene_graph_oov2.py")
+        spec = importlib.util.spec_from_file_location("text_scene_graph_direct", module_path)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[spec.name] = module
+        spec.loader.exec_module(module)
+        TextGraphFeatureBank = module.TextGraphFeatureBank
+        TextHOIRetriever = module.TextHOIRetriever
+        TextSceneGraphReasoner = module.TextSceneGraphReasoner
+    return TextGraphFeatureBank, TextHOIRetriever, TextSceneGraphReasoner
+
+
+def _load_text_scene_graph_oov3_reasoner():
+    try:
+        from .text_scene_graph_oov3 import TextSceneGraphReasoner
+    except ImportError:
+        module_path = Path(__file__).resolve().with_name("text_scene_graph_oov3.py")
+        spec = importlib.util.spec_from_file_location("text_scene_graph_oov3_direct", module_path)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[spec.name] = module
+        spec.loader.exec_module(module)
+        TextSceneGraphReasoner = module.TextSceneGraphReasoner
+    return TextSceneGraphReasoner
+
+
+def _load_sync_matcher_classes():
+    try:
+        from .synchronized_evidence_topology_matcher import SynchronizedEvidenceTopologyMatcher
+    except ImportError:
+        module_path = Path(__file__).resolve().with_name("synchronized_evidence_topology_matcher.py")
+        spec = importlib.util.spec_from_file_location("synchronized_evidence_topology_matcher_direct", module_path)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[spec.name] = module
+        spec.loader.exec_module(module)
+        SynchronizedEvidenceTopologyMatcher = module.SynchronizedEvidenceTopologyMatcher
+    return SynchronizedEvidenceTopologyMatcher
+
+
+@dataclass
+class GraphReasonerOutput:
+    pair_feats: Tensor
+    node_feats: Optional[Tensor]
+    debug_info: Dict[str, Any]
+
+
+class EdgeAwareGraphLayer(nn.Module):
+    """Lightweight edge-aware graph transformer layer.
+
+    Node update uses dense edge-masked multi-head attention with an additive edge
+    bias. Edge update uses endpoint node features and only updates existing edges.
+    """
+
+    def __init__(self, d_model: int = 256, num_heads: int = 8, dropout: float = 0.1):
+        super().__init__()
+        if d_model % num_heads != 0:
+            raise ValueError(f"d_model ({d_model}) must be divisible by num_heads ({num_heads})")
+        self.d_model = d_model
+        self.num_heads = num_heads
+        self.head_dim = d_model // num_heads
+
+        self.q_proj = nn.Linear(d_model, d_model)
+        self.k_proj = nn.Linear(d_model, d_model)
+        self.v_proj = nn.Linear(d_model, d_model)
+        self.out_proj = nn.Linear(d_model, d_model)
+        self.edge_bias = nn.Linear(d_model, num_heads)
+        self.attn_dropout = nn.Dropout(dropout)
+        self.node_dropout = nn.Dropout(dropout)
+        self.node_norm1 = nn.LayerNorm(d_model)
+        self.node_norm2 = nn.LayerNorm(d_model)
+        self.node_ffn = nn.Sequential(
+            nn.Linear(d_model, d_model * 4),
+            nn.ReLU(inplace=True),
+            nn.Dropout(dropout),
+            nn.Linear(d_model * 4, d_model),
+        )
+
+        self.edge_ffn = nn.Sequential(
+            nn.Linear(d_model * 4, d_model * 2),
+            nn.ReLU(inplace=True),
+            nn.Dropout(dropout),
+            nn.Linear(d_model * 2, d_model),
+        )
+        self.edge_res_scale = nn.Parameter(torch.tensor(0.1))
+
+    def forward(
+        self,
+        node_feats: Tensor,
+        edge_attr: Tensor,
+        edge_mask: Tensor,
+        node_mask: Tensor,
+    ) -> Tuple[Tensor, Tensor, Dict[str, Any]]:
+        batch_size, num_nodes, dim = node_feats.shape
+        valid_node_mask = node_mask.to(dtype=torch.bool)
+
+        eye = torch.eye(num_nodes, dtype=torch.bool, device=node_feats.device).unsqueeze(0)
+        self_loop_mask = eye & valid_node_mask.unsqueeze(1) & valid_node_mask.unsqueeze(2)
+        attn_allowed = (edge_mask | self_loop_mask) & valid_node_mask.unsqueeze(1) & valid_node_mask.unsqueeze(2)
+
+        q = self.q_proj(node_feats).view(batch_size, num_nodes, self.num_heads, self.head_dim).transpose(1, 2)
+        k = self.k_proj(node_feats).view(batch_size, num_nodes, self.num_heads, self.head_dim).transpose(1, 2)
+        v = self.v_proj(node_feats).view(batch_size, num_nodes, self.num_heads, self.head_dim).transpose(1, 2)
+
+        logits = torch.matmul(q, k.transpose(-2, -1)) / math.sqrt(self.head_dim)
+        edge_bias = self.edge_bias(edge_attr).permute(0, 3, 1, 2)
+        logits = logits + edge_bias
+        logits = logits.masked_fill(~attn_allowed.unsqueeze(1), -1e4)
+        attn = torch.softmax(logits, dim=-1)
+        attn = attn.masked_fill(~attn_allowed.unsqueeze(1), 0.0)
+        attn = self.attn_dropout(attn)
+
+        attn_out = torch.matmul(attn, v).transpose(1, 2).reshape(batch_size, num_nodes, dim)
+        attn_out = self.out_proj(attn_out)
+        node_new = self.node_norm1(node_feats + self.node_dropout(attn_out))
+        node_new = self.node_norm2(node_new + self.node_dropout(self.node_ffn(node_new)))
+        node_new = node_new * valid_node_mask.unsqueeze(-1).to(dtype=node_new.dtype)
+
+        src_nodes = node_new.unsqueeze(2).expand(batch_size, num_nodes, num_nodes, dim)
+        dst_nodes = node_new.unsqueeze(1).expand(batch_size, num_nodes, num_nodes, dim)
+        edge_update_input = torch.cat([edge_attr, src_nodes, dst_nodes, src_nodes * dst_nodes], dim=-1)
+        edge_delta = self.edge_ffn(edge_update_input)
+        edge_new = edge_attr + self.edge_res_scale * edge_delta
+        edge_new = edge_new * edge_mask.unsqueeze(-1).to(dtype=edge_new.dtype)
+
+        debug = {
+            "node_in_shape": tuple(node_feats.shape),
+            "node_out_shape": tuple(node_new.shape),
+            "edge_in_shape": tuple(edge_attr.shape),
+            "edge_out_shape": tuple(edge_new.shape),
+            "attention_mask_shape": tuple(attn_allowed.shape),
+            "has_nan": bool(torch.isnan(node_new).any().item() or torch.isnan(edge_new).any().item()),
+        }
+        return node_new, edge_new, debug
+
+
+class VisualSceneGraphReasoner(nn.Module):
+    """Visual scene graph reasoner with E_ho/E_oo and edge-aware updates."""
+
+    EDGE_HUMAN_TO_OBJECT = 0
+    EDGE_OBJECT_TO_HUMAN = 1
+    EDGE_OBJECT_OBJECT = 2
+    EDGE_HUMAN_HUMAN = 3
+    GEO_DIM = 9
+    BOX_DIM = 4
+
+    def __init__(
+        self,
+        d_model: int = 256,
+        num_obj_classes: int = 80,
+        num_edge_types: int = 4,
+        num_node_types: int = 3,
+        num_layers: int = 2,
+        num_heads: int = 8,
+        k_oo: int = 3,
+        enable_oo_edges: bool = True,
+        enable_hh_edges: bool = False,
+        dropout: float = 0.1,
+        spatial_sigma: float = 0.5,
+        graph_oo_mode: str = "spatial",
+        graph_oo_lambda_geo: float = 1.0,
+        graph_oo_lambda_share: float = 0.5,
+        graph_oo_lambda_text: float = 0.0,
+        graph_oo_min_score: float = 0.0,
+        graph_oo_fallback_to_spatial: bool = True,
+        graph_oo_share_eps: float = 1e-6,
+        graph_oo_prior_path: str = "",
+        graph_oo_prior_normalize: str = "none",
+        graph_oo_prior_symmetric: bool = True,
+        graph_oo_prior_eps: float = 1e-6,
+        graph_oo_prior_label_ids: Optional[List[int]] = None,
+        enable_text_graph: bool = False,
+        text_features_path: str = "",
+        text_mask_path: str = "",
+        hoi_ids_path: str = "",
+        object_to_hoi_indices_path: str = "",
+        field_order_path: str = "",
+        graph_text_human_node_features_path: str = "",
+        graph_text_object_node_features_path: str = "",
+        graph_text_ho_edge_features_path: str = "",
+        graph_text_discriminative_features_path: str = "",
+        graph_text_scene_context_features_path: str = "",
+        graph_text_oo_context_features_path: str = "",
+        oo_affordance_prior_path: str = "",
+        graph_text_topk: int = 5,
+        graph_text_pre_topk: int = 20,
+        graph_text_temperature: float = 0.07,
+        graph_text_rerank_weight: float = 0.5,
+        graph_text_use_discriminative_rerank: bool = True,
+        graph_text_label_ids: Optional[List[int]] = None,
+        graph_text_num_layers: int = 0,
+        graph_text_num_heads: int = 8,
+        graph_text_dropout: float = 0.1,
+        graph_text_use_scene_token: bool = True,
+        graph_text_use_oo_context_token: bool = True,
+        graph_text_cross_num_heads: int = 8,
+        graph_text_query_source: str = "refined_edge",
+        graph_text_sync_mode: str = "layerwise",
+        graph_text_dense_injection: bool = True,
+        graph_text_final_pair_injection: bool = False,
+        graph_text_sync_query_source: str = "base_pair",
+        graph_text_export_each_layer: bool = True,
+        graph_text_dynamic_retrieval: bool = False,
+        graph_text_sync_layers_with_visual: bool = True,
+        graph_text_edge_inject_reverse: bool = True,
+        graph_text_node_scatter_reduce: str = "mean",
+        graph_text_gate_init: float = 0.0,
+        graph_text_debug: bool = False,
+        graph_text_prior_injection: str = "edge_only",
+        graph_text_use_human_node_prior: bool = False,
+        graph_text_use_object_node_prior: bool = False,
+        graph_text_use_ho_edge_prior: bool = True,
+        graph_text_use_discriminative_prior: bool = False,
+        graph_text_use_scene_prior: bool = False,
+        graph_text_use_oo_prior: bool = False,
+        graph_text_node_prior_gate_init: float = 0.0,
+        graph_text_edge_prior_gate_init: float = 0.0,
+        graph_text_scene_prior_gate_init: float = 0.0,
+        graph_text_oo_prior_gate_init: float = 0.0,
+        graph_text_force_oov3: bool = True,
+        graph_text_prototype_slot_fallback_to_raw: bool = True,
+        graph_text_prototype_slot_debug: bool = False,
+        graph_enable_reciprocal_setm: bool = False,
+        graph_reciprocal_use_path_context: bool = True,
+        graph_reciprocal_write_text: bool = True,
+        graph_reciprocal_write_visual: bool = False,
+        graph_reciprocal_update_human: bool = True,
+        graph_reciprocal_update_object: bool = True,
+        graph_reciprocal_update_anchor: bool = True,
+        graph_reciprocal_update_scene: bool = False,
+        graph_reciprocal_update_context: bool = False,
+        graph_reciprocal_update_discriminative: bool = False,
+        graph_reciprocal_detach_text_update: bool = False,
+        graph_reciprocal_debug: bool = False,
+        graph_sync_visual_gate_init: float = 0.0,
+        graph_sync_text_gate_init: float = 0.0,
+        graph_sync_anchor_gate_init: float = 0.0,
+        graph_sync_dropout: Optional[float] = None,
+        graph_sync_debug: bool = False,
+    ):
+        super().__init__()
+        valid_oo_modes = {"spatial", "share_human", "hybrid", "text_hybrid"}
+        if graph_oo_mode not in valid_oo_modes:
+            raise ValueError(f"graph_oo_mode must be one of {sorted(valid_oo_modes)}, got {graph_oo_mode}")
+        valid_text_query_sources = {"base_pair", "refined_edge", "union", "refined_plus_union"}
+        if graph_text_query_source not in valid_text_query_sources:
+            raise ValueError(
+                f"graph_text_query_source must be one of {sorted(valid_text_query_sources)}, got {graph_text_query_source}"
+            )
+        if graph_text_sync_query_source not in valid_text_query_sources:
+            raise ValueError(
+                f"graph_text_sync_query_source must be one of {sorted(valid_text_query_sources)}, got {graph_text_sync_query_source}"
+            )
+        valid_text_sync_modes = {"posthoc", "layerwise"}
+        if graph_text_sync_mode not in valid_text_sync_modes:
+            raise ValueError(
+                f"graph_text_sync_mode must be one of {sorted(valid_text_sync_modes)}, got {graph_text_sync_mode}"
+            )
+        valid_text_prior_injection = {"none", "edge_only", "node_edge", "all"}
+        if graph_text_prior_injection not in valid_text_prior_injection:
+            raise ValueError(
+                f"graph_text_prior_injection must be one of {sorted(valid_text_prior_injection)}, got {graph_text_prior_injection}"
+            )
+        valid_node_scatter_reduce = {"mean", "sum"}
+        if graph_text_node_scatter_reduce not in valid_node_scatter_reduce:
+            raise ValueError(
+                f"graph_text_node_scatter_reduce must be one of {sorted(valid_node_scatter_reduce)}, got {graph_text_node_scatter_reduce}"
+            )
+        self.d_model = d_model
+        self.num_obj_classes = num_obj_classes
+        self.num_edge_types = num_edge_types
+        self.num_node_types = num_node_types
+        self.num_layers = num_layers
+        self.num_heads = num_heads
+        self.k_oo = k_oo
+        self.enable_oo_edges = enable_oo_edges
+        self.enable_hh_edges = enable_hh_edges
+        self.spatial_sigma = spatial_sigma
+        self.graph_oo_mode = graph_oo_mode
+        self.graph_oo_lambda_geo = graph_oo_lambda_geo
+        self.graph_oo_lambda_share = graph_oo_lambda_share
+        self.graph_oo_lambda_text = graph_oo_lambda_text
+        self.graph_oo_min_score = graph_oo_min_score
+        self.graph_oo_fallback_to_spatial = graph_oo_fallback_to_spatial
+        self.graph_oo_share_eps = graph_oo_share_eps
+        self.graph_oo_prior_normalize = graph_oo_prior_normalize
+        self.graph_oo_prior_symmetric = graph_oo_prior_symmetric
+        self.graph_oo_prior_eps = graph_oo_prior_eps
+        self.enable_text_graph = bool(enable_text_graph)
+        self.graph_text_query_source = graph_text_query_source
+        self.graph_text_sync_mode = graph_text_sync_mode
+        self.graph_text_dense_injection = bool(graph_text_dense_injection)
+        self.graph_text_final_pair_injection = bool(graph_text_final_pair_injection)
+        self.graph_text_sync_query_source = graph_text_sync_query_source
+        self.graph_text_export_each_layer = bool(graph_text_export_each_layer)
+        self.graph_text_dynamic_retrieval = bool(graph_text_dynamic_retrieval)
+        self.graph_text_sync_layers_with_visual = bool(graph_text_sync_layers_with_visual)
+        self.graph_text_edge_inject_reverse = bool(graph_text_edge_inject_reverse)
+        self.graph_text_node_scatter_reduce = graph_text_node_scatter_reduce
+        self.graph_text_debug = bool(graph_text_debug)
+        self.graph_text_prior_injection = graph_text_prior_injection
+        self.graph_text_use_human_node_prior = bool(graph_text_use_human_node_prior)
+        self.graph_text_use_object_node_prior = bool(graph_text_use_object_node_prior)
+        self.graph_text_use_ho_edge_prior = bool(graph_text_use_ho_edge_prior)
+        self.graph_text_use_discriminative_prior = bool(graph_text_use_discriminative_prior)
+        self.graph_text_use_scene_prior = bool(graph_text_use_scene_prior)
+        self.graph_text_use_oo_prior = bool(graph_text_use_oo_prior)
+        self.graph_text_force_oov3 = bool(graph_text_force_oov3)
+        self.graph_text_prototype_slot_fallback_to_raw = bool(graph_text_prototype_slot_fallback_to_raw)
+        self.graph_text_prototype_slot_debug = bool(graph_text_prototype_slot_debug)
+        self.graph_enable_reciprocal_setm = bool(graph_enable_reciprocal_setm)
+        self.graph_reciprocal_use_path_context = bool(graph_reciprocal_use_path_context)
+        self.graph_reciprocal_write_text = bool(graph_reciprocal_write_text)
+        self.graph_reciprocal_write_visual = bool(graph_reciprocal_write_visual)
+        self.graph_reciprocal_update_human = bool(graph_reciprocal_update_human)
+        self.graph_reciprocal_update_object = bool(graph_reciprocal_update_object)
+        self.graph_reciprocal_update_anchor = bool(graph_reciprocal_update_anchor)
+        self.graph_reciprocal_update_scene = bool(graph_reciprocal_update_scene)
+        self.graph_reciprocal_update_context = bool(graph_reciprocal_update_context)
+        self.graph_reciprocal_update_discriminative = bool(graph_reciprocal_update_discriminative)
+        self.graph_reciprocal_detach_text_update = bool(graph_reciprocal_detach_text_update)
+        self.graph_reciprocal_debug = bool(graph_reciprocal_debug)
+        self.graph_sync_debug = bool(graph_sync_debug)
+        self._load_oo_affordance_prior(
+            prior_path=graph_oo_prior_path,
+            normalize=graph_oo_prior_normalize,
+            symmetric=graph_oo_prior_symmetric,
+            eps=graph_oo_prior_eps,
+        )
+        self._build_oo_prior_label_map(graph_oo_prior_label_ids)
+
+        self.class_embedding = nn.Embedding(num_obj_classes + 1, d_model)
+        self.node_type_embedding = nn.Embedding(num_node_types, d_model)
+        self.box_mlp = nn.Sequential(
+            nn.Linear(self.BOX_DIM, d_model),
+            nn.ReLU(inplace=True),
+            nn.Dropout(dropout),
+            nn.Linear(d_model, d_model),
+        )
+        self.node_fusion = nn.Sequential(
+            nn.LayerNorm(d_model * 5),
+            nn.Linear(d_model * 5, d_model * 2),
+            nn.ReLU(inplace=True),
+            nn.Dropout(dropout),
+            nn.Linear(d_model * 2, d_model),
+        )
+        self.endpoint_pair_proj = nn.Sequential(
+            nn.Linear(d_model * 2 + 1, d_model),
+            nn.ReLU(inplace=True),
+            nn.Dropout(dropout),
+            nn.Linear(d_model, d_model),
+        )
+        self.geo_mlp = nn.Sequential(
+            nn.Linear(self.GEO_DIM, d_model),
+            nn.ReLU(inplace=True),
+            nn.Dropout(dropout),
+            nn.Linear(d_model, d_model),
+        )
+        self.edge_type_embedding = nn.Embedding(num_edge_types, d_model)
+        self.edge_mlp = nn.Sequential(
+            nn.Linear(d_model * 5 + 1, d_model),
+            nn.ReLU(inplace=True),
+            nn.Dropout(dropout),
+            nn.Linear(d_model, d_model),
+        )
+        self.layers = nn.ModuleList([
+            EdgeAwareGraphLayer(d_model=d_model, num_heads=num_heads, dropout=dropout)
+            for _ in range(num_layers)
+        ])
+        self.pair_out_mlp = nn.Sequential(
+            nn.LayerNorm(d_model * 5),
+            nn.Linear(d_model * 5, d_model * 2),
+            nn.ReLU(inplace=True),
+            nn.Dropout(dropout),
+            nn.Linear(d_model * 2, d_model),
+        )
+        self.text_graph_reasoner = None
+        self.text_cross_attn = None
+        self.text_cross_norm = None
+        self.text_context_proj = None
+        self.text_refined_union_query_proj = None
+        self.text_gate = nn.Parameter(torch.tensor(float(graph_text_gate_init)))
+        self.text_human_node_proj = self._make_text_prior_mlp(d_model)
+        self.text_object_node_proj = self._make_text_prior_mlp(d_model)
+        self.text_ho_edge_proj = self._make_text_prior_mlp(d_model)
+        self.text_discriminative_proj = self._make_text_prior_mlp(d_model)
+        self.text_scene_proj = self._make_text_prior_mlp(d_model)
+        self.text_oo_proj = self._make_text_prior_mlp(d_model)
+        self.text_human_node_gate = nn.Parameter(torch.tensor(float(graph_text_node_prior_gate_init)))
+        self.text_object_node_gate = nn.Parameter(torch.tensor(float(graph_text_node_prior_gate_init)))
+        self.text_ho_edge_gate = nn.Parameter(torch.tensor(float(graph_text_edge_prior_gate_init)))
+        self.text_discriminative_gate = nn.Parameter(torch.tensor(float(graph_text_edge_prior_gate_init)))
+        self.text_scene_gate = nn.Parameter(torch.tensor(float(graph_text_scene_prior_gate_init)))
+        self.text_oo_gate = nn.Parameter(torch.tensor(float(graph_text_oo_prior_gate_init)))
+        self.sync_evidence_matcher = None
+        self.light_path_context_proj = None
+        if self.enable_text_graph:
+            TextGraphFeatureBank, TextHOIRetriever, TextSceneGraphReasoner = _load_text_scene_graph_classes()
+            text_bank = TextGraphFeatureBank(
+                text_features_path=text_features_path,
+                text_mask_path=text_mask_path,
+                hoi_ids_path=hoi_ids_path,
+                object_to_hoi_indices_path=object_to_hoi_indices_path,
+                field_order_path=field_order_path,
+                d_model=d_model,
+                normalize=True,
+                strict_shape=False,
+                human_node_features_path=graph_text_human_node_features_path,
+                object_node_features_path=graph_text_object_node_features_path,
+                ho_edge_features_path=graph_text_ho_edge_features_path,
+                discriminative_features_path=graph_text_discriminative_features_path,
+                scene_context_features_path=graph_text_scene_context_features_path,
+                oo_context_features_path=graph_text_oo_context_features_path,
+                oo_affordance_prior_path=oo_affordance_prior_path,
+                label_ids=graph_text_label_ids,
+            )
+            text_retriever = TextHOIRetriever(
+                bank=text_bank,
+                d_model=d_model,
+                topk=graph_text_topk,
+                pre_topk=graph_text_pre_topk,
+                temperature=graph_text_temperature,
+                rerank_weight=graph_text_rerank_weight,
+                use_discriminative_rerank=graph_text_use_discriminative_rerank,
+                query_proj=True,
+                debug=graph_text_debug,
+            )
+            self.text_graph_reasoner = TextSceneGraphReasoner(
+                retriever=text_retriever,
+                d_model=d_model,
+                num_layers=num_layers if int(graph_text_num_layers) <= 0 else int(graph_text_num_layers),
+                num_heads=graph_text_num_heads,
+                dropout=graph_text_dropout,
+                use_scene_token=graph_text_use_scene_token,
+                use_oo_context_token=graph_text_use_oo_context_token,
+                max_topk=max(int(graph_text_topk), 1),
+                debug=graph_text_debug,
+            )
+            if self.enable_text_graph and self.graph_text_force_oov3 and self.text_graph_reasoner is not None:
+                TextSceneGraphReasonerV3 = _load_text_scene_graph_oov3_reasoner()
+                old_reasoner = self.text_graph_reasoner
+                self.text_graph_reasoner = TextSceneGraphReasonerV3(
+                    retriever=old_reasoner.retriever,
+                    d_model=self.d_model,
+                    num_layers=getattr(old_reasoner, "num_layers", getattr(self, "num_layers", 1)),
+                    num_heads=getattr(old_reasoner, "num_heads", getattr(self, "num_heads", 8)),
+                    dropout=graph_text_dropout,
+                    use_field_tokens=getattr(
+                        old_reasoner,
+                        "use_field_tokens",
+                        ("human_node", "object_node", "ho_edge", "discriminative", "scene_context", "oo_context"),
+                    ),
+                    use_scene_token=getattr(old_reasoner, "use_scene_token", True),
+                    use_oo_context_token=getattr(old_reasoner, "use_oo_context_token", True),
+                    use_score_embedding=getattr(old_reasoner, "use_score_embedding", True),
+                    use_rank_embedding=getattr(old_reasoner, "use_rank_embedding", True),
+                    max_topk=getattr(old_reasoner, "max_topk", 5),
+                    field_dropout=0.0,
+                    debug=getattr(old_reasoner, "debug", False),
+                    enable_prototype_slots=True,
+                    prototype_slot_fallback_to_raw=self.graph_text_prototype_slot_fallback_to_raw,
+                    prototype_slot_debug=self.graph_text_prototype_slot_debug or self.graph_text_debug,
+                )
+            self.text_cross_attn = nn.MultiheadAttention(
+                d_model,
+                graph_text_cross_num_heads,
+                dropout=dropout,
+                batch_first=True,
+            )
+            self.text_cross_norm = nn.LayerNorm(d_model)
+            self.text_context_proj = nn.Sequential(
+                nn.Linear(d_model, d_model),
+                nn.ReLU(inplace=True),
+                nn.Linear(d_model, d_model),
+            )
+            self.text_refined_union_query_proj = nn.Sequential(
+                nn.Linear(d_model * 2, d_model),
+                nn.ReLU(inplace=True),
+                nn.Linear(d_model, d_model),
+            )
+        if self.graph_enable_reciprocal_setm and not self.enable_text_graph:
+            raise ValueError("graph_enable_reciprocal_setm=True requires graph_enable_text_graph=True")
+        if self.graph_enable_reciprocal_setm and self.graph_text_sync_mode != "layerwise":
+            raise ValueError('graph_enable_reciprocal_setm=True requires graph_text_sync_mode="layerwise"')
+        if self.graph_enable_reciprocal_setm and self.graph_text_dynamic_retrieval:
+            raise ValueError(
+                "graph_enable_reciprocal_setm=True requires graph_text_dynamic_retrieval=False because rebuilding text_state erases visual-to-text prototype updates."
+            )
+        if self.graph_enable_reciprocal_setm and not self.graph_text_export_each_layer:
+            raise ValueError("graph_enable_reciprocal_setm=True requires graph_text_export_each_layer=True")
+        if self.graph_enable_reciprocal_setm and not self.graph_text_dense_injection:
+            raise ValueError("graph_enable_reciprocal_setm=True requires graph_text_dense_injection=True")
+        if self.graph_enable_reciprocal_setm and self.text_graph_reasoner is None:
+            raise ValueError("graph_enable_reciprocal_setm=True requires an initialized text_graph_reasoner")
+        if self.graph_enable_reciprocal_setm:
+            SynchronizedEvidenceTopologyMatcher = _load_sync_matcher_classes()
+            sync_dropout = dropout if graph_sync_dropout is None else graph_sync_dropout
+            self.sync_evidence_matcher = SynchronizedEvidenceTopologyMatcher(
+                d_model=self.d_model,
+                num_slots=6,
+                dropout=float(sync_dropout),
+                visual_gate_init=graph_sync_visual_gate_init,
+                text_gate_init=graph_sync_text_gate_init,
+                anchor_gate_init=graph_sync_anchor_gate_init,
+                normalize_inputs=True,
+                debug=graph_sync_debug,
+            )
+        if self.graph_enable_reciprocal_setm and self.graph_reciprocal_use_path_context:
+            self.light_path_context_proj = nn.Sequential(
+                nn.LayerNorm(self.d_model * 4),
+                nn.Linear(self.d_model * 4, self.d_model),
+                nn.ReLU(inplace=True),
+                nn.Dropout(dropout),
+                nn.Linear(self.d_model, self.d_model),
+            )
+
+    def _make_text_prior_mlp(self, d_model: int) -> nn.Module:
+        return nn.Sequential(
+            nn.Linear(d_model, d_model),
+            nn.ReLU(inplace=True),
+            nn.Linear(d_model, d_model),
+        )
+
+    def _load_oo_affordance_prior(
+        self,
+        prior_path: str,
+        normalize: str = "none",
+        symmetric: bool = True,
+        eps: float = 1e-6,
+    ) -> Tensor:
+        if not prior_path:
+            A = torch.zeros((80, 80), dtype=torch.float32)
+            self.register_buffer("oo_affordance_prior", A)
+            self.oo_prior_loaded = False
+            self.oo_prior_path = ""
+            self.oo_prior_shape = tuple(A.shape)
+            return A
+
+        if not os.path.isfile(prior_path):
+            raise FileNotFoundError(f"OO affordance prior file not found: {prior_path}")
+
+        ext = os.path.splitext(prior_path)[1].lower()
+        if ext == ".npy":
+            A = torch.as_tensor(np.load(prior_path), dtype=torch.float32)
+        elif ext in {".pt", ".pth"}:
+            prior_data = torch.load(prior_path, map_location="cpu")
+            if isinstance(prior_data, dict):
+                for key in ("oo_affordance_prior", "prior", "A"):
+                    if key in prior_data:
+                        prior_data = prior_data[key]
+                        break
+            A = torch.as_tensor(prior_data, dtype=torch.float32)
+        else:
+            raise ValueError(f"Unsupported OO affordance prior extension: {ext}")
+
+        if A.dim() != 2 or A.shape[0] != A.shape[1]:
+            raise ValueError(f"OO affordance prior must be a 2D square matrix, got {tuple(A.shape)}")
+        A = torch.nan_to_num(A, nan=0.0, posinf=1.0, neginf=0.0)
+        if normalize == "none":
+            A = A.clamp(0.0, 1.0)
+        elif normalize == "minmax":
+            finite = torch.isfinite(A)
+            if bool(finite.any().item()):
+                finite_vals = A[finite]
+                denom = (finite_vals.max() - finite_vals.min()).clamp(min=eps)
+                A = (A - finite_vals.min()) / denom
+            else:
+                A = torch.zeros_like(A)
+            A = A.clamp(0.0, 1.0)
+        elif normalize == "sigmoid":
+            A = torch.sigmoid(A).clamp(0.0, 1.0)
+        else:
+            raise ValueError("graph_oo_prior_normalize must be one of ['none', 'minmax', 'sigmoid']")
+        if symmetric:
+            A = (0.5 * (A + A.t())).clamp(0.0, 1.0)
+        A.fill_diagonal_(0.0)
+        self.register_buffer("oo_affordance_prior", A)
+        self.oo_prior_loaded = bool(prior_path)
+        self.oo_prior_path = prior_path
+        self.oo_prior_shape = tuple(A.shape)
+        return A
+
+    def _build_oo_prior_label_map(self, graph_oo_prior_label_ids: Optional[List[int]]) -> None:
+        if graph_oo_prior_label_ids is None or len(graph_oo_prior_label_ids) == 0:
+            return
+        label_ids = [int(label_id) for label_id in graph_oo_prior_label_ids if int(label_id) >= 0]
+        if not label_ids:
+            return
+        label_to_prior_index = torch.full((max(label_ids) + 1,), -1, dtype=torch.long)
+        for prior_idx, label_id in enumerate(graph_oo_prior_label_ids):
+            label_id = int(label_id)
+            if label_id < 0 or prior_idx >= self.oo_affordance_prior.shape[0]:
+                continue
+            label_to_prior_index[label_id] = prior_idx
+        self.register_buffer("oo_prior_label_to_index", label_to_prior_index)
+
+    def _map_labels_to_oo_prior_indices(self, labels_img: Tensor) -> Tuple[Tensor, Tensor]:
+        labels_long = labels_img.to(dtype=torch.long)
+        if hasattr(self, "oo_prior_label_to_index"):
+            mapping = self.oo_prior_label_to_index.to(device=labels_img.device)
+            valid_range = (labels_long >= 0) & (labels_long < mapping.shape[0])
+            safe_labels = labels_long.clamp(min=0, max=max(mapping.shape[0] - 1, 0))
+            prior_indices = mapping[safe_labels]
+            valid_mask = valid_range & (prior_indices >= 0)
+            prior_indices = prior_indices.clamp(min=0, max=max(self.oo_affordance_prior.shape[0] - 1, 0))
+            return prior_indices, valid_mask
+        prior_size = self.oo_affordance_prior.shape[0]
+        valid_mask = (labels_long >= 0) & (labels_long < prior_size)
+        prior_indices = labels_long.clamp(min=0, max=max(prior_size - 1, 0))
+        return prior_indices, valid_mask
+
+    def _build_oo_text_score_matrix(self, labels_img: Tensor, object_ids: Tensor) -> Tuple[Tensor, Dict[str, Any]]:
+        num_objects = int(object_ids.numel())
+        s_text = torch.zeros((num_objects, num_objects), dtype=torch.float32, device=labels_img.device)
+        stats = self._empty_oo_text_stats()
+        if self.graph_oo_mode != "text_hybrid" or self.graph_oo_lambda_text <= 0.0:
+            return s_text, stats
+        stats["oo_prior_loaded"] = self.oo_prior_loaded
+        stats["oo_prior_shape"] = self.oo_prior_shape
+        prior = self.oo_affordance_prior.to(device=labels_img.device)
+        if prior.numel() == 0 or not bool((prior > 0).any().item()):
+            return s_text, stats
+        obj_labels = labels_img[object_ids]
+        prior_idx, valid_obj_mask = self._map_labels_to_oo_prior_indices(obj_labels)
+        valid_pair = valid_obj_mask[:, None] & valid_obj_mask[None, :]
+        idx_i = prior_idx.clamp(0, prior.shape[0] - 1)
+        idx_j = prior_idx.clamp(0, prior.shape[1] - 1)
+        raw = prior[idx_i[:, None], idx_j[None, :]].to(dtype=s_text.dtype)
+        s_text = torch.where(valid_pair, raw, torch.zeros_like(raw))
+        if num_objects > 0:
+            s_text.fill_diagonal_(0.0)
+        stats.update(self._oo_text_matrix_stats(s_text, valid_pair))
+        stats["oo_text_invalid_label_count"] = int((~valid_obj_mask).sum().detach().cpu().item())
+        stats["oo_text_used"] = bool(stats["oo_text_max"] > 0.0)
+        stats["oo_text_inactive"] = not stats["oo_text_used"]
+        return s_text, stats
+
+    def forward(
+        self,
+        node_feats: Tensor,
+        boxes: Tensor,
+        labels: Tensor,
+        node_types: Tensor,
+        node_mask: Tensor,
+        pair_indices: Tensor,
+        pair_scores: Tensor,
+        pair_feats: Optional[Tensor] = None,
+        union_feats: Optional[Tensor] = None,
+        global_feat: Optional[Tensor] = None,
+        node_blip_feats: Optional[Tensor] = None,
+    ) -> GraphReasonerOutput:
+        self._check_inputs(
+            node_feats=node_feats,
+            node_blip_feats=node_blip_feats,
+            boxes=boxes,
+            labels=labels,
+            node_types=node_types,
+            node_mask=node_mask,
+            pair_indices=pair_indices,
+            pair_scores=pair_scores,
+            pair_feats=pair_feats,
+            union_feats=union_feats,
+            global_feat=global_feat,
+        )
+
+        fused_node_feats = self._fuse_node_inputs(node_feats, node_blip_feats, boxes, labels, node_types)
+        fused_node_feats = fused_node_feats * node_mask.unsqueeze(-1).to(dtype=fused_node_feats.dtype)
+
+        if pair_feats is None:
+            base_pair_feats = self._build_pair_feats_from_endpoints(fused_node_feats, pair_indices, pair_scores)
+            pair_source = "endpoint_node_feats"
+        else:
+            base_pair_feats = pair_feats
+            pair_source = "provided_pair_feats"
+
+        edge_attr_dense, edge_mask_dense, edge_score_dense, counts = self._build_dense_edges(
+            node_feats=fused_node_feats,
+            boxes=boxes,
+            labels=labels,
+            node_types=node_types,
+            node_mask=node_mask,
+            pair_indices=pair_indices,
+            pair_scores=pair_scores,
+            pair_feats=base_pair_feats,
+            union_feats=union_feats,
+        )
+
+        union_input = union_feats if union_feats is not None else torch.zeros_like(base_pair_feats)
+        text_state = None
+        text_pair_valid_mask = None
+        pair_object_labels = None
+        pair_label_valid_mask = None
+        text_layer_debug = []
+        text_dense_injection_debug_per_layer = []
+        text_layerwise_enabled = self.enable_text_graph and self.graph_text_sync_mode == "layerwise"
+        reciprocal_setm_debug = []
+        reciprocal_setm_applied = False
+        reciprocal_setm_has_nan = False
+        reciprocal_valid_pair_count_total = 0
+        reciprocal_valid_prototype_count_total = 0
+        reciprocal_text_state_updated_slot_count_total = 0
+        reciprocal_path_context_valid_ratio_values = []
+        reciprocal_visual_anchor_delta_norm_values = []
+        reciprocal_write_visual_applied = False
+        if self.graph_enable_reciprocal_setm:
+            if self.sync_evidence_matcher is None:
+                raise ValueError("graph_enable_reciprocal_setm=True requires initialized sync_evidence_matcher")
+            if not text_layerwise_enabled:
+                raise ValueError('graph_enable_reciprocal_setm=True requires graph_text_sync_mode="layerwise" and graph_enable_text_graph=True')
+            if self.graph_text_dynamic_retrieval:
+                raise ValueError(
+                    "graph_enable_reciprocal_setm=True requires graph_text_dynamic_retrieval=False because rebuilding text_state erases visual-to-text prototype updates."
+                )
+            if not self.graph_text_export_each_layer:
+                raise ValueError("graph_enable_reciprocal_setm=True requires graph_text_export_each_layer=True")
+        if text_layerwise_enabled:
+            initial_refined_edge, initial_valid_pair_mask = self._gather_pair_edge_feats(edge_attr_dense, pair_indices, node_mask)
+            pair_object_labels, pair_label_valid_mask = self._gather_pair_object_labels(
+                labels=labels,
+                pair_indices=pair_indices,
+                node_mask=node_mask,
+            )
+            text_pair_valid_mask = initial_valid_pair_mask & pair_label_valid_mask
+            text_query_feats = self._build_text_query_feats(
+                source=self.graph_text_sync_query_source,
+                refined_edge=initial_refined_edge,
+                base_pair_feats=base_pair_feats,
+                union_feats=union_input,
+            )
+            text_state = self.text_graph_reasoner.build_initial_state(
+                visual_pair_feats=text_query_feats,
+                pair_object_labels=pair_object_labels,
+                pair_valid_mask=text_pair_valid_mask,
+            )
+
+        layer_debug = []
+        updated_node_feats = fused_node_feats
+        updated_edge_attr = edge_attr_dense
+        for layer_idx, layer in enumerate(self.layers):
+            updated_node_feats, updated_edge_attr, layer_info = layer(
+                updated_node_feats,
+                updated_edge_attr,
+                edge_mask_dense,
+                node_mask,
+            )
+            layer_info["layer_index"] = layer_idx
+            layer_debug.append(layer_info)
+            if text_layerwise_enabled and text_state is not None:
+                refined_edge_l, valid_pair_mask_l = self._gather_pair_edge_feats(updated_edge_attr, pair_indices, node_mask)
+                node_h_l = self._gather_pair_nodes(updated_node_feats, pair_indices[..., 0])
+                node_o_l = self._gather_pair_nodes(updated_node_feats, pair_indices[..., 1])
+                layer_text_pair_valid_mask = valid_pair_mask_l if text_pair_valid_mask is None else (valid_pair_mask_l & text_pair_valid_mask)
+                if self.graph_text_dynamic_retrieval:
+                    text_query_feats_l = self._build_text_query_feats(
+                        source="refined_edge",
+                        refined_edge=refined_edge_l,
+                        base_pair_feats=base_pair_feats,
+                        union_feats=union_input,
+                    )
+                    text_state = self.text_graph_reasoner.build_initial_state(
+                        visual_pair_feats=text_query_feats_l,
+                        pair_object_labels=pair_object_labels,
+                        pair_valid_mask=layer_text_pair_valid_mask,
+                    )
+                text_state = self.text_graph_reasoner.step(text_state, layer_idx)
+                if self.graph_text_export_each_layer:
+                    text_out_l = self.text_graph_reasoner.export_layer_outputs(text_state)
+                    if self.graph_enable_reciprocal_setm:
+                        if not hasattr(text_out_l, "prototype_slots") or not hasattr(text_out_l, "prototype_slot_mask"):
+                            raise ValueError(
+                                "graph_enable_reciprocal_setm=True requires text_graph_reasoner.export_layer_outputs(...) to return prototype_slots and prototype_slot_mask. Make sure graph_text_force_oov3=True."
+                            )
+                        visual_tokens_l, visual_mask_l, visual_debug_l = self._build_lightweight_visual_evidence_tokens(
+                            updated_node_feats=updated_node_feats,
+                            updated_edge_attr=updated_edge_attr,
+                            edge_mask_dense=edge_mask_dense,
+                            node_mask=node_mask,
+                            pair_indices=pair_indices,
+                            pair_valid_mask=layer_text_pair_valid_mask,
+                            refined_edge=refined_edge_l,
+                            node_h=node_h_l,
+                            node_o=node_o_l,
+                        )
+                        sync_out_l = self.sync_evidence_matcher(
+                            visual_tokens=visual_tokens_l,
+                            visual_mask=visual_mask_l,
+                            prototype_slots=text_out_l.prototype_slots,
+                            prototype_slot_mask=text_out_l.prototype_slot_mask,
+                            pair_valid_mask=layer_text_pair_valid_mask,
+                        )
+                        write_text_mask = text_out_l.prototype_slot_mask & layer_text_pair_valid_mask[:, :, None, None]
+                        valid_pair_count_l = int(layer_text_pair_valid_mask.sum().detach().cpu().item())
+                        valid_prototype_count_l = int(write_text_mask.any(dim=-1).sum().detach().cpu().item())
+                        updated_slot_count_l = 0
+                        write_visual_applied_l = False
+                        visual_anchor_delta_norm_l = float(sync_out_l.debug_info.get("sync_anchor_delta_norm_mean", 0.0))
+                        if self.graph_reciprocal_write_text:
+                            text_state = self._apply_lightweight_prototype_slot_update_to_text_state(
+                                text_state=text_state,
+                                updated_prototype_slots=sync_out_l.updated_prototype_slots,
+                                prototype_slot_mask=write_text_mask,
+                                detach_update=self.graph_reciprocal_detach_text_update,
+                            )
+                            updated_slot_count_l = int(text_state.debug_info.get("reciprocal_text_state_updated_slot_count", 0))
+                            text_out_l = self.text_graph_reasoner.export_layer_outputs(text_state)
+                        if self.graph_reciprocal_write_visual:
+                            if not hasattr(sync_out_l, "anchor_delta"):
+                                raise ValueError("graph_reciprocal_write_visual=True requires sync_out_l.anchor_delta")
+                            updated_edge_attr = self._scatter_pair_delta_to_dense_edges(
+                                edge_attr_dense=updated_edge_attr,
+                                pair_indices=pair_indices,
+                                pair_delta=sync_out_l.anchor_delta,
+                                valid_pair_mask=layer_text_pair_valid_mask,
+                                edge_mask_dense=edge_mask_dense,
+                                write_reverse=False,
+                            )
+                            write_visual_applied_l = True
+                            reciprocal_write_visual_applied = True
+                        layer_reciprocal_debug = {
+                            "layer_idx": int(layer_idx),
+                            "reciprocal_visual_tokens_shape": tuple(visual_tokens_l.shape),
+                            "reciprocal_visual_mask_shape": tuple(visual_mask_l.shape),
+                            "prototype_slots_shape": tuple(text_out_l.prototype_slots.shape),
+                            "prototype_slot_mask_shape": tuple(text_out_l.prototype_slot_mask.shape),
+                            "sync_match_logits_shape": tuple(sync_out_l.match_logits.shape),
+                            "sync_valid_pair_count": valid_pair_count_l,
+                            "sync_valid_prototype_count": valid_prototype_count_l,
+                            "reciprocal_path_context_valid_ratio": visual_debug_l.get("reciprocal_path_context_valid_ratio", 0.0),
+                            "sync_anchor_delta_norm_mean": visual_anchor_delta_norm_l,
+                            "reciprocal_visual_anchor_delta_norm_mean": visual_anchor_delta_norm_l,
+                            "sync_visual_gate": float(sync_out_l.debug_info.get("sync_visual_gate", 0.0)),
+                            "sync_text_gate": float(sync_out_l.debug_info.get("sync_text_gate", 0.0)),
+                            "sync_anchor_gate": float(sync_out_l.debug_info.get("sync_anchor_gate", 0.0)),
+                            "sync_has_nan": bool(sync_out_l.debug_info.get("sync_has_nan", False)),
+                            "write_text": bool(self.graph_reciprocal_write_text),
+                            "write_visual": bool(write_visual_applied_l),
+                            "reciprocal_write_visual_requested": bool(self.graph_reciprocal_write_visual),
+                            "reciprocal_write_visual_applied": bool(write_visual_applied_l),
+                            "reciprocal_text_state_updated_slot_count": updated_slot_count_l,
+                        }
+                        layer_reciprocal_debug.update(visual_debug_l)
+                        reciprocal_setm_debug.append(layer_reciprocal_debug)
+                        reciprocal_setm_applied = True
+                        reciprocal_valid_pair_count_total += valid_pair_count_l
+                        reciprocal_valid_prototype_count_total += valid_prototype_count_l
+                        reciprocal_text_state_updated_slot_count_total += updated_slot_count_l
+                        reciprocal_path_context_valid_ratio_values.append(float(visual_debug_l.get("reciprocal_path_context_valid_ratio", 0.0)))
+                        reciprocal_visual_anchor_delta_norm_values.append(visual_anchor_delta_norm_l)
+                        reciprocal_setm_has_nan = bool(
+                            reciprocal_setm_has_nan
+                            or layer_reciprocal_debug.get("sync_has_nan", False)
+                            or visual_debug_l.get("reciprocal_visual_evidence_has_nan", False)
+                        )
+                    text_context_l = self._cross_attend_text_tokens(
+                        query=refined_edge_l,
+                        text_tokens=text_out_l.text_tokens,
+                        text_token_mask=text_out_l.text_token_mask,
+                        valid_pair_mask=layer_text_pair_valid_mask,
+                    )
+                    text_layer_debug.append(self._build_text_layer_debug_info(
+                        layer_idx=layer_idx,
+                        text_out=text_out_l,
+                        text_context=text_context_l,
+                        refined_edge=refined_edge_l,
+                    ))
+                    if self.graph_text_dense_injection:
+                        updated_node_feats, updated_edge_attr, dense_debug_l = self._inject_text_to_visual_state(
+                            updated_node_feats=updated_node_feats,
+                            updated_edge_attr=updated_edge_attr,
+                            edge_mask_dense=edge_mask_dense,
+                            pair_indices=pair_indices,
+                            text_out=text_out_l,
+                            text_context=text_context_l,
+                            valid_pair_mask=layer_text_pair_valid_mask,
+                            layer_idx=layer_idx,
+                        )
+                        text_dense_injection_debug_per_layer.append(dense_debug_l)
+
+        refined_edge, valid_pair_mask = self._gather_pair_edge_feats(updated_edge_attr, pair_indices, node_mask)
+        node_h = self._gather_pair_nodes(updated_node_feats, pair_indices[..., 0])
+        node_o = self._gather_pair_nodes(updated_node_feats, pair_indices[..., 1])
+        text_debug_info = self._empty_text_debug_info(refined_edge)
+        prototype_slot_valid_values = [
+            float(item.get("prototype_slot_valid_ratio", 0.0))
+            for item in text_layer_debug
+            if "prototype_slot_valid_ratio" in item
+        ]
+        prototype_valid_count_total = sum(int(item.get("prototype_valid_count", 0)) for item in text_layer_debug)
+        text_debug_info.update({
+            "text_sync_mode": self.graph_text_sync_mode,
+            "text_layerwise_enabled": text_layerwise_enabled,
+            "text_layer_count": len(text_layer_debug),
+            "text_layer_debug": text_layer_debug,
+            "graph_text_dense_injection": self.graph_text_dense_injection,
+            "graph_text_final_pair_injection": self.graph_text_final_pair_injection,
+            "text_dynamic_retrieval": self.graph_text_dynamic_retrieval,
+            "text_sync_layers_with_visual": self.graph_text_sync_layers_with_visual,
+            "text_dense_injection_debug_per_layer": text_dense_injection_debug_per_layer,
+            "text_dense_total_edge_update_count": sum(
+                item.get("text_dense_edge_update_count", 0) + item.get("text_dense_reverse_edge_update_count", 0)
+                for item in text_dense_injection_debug_per_layer
+            ),
+            "text_dense_total_node_update_count": sum(
+                item.get("text_dense_human_node_update_count", 0) + item.get("text_dense_object_node_update_count", 0)
+                for item in text_dense_injection_debug_per_layer
+            ),
+            "prototype_slot_valid_ratio": (
+                float(sum(prototype_slot_valid_values) / len(prototype_slot_valid_values))
+                if prototype_slot_valid_values
+                else 0.0
+            ),
+            "prototype_valid_count": int(prototype_valid_count_total),
+            "text_layerwise_final_injected": bool(text_layerwise_enabled and self.graph_text_dense_injection and len(text_dense_injection_debug_per_layer) > 0),
+        })
+        if self.enable_text_graph and self.graph_text_sync_mode == "posthoc":
+            text_query_feats = self._build_text_query_feats(
+                source=self.graph_text_query_source,
+                refined_edge=refined_edge,
+                base_pair_feats=base_pair_feats,
+                union_feats=union_input,
+            )
+            pair_object_labels, pair_label_valid_mask = self._gather_pair_object_labels(
+                labels=labels,
+                pair_indices=pair_indices,
+                node_mask=node_mask,
+            )
+            text_pair_valid_mask = valid_pair_mask & pair_label_valid_mask
+            text_out = self.text_graph_reasoner(
+                visual_pair_feats=text_query_feats,
+                pair_object_labels=pair_object_labels,
+                pair_valid_mask=text_pair_valid_mask,
+            )
+            text_context = self._cross_attend_text_tokens(
+                query=refined_edge,
+                text_tokens=text_out.text_tokens,
+                text_token_mask=text_out.text_token_mask,
+                valid_pair_mask=text_pair_valid_mask,
+            )
+            text_injection = torch.tanh(self.text_gate).to(dtype=text_context.dtype) * text_context
+            text_injection = text_injection * valid_pair_mask.unsqueeze(-1).to(dtype=text_injection.dtype)
+            refined_edge = refined_edge + text_injection
+            node_h, node_o, refined_edge, text_prior_debug_info = self._inject_text_priors(
+                text_out=text_out,
+                node_h=node_h,
+                node_o=node_o,
+                refined_edge=refined_edge,
+                valid_pair_mask=valid_pair_mask,
+            )
+            text_debug_info = self._build_text_debug_info(
+                text_out=text_out,
+                text_context=text_context,
+                text_injection=text_injection,
+                text_pair_valid_mask=text_pair_valid_mask,
+                text_prior_debug_info=text_prior_debug_info,
+            )
+            text_debug_info.update({
+                "text_sync_mode": self.graph_text_sync_mode,
+                "text_layerwise_enabled": False,
+                "text_layer_count": 0,
+                "text_layer_debug": [],
+                "graph_text_dense_injection": self.graph_text_dense_injection,
+                "graph_text_final_pair_injection": self.graph_text_final_pair_injection,
+                "text_dynamic_retrieval": False,
+                "text_sync_layers_with_visual": self.graph_text_sync_layers_with_visual,
+                "text_dense_injection_debug_per_layer": [],
+                "text_dense_total_edge_update_count": 0,
+                "text_dense_total_node_update_count": 0,
+                "prototype_slot_valid_ratio": float(text_out.debug_info.get("prototype_slot_valid_ratio", 0.0)),
+                "prototype_valid_count": int(text_out.debug_info.get("prototype_valid_count", 0)),
+                "text_layerwise_final_injected": False,
+            })
+        reciprocal_path_context_valid_ratio = (
+            float(sum(reciprocal_path_context_valid_ratio_values) / len(reciprocal_path_context_valid_ratio_values))
+            if reciprocal_path_context_valid_ratio_values
+            else 0.0
+        )
+        reciprocal_visual_anchor_delta_norm_mean = (
+            float(sum(reciprocal_visual_anchor_delta_norm_values) / len(reciprocal_visual_anchor_delta_norm_values))
+            if reciprocal_visual_anchor_delta_norm_values
+            else 0.0
+        )
+        text_debug_info.update({
+            "reciprocal_setm_enabled": bool(self.graph_enable_reciprocal_setm),
+            "reciprocal_setm_applied": bool(reciprocal_setm_applied),
+            "reciprocal_setm_layer_count": len(reciprocal_setm_debug),
+            "reciprocal_setm_debug": reciprocal_setm_debug,
+            "reciprocal_valid_pair_count": int(reciprocal_valid_pair_count_total),
+            "reciprocal_valid_prototype_count": int(reciprocal_valid_prototype_count_total),
+            "reciprocal_text_state_updated_slot_count": int(reciprocal_text_state_updated_slot_count_total),
+            "reciprocal_path_context_valid_ratio": reciprocal_path_context_valid_ratio,
+            "reciprocal_setm_has_nan": bool(reciprocal_setm_has_nan),
+            "reciprocal_write_text": bool(self.graph_reciprocal_write_text),
+            "reciprocal_write_visual": bool(self.graph_reciprocal_write_visual),
+            "reciprocal_write_visual_applied": bool(reciprocal_write_visual_applied),
+            "reciprocal_visual_anchor_delta_norm_mean": reciprocal_visual_anchor_delta_norm_mean,
+            "reciprocal_use_path_context": bool(self.graph_reciprocal_use_path_context),
+        })
+        pair_out_input = torch.cat([refined_edge, node_h, node_o, base_pair_feats, union_input], dim=-1)
+        pair_out = self.pair_out_mlp(pair_out_input)
+        fallback_pair_feats = base_pair_feats if pair_feats is not None else torch.zeros_like(base_pair_feats)
+        pair_out = torch.where(valid_pair_mask.unsqueeze(-1), pair_out, fallback_pair_feats)
+
+        has_nan = bool(
+            torch.isnan(pair_out).any().item()
+            or torch.isnan(updated_node_feats).any().item()
+            or torch.isnan(updated_edge_attr).any().item()
+        )
+        debug_info = {
+            "pair_source": pair_source,
+            "node_feats_shape": tuple(node_feats.shape),
+            "node_blip_feats_shape": None if node_blip_feats is None else tuple(node_blip_feats.shape),
+            "fused_node_feats_shape": tuple(fused_node_feats.shape),
+            "updated_node_feats_shape": tuple(updated_node_feats.shape),
+            "pair_indices_shape": tuple(pair_indices.shape),
+            "pair_feats_shape": tuple(pair_out.shape),
+            "pair_edge_feats_shape": tuple(refined_edge.shape),
+            "edge_attr_dense_shape": tuple(edge_attr_dense.shape),
+            "updated_edge_attr_dense_shape": tuple(updated_edge_attr.shape),
+            "edge_mask_dense_shape": tuple(edge_mask_dense.shape),
+            "edge_score_dense_shape": tuple(edge_score_dense.shape),
+            "e_ho_edge_count": counts["e_ho_edge_count"],
+            "e_oo_edge_count": counts["e_oo_edge_count"],
+            "e_hh_edge_count": counts["e_hh_edge_count"],
+            "edge_count_per_batch": counts["edge_count_per_batch"],
+            "e_ho_edge_count_per_batch": counts["e_ho_edge_count_per_batch"],
+            "e_oo_edge_count_per_batch": counts["e_oo_edge_count_per_batch"],
+            "e_hh_edge_count_per_batch": counts["e_hh_edge_count_per_batch"],
+            "oo_mode": counts["oo_mode"],
+            "oo_fallback_per_batch": counts["oo_fallback_per_batch"],
+            "oo_geo_mean_per_batch": counts["oo_geo_mean_per_batch"],
+            "oo_geo_max_per_batch": counts["oo_geo_max_per_batch"],
+            "oo_share_mean_per_batch": counts["oo_share_mean_per_batch"],
+            "oo_share_max_per_batch": counts["oo_share_max_per_batch"],
+            "oo_text_used_per_batch": counts["oo_text_used_per_batch"],
+            "oo_text_inactive_per_batch": counts["oo_text_inactive_per_batch"],
+            "oo_text_mean_per_batch": counts["oo_text_mean_per_batch"],
+            "oo_text_max_per_batch": counts["oo_text_max_per_batch"],
+            "oo_text_nonzero_ratio_per_batch": counts["oo_text_nonzero_ratio_per_batch"],
+            "oo_text_invalid_label_count_per_batch": counts["oo_text_invalid_label_count_per_batch"],
+            "oo_score_mean_per_batch": counts["oo_score_mean_per_batch"],
+            "oo_score_max_per_batch": counts["oo_score_max_per_batch"],
+            "oo_topk_count_per_batch": counts["oo_topk_count_per_batch"],
+            "oo_geo_mean": counts["oo_geo_mean"],
+            "oo_geo_max": counts["oo_geo_max"],
+            "oo_share_mean": counts["oo_share_mean"],
+            "oo_share_max": counts["oo_share_max"],
+            "oo_text_mean": counts["oo_text_mean"],
+            "oo_text_max": counts["oo_text_max"],
+            "oo_score_mean": counts["oo_score_mean"],
+            "oo_score_max": counts["oo_score_max"],
+            "valid_pair_count_per_batch": valid_pair_mask.sum(dim=1).detach().cpu().tolist(),
+            "has_union_feats": union_feats is not None,
+            "has_global_feat": global_feat is not None,
+            "enable_oo_edges": self.enable_oo_edges,
+            "enable_hh_edges": self.enable_hh_edges,
+            **text_debug_info,
+            "message_passing_enabled": True,
+            "layer_debug": layer_debug,
+            "has_nan": has_nan,
+            "edge_attr_dense": edge_attr_dense.detach(),
+            "updated_edge_attr_dense": updated_edge_attr.detach(),
+            "edge_mask_dense": edge_mask_dense.detach(),
+            "edge_score_dense": edge_score_dense.detach(),
+        }
+        return GraphReasonerOutput(
+            pair_feats=pair_out,
+            node_feats=updated_node_feats,
+            debug_info=debug_info,
+        )
+
+    def _build_dense_edges(
+        self,
+        node_feats: Tensor,
+        boxes: Tensor,
+        labels: Tensor,
+        node_types: Tensor,
+        node_mask: Tensor,
+        pair_indices: Tensor,
+        pair_scores: Tensor,
+        pair_feats: Tensor,
+        union_feats: Optional[Tensor],
+    ):
+        batch_size, num_nodes, _ = node_feats.shape
+        edge_attr_dense = node_feats.new_zeros((batch_size, num_nodes, num_nodes, self.d_model))
+        edge_mask_dense = torch.zeros((batch_size, num_nodes, num_nodes), dtype=torch.bool, device=node_feats.device)
+        edge_score_dense = node_feats.new_zeros((batch_size, num_nodes, num_nodes))
+
+        e_ho_counts = []
+        e_oo_counts = []
+        e_hh_counts = []
+        edge_counts = []
+        oo_stats_per_batch = []
+
+        for batch_idx in range(batch_size):
+            e_ho = self._add_ho_edges(
+                batch_idx=batch_idx,
+                boxes=boxes,
+                labels=labels,
+                node_mask=node_mask,
+                pair_indices=pair_indices,
+                pair_scores=pair_scores,
+                pair_feats=pair_feats,
+                union_feats=union_feats,
+                edge_attr_dense=edge_attr_dense,
+                edge_mask_dense=edge_mask_dense,
+                edge_score_dense=edge_score_dense,
+            )
+            e_oo = 0
+            oo_stats = self._empty_oo_stats(oo_mode=self.graph_oo_mode)
+            if self.enable_oo_edges:
+                if self.graph_oo_mode == "spatial":
+                    oo_stats = self._spatial_oo_stats(
+                        batch_idx=batch_idx,
+                        boxes=boxes,
+                        node_types=node_types,
+                        node_mask=node_mask,
+                    )
+                    e_oo = self._add_spatial_edges(
+                        batch_idx=batch_idx,
+                        boxes=boxes,
+                        labels=labels,
+                        node_types=node_types,
+                        node_mask=node_mask,
+                        source_type=1,
+                        edge_type=self.EDGE_OBJECT_OBJECT,
+                        edge_attr_dense=edge_attr_dense,
+                        edge_mask_dense=edge_mask_dense,
+                        edge_score_dense=edge_score_dense,
+                    )
+                    oo_stats["oo_topk_count"] = e_oo
+                else:
+                    e_oo, oo_stats = self._add_human_conditioned_oo_edges(
+                        batch_idx=batch_idx,
+                        boxes=boxes,
+                        labels=labels,
+                        node_types=node_types,
+                        node_mask=node_mask,
+                        pair_indices=pair_indices,
+                        pair_scores=pair_scores,
+                        edge_attr_dense=edge_attr_dense,
+                        edge_mask_dense=edge_mask_dense,
+                        edge_score_dense=edge_score_dense,
+                    )
+            e_hh = 0
+            if self.enable_hh_edges:
+                e_hh = self._add_spatial_edges(
+                    batch_idx=batch_idx,
+                    boxes=boxes,
+                    labels=labels,
+                    node_types=node_types,
+                    node_mask=node_mask,
+                    source_type=0,
+                    edge_type=self.EDGE_HUMAN_HUMAN,
+                    edge_attr_dense=edge_attr_dense,
+                    edge_mask_dense=edge_mask_dense,
+                    edge_score_dense=edge_score_dense,
+                )
+            e_ho_counts.append(e_ho)
+            e_oo_counts.append(e_oo)
+            e_hh_counts.append(e_hh)
+            edge_counts.append(int(edge_mask_dense[batch_idx].sum().item()))
+            oo_stats_per_batch.append(oo_stats)
+
+        def _mean(values):
+            return float(sum(values) / len(values)) if values else 0.0
+
+        def _max(values):
+            return float(max(values)) if values else 0.0
+
+        oo_geo_means = [stats["oo_geo_mean"] for stats in oo_stats_per_batch]
+        oo_geo_maxes = [stats["oo_geo_max"] for stats in oo_stats_per_batch]
+        oo_share_means = [stats["oo_share_mean"] for stats in oo_stats_per_batch]
+        oo_share_maxes = [stats["oo_share_max"] for stats in oo_stats_per_batch]
+        oo_text_means = [stats["oo_text_mean"] for stats in oo_stats_per_batch]
+        oo_text_maxes = [stats["oo_text_max"] for stats in oo_stats_per_batch]
+        oo_score_means = [stats["oo_score_mean"] for stats in oo_stats_per_batch]
+        oo_score_maxes = [stats["oo_score_max"] for stats in oo_stats_per_batch]
+
+        counts = {
+            "e_ho_edge_count": int(sum(e_ho_counts)),
+            "e_oo_edge_count": int(sum(e_oo_counts)),
+            "e_hh_edge_count": int(sum(e_hh_counts)),
+            "edge_count_per_batch": edge_counts,
+            "e_ho_edge_count_per_batch": e_ho_counts,
+            "e_oo_edge_count_per_batch": e_oo_counts,
+            "e_hh_edge_count_per_batch": e_hh_counts,
+            "oo_mode": self.graph_oo_mode,
+            "oo_fallback_per_batch": [stats["oo_fallback"] for stats in oo_stats_per_batch],
+            "oo_geo_mean_per_batch": oo_geo_means,
+            "oo_geo_max_per_batch": oo_geo_maxes,
+            "oo_share_mean_per_batch": oo_share_means,
+            "oo_share_max_per_batch": oo_share_maxes,
+            "oo_text_used_per_batch": [stats["oo_text_used"] for stats in oo_stats_per_batch],
+            "oo_text_inactive_per_batch": [stats["oo_text_inactive"] for stats in oo_stats_per_batch],
+            "oo_text_mean_per_batch": oo_text_means,
+            "oo_text_max_per_batch": oo_text_maxes,
+            "oo_text_nonzero_ratio_per_batch": [stats["oo_text_nonzero_ratio"] for stats in oo_stats_per_batch],
+            "oo_text_invalid_label_count_per_batch": [stats["oo_text_invalid_label_count"] for stats in oo_stats_per_batch],
+            "oo_score_mean_per_batch": oo_score_means,
+            "oo_score_max_per_batch": oo_score_maxes,
+            "oo_topk_count_per_batch": [stats["oo_topk_count"] for stats in oo_stats_per_batch],
+            "oo_geo_mean": _mean(oo_geo_means),
+            "oo_geo_max": _max(oo_geo_maxes),
+            "oo_share_mean": _mean(oo_share_means),
+            "oo_share_max": _max(oo_share_maxes),
+            "oo_text_mean": _mean(oo_text_means),
+            "oo_text_max": _max(oo_text_maxes),
+            "oo_score_mean": _mean(oo_score_means),
+            "oo_score_max": _max(oo_score_maxes),
+        }
+        return edge_attr_dense, edge_mask_dense, edge_score_dense, counts
+
+    def _empty_oo_stats(self, oo_mode: str, fallback: bool = False) -> Dict[str, Any]:
+        return {
+            "oo_mode": oo_mode,
+            "oo_fallback": fallback,
+            "oo_prior_loaded": self.oo_prior_loaded,
+            "oo_prior_shape": self.oo_prior_shape,
+            "oo_geo_mean": 0.0,
+            "oo_geo_max": 0.0,
+            "oo_share_mean": 0.0,
+            "oo_share_max": 0.0,
+            "oo_text_used": False,
+            "oo_text_inactive": True,
+            "oo_text_mean": 0.0,
+            "oo_text_max": 0.0,
+            "oo_text_min_valid": 0.0,
+            "oo_text_nonzero_ratio": 0.0,
+            "oo_text_invalid_label_count": 0,
+            "oo_score_mean": 0.0,
+            "oo_score_max": 0.0,
+            "oo_topk_count": 0,
+        }
+
+    def _empty_oo_text_stats(self) -> Dict[str, Any]:
+        return {
+            "oo_text_used": False,
+            "oo_prior_loaded": self.oo_prior_loaded,
+            "oo_prior_shape": self.oo_prior_shape,
+            "oo_text_invalid_label_count": 0,
+            "oo_text_nonzero_ratio": 0.0,
+            "oo_text_mean": 0.0,
+            "oo_text_max": 0.0,
+            "oo_text_min_valid": 0.0,
+            "oo_text_inactive": True,
+        }
+
+    def _oo_text_matrix_stats(self, scores: Tensor, valid_pair: Optional[Tensor] = None) -> Dict[str, Any]:
+        stats = self._empty_oo_text_stats()
+        if scores.numel() == 0:
+            return stats
+        valid = torch.isfinite(scores)
+        if valid_pair is not None:
+            valid = valid & valid_pair
+        if scores.dim() == 2 and scores.shape[0] == scores.shape[1]:
+            valid = valid & ~torch.eye(scores.shape[0], dtype=torch.bool, device=scores.device)
+        if not bool(valid.any().item()):
+            return stats
+        valid_scores = scores[valid].detach().float()
+        stats["oo_text_mean"] = float(valid_scores.mean().item())
+        stats["oo_text_max"] = float(valid_scores.max().item())
+        stats["oo_text_min_valid"] = float(valid_scores.min().item())
+        stats["oo_text_nonzero_ratio"] = float((valid_scores > 0).float().mean().item())
+        stats["oo_text_used"] = bool(stats["oo_text_max"] > 0.0)
+        stats["oo_text_inactive"] = not stats["oo_text_used"]
+        return stats
+
+    def _valid_score_stats(self, scores: Tensor) -> Tuple[float, float]:
+        valid = torch.isfinite(scores)
+        if not bool(valid.any().item()):
+            return 0.0, 0.0
+        valid_scores = scores[valid].detach().float()
+        return float(valid_scores.mean().item()), float(valid_scores.max().item())
+
+    def _spatial_oo_stats(
+        self,
+        batch_idx: int,
+        boxes: Tensor,
+        node_types: Tensor,
+        node_mask: Tensor,
+    ) -> Dict[str, Any]:
+        stats = self._empty_oo_stats(oo_mode="spatial")
+        object_ids = torch.logical_and(node_mask[batch_idx], node_types[batch_idx] == 1).nonzero(as_tuple=False).squeeze(1)
+        if object_ids.numel() < 2:
+            return stats
+        centers = self._box_centers(boxes[batch_idx, object_ids])
+        distances = torch.cdist(centers, centers, p=2)
+        s_geo = torch.exp(-distances / self.spatial_sigma)
+        diag = torch.eye(object_ids.numel(), dtype=torch.bool, device=boxes.device)
+        s_geo = s_geo.masked_fill(diag, float("-inf"))
+        stats["oo_geo_mean"], stats["oo_geo_max"] = self._valid_score_stats(s_geo)
+        stats["oo_score_mean"], stats["oo_score_max"] = stats["oo_geo_mean"], stats["oo_geo_max"]
+        return stats
+
+    def _add_ho_edges(
+        self,
+        batch_idx: int,
+        boxes: Tensor,
+        labels: Tensor,
+        node_mask: Tensor,
+        pair_indices: Tensor,
+        pair_scores: Tensor,
+        pair_feats: Tensor,
+        union_feats: Optional[Tensor],
+        edge_attr_dense: Tensor,
+        edge_mask_dense: Tensor,
+        edge_score_dense: Tensor,
+    ) -> int:
+        count = 0
+        num_nodes = boxes.shape[1]
+        for pair_idx in range(pair_indices.shape[1]):
+            human_idx = int(pair_indices[batch_idx, pair_idx, 0].item())
+            object_idx = int(pair_indices[batch_idx, pair_idx, 1].item())
+            if human_idx < 0 or object_idx < 0 or human_idx >= num_nodes or object_idx >= num_nodes:
+                continue
+            if not bool(node_mask[batch_idx, human_idx]) or not bool(node_mask[batch_idx, object_idx]):
+                continue
+            score = pair_scores[batch_idx, pair_idx]
+            union_feat = None if union_feats is None else union_feats[batch_idx, pair_idx]
+            self._write_edge(
+                batch_idx=batch_idx,
+                src_idx=human_idx,
+                dst_idx=object_idx,
+                score=score,
+                edge_type=self.EDGE_HUMAN_TO_OBJECT,
+                boxes=boxes,
+                labels=labels,
+                base_feat=pair_feats[batch_idx, pair_idx],
+                union_feat=union_feat,
+                edge_attr_dense=edge_attr_dense,
+                edge_mask_dense=edge_mask_dense,
+                edge_score_dense=edge_score_dense,
+            )
+            self._write_edge(
+                batch_idx=batch_idx,
+                src_idx=object_idx,
+                dst_idx=human_idx,
+                score=score,
+                edge_type=self.EDGE_OBJECT_TO_HUMAN,
+                boxes=boxes,
+                labels=labels,
+                base_feat=pair_feats[batch_idx, pair_idx],
+                union_feat=union_feat,
+                edge_attr_dense=edge_attr_dense,
+                edge_mask_dense=edge_mask_dense,
+                edge_score_dense=edge_score_dense,
+            )
+            count += 2
+        return count
+
+    def _add_spatial_edges(
+        self,
+        batch_idx: int,
+        boxes: Tensor,
+        labels: Tensor,
+        node_types: Tensor,
+        node_mask: Tensor,
+        source_type: int,
+        edge_type: int,
+        edge_attr_dense: Tensor,
+        edge_mask_dense: Tensor,
+        edge_score_dense: Tensor,
+    ) -> int:
+        node_ids = torch.logical_and(node_mask[batch_idx], node_types[batch_idx] == source_type).nonzero(as_tuple=False).squeeze(1)
+        if node_ids.numel() < 2:
+            return 0
+
+        centers = self._box_centers(boxes[batch_idx, node_ids])
+        distances = torch.cdist(centers, centers, p=2)
+        self_mask = torch.eye(node_ids.numel(), dtype=torch.bool, device=boxes.device)
+        distances = distances.masked_fill(self_mask, float("inf"))
+        topk = min(self.k_oo, node_ids.numel() - 1)
+        if topk <= 0:
+            return 0
+
+        count = 0
+        _, nearest = distances.topk(k=topk, dim=1, largest=False)
+        for local_src in range(node_ids.numel()):
+            src_idx = int(node_ids[local_src].item())
+            for local_dst in nearest[local_src]:
+                dst_idx = int(node_ids[int(local_dst.item())].item())
+                if src_idx == dst_idx:
+                    continue
+                distance = distances[local_src, int(local_dst.item())]
+                score = torch.exp(-distance / self.spatial_sigma)
+                for edge_src, edge_dst in ((src_idx, dst_idx), (dst_idx, src_idx)):
+                    is_new_edge = not bool(edge_mask_dense[batch_idx, edge_src, edge_dst])
+                    if not is_new_edge:
+                        continue
+                    self._write_edge(
+                        batch_idx=batch_idx,
+                        src_idx=edge_src,
+                        dst_idx=edge_dst,
+                        score=score,
+                        edge_type=edge_type,
+                        boxes=boxes,
+                        labels=labels,
+                        base_feat=None,
+                        union_feat=None,
+                        edge_attr_dense=edge_attr_dense,
+                        edge_mask_dense=edge_mask_dense,
+                        edge_score_dense=edge_score_dense,
+                    )
+                    count += 1
+        return count
+
+    def _build_ho_score_matrix(
+        self,
+        pair_indices_img: Tensor,
+        pair_scores_img: Tensor,
+        node_types_img: Tensor,
+        node_mask_img: Tensor,
+        num_nodes: int,
+    ) -> Tensor:
+        ho_score_flat = pair_scores_img.new_zeros(num_nodes * num_nodes)
+        if pair_indices_img.numel() == 0:
+            return ho_score_flat.view(num_nodes, num_nodes)
+
+        human_idx = pair_indices_img[:, 0]
+        object_idx = pair_indices_img[:, 1]
+        valid = (human_idx >= 0) & (object_idx >= 0) & (human_idx < num_nodes) & (object_idx < num_nodes)
+        if not bool(valid.any().item()):
+            return ho_score_flat.view(num_nodes, num_nodes)
+
+        safe_human_idx = human_idx.clamp(min=0, max=max(num_nodes - 1, 0))
+        safe_object_idx = object_idx.clamp(min=0, max=max(num_nodes - 1, 0))
+        valid = (
+            valid
+            & node_mask_img[safe_human_idx]
+            & node_mask_img[safe_object_idx]
+            & (node_types_img[safe_human_idx] == 0)
+            & (node_types_img[safe_object_idx] == 1)
+        )
+        if not bool(valid.any().item()):
+            return ho_score_flat.view(num_nodes, num_nodes)
+
+        flat_idx = safe_human_idx[valid] * num_nodes + safe_object_idx[valid]
+        scores = torch.sigmoid(pair_scores_img[valid])
+        ho_score_flat = ho_score_flat.scatter_reduce(0, flat_idx, scores, reduce="amax", include_self=True)
+        return ho_score_flat.view(num_nodes, num_nodes)
+
+    def _add_human_conditioned_oo_edges(
+        self,
+        batch_idx: int,
+        boxes: Tensor,
+        labels: Tensor,
+        node_types: Tensor,
+        node_mask: Tensor,
+        pair_indices: Tensor,
+        pair_scores: Tensor,
+        edge_attr_dense: Tensor,
+        edge_mask_dense: Tensor,
+        edge_score_dense: Tensor,
+    ) -> Tuple[int, Dict[str, Any]]:
+        valid_nodes = node_mask[batch_idx]
+        human_ids = torch.logical_and(valid_nodes, node_types[batch_idx] == 0).nonzero(as_tuple=False).squeeze(1)
+        object_ids = torch.logical_and(valid_nodes, node_types[batch_idx] == 1).nonzero(as_tuple=False).squeeze(1)
+        stats = self._empty_oo_stats(oo_mode=self.graph_oo_mode)
+
+        if object_ids.numel() < 2:
+            return 0, stats
+
+        num_nodes = boxes.shape[1]
+        if human_ids.numel() > 0:
+            ho_score = self._build_ho_score_matrix(
+                pair_indices_img=pair_indices[batch_idx],
+                pair_scores_img=pair_scores[batch_idx],
+                node_types_img=node_types[batch_idx],
+                node_mask_img=node_mask[batch_idx],
+                num_nodes=num_nodes,
+            )
+            score_h_obj = ho_score[human_ids[:, None], object_ids[None, :]]
+            share = score_h_obj[:, :, None] * score_h_obj[:, None, :]
+            s_share = share.max(dim=0).values
+        else:
+            s_share = boxes.new_zeros((object_ids.numel(), object_ids.numel()))
+
+        centers = self._box_centers(boxes[batch_idx, object_ids])
+        distances = torch.cdist(centers, centers, p=2)
+        s_geo = torch.exp(-distances / self.spatial_sigma)
+        s_text, text_stats = self._build_oo_text_score_matrix(labels[batch_idx], object_ids)
+        stats.update(text_stats)
+
+        diag = torch.eye(object_ids.numel(), dtype=torch.bool, device=boxes.device)
+        s_geo_stats = s_geo.masked_fill(diag, float("-inf"))
+        s_share_stats = s_share.masked_fill(diag, float("-inf"))
+
+        stats["oo_geo_mean"], stats["oo_geo_max"] = self._valid_score_stats(s_geo_stats)
+        stats["oo_share_mean"], stats["oo_share_max"] = self._valid_score_stats(s_share_stats)
+
+        if self.graph_oo_mode == "share_human" and stats["oo_share_max"] <= self.graph_oo_share_eps:
+            if not self.graph_oo_fallback_to_spatial:
+                return 0, stats
+            count = self._add_spatial_edges(
+                batch_idx=batch_idx,
+                boxes=boxes,
+                labels=labels,
+                node_types=node_types,
+                node_mask=node_mask,
+                source_type=1,
+                edge_type=self.EDGE_OBJECT_OBJECT,
+                edge_attr_dense=edge_attr_dense,
+                edge_mask_dense=edge_mask_dense,
+                edge_score_dense=edge_score_dense,
+            )
+            stats["oo_fallback"] = True
+            stats["oo_topk_count"] = count
+            return count, stats
+
+        if self.graph_oo_mode == "share_human":
+            s_oo = self.graph_oo_lambda_share * s_share
+        elif self.graph_oo_mode == "hybrid":
+            s_oo = (
+                self.graph_oo_lambda_geo * s_geo
+                + self.graph_oo_lambda_share * s_share
+            )
+        elif self.graph_oo_mode == "text_hybrid":
+            s_oo = (
+                self.graph_oo_lambda_geo * s_geo
+                + self.graph_oo_lambda_share * s_share
+                + self.graph_oo_lambda_text * s_text.to(dtype=s_geo.dtype)
+            )
+        else:
+            raise ValueError(f"Unsupported human-conditioned OO mode: {self.graph_oo_mode}")
+        s_oo = s_oo.masked_fill(diag, float("-inf"))
+
+        stats["oo_score_mean"], stats["oo_score_max"] = self._valid_score_stats(s_oo)
+
+        topk = min(self.k_oo, object_ids.numel() - 1)
+        if topk <= 0:
+            return 0, stats
+
+        count = 0
+        _, nearest = s_oo.topk(k=topk, dim=1, largest=True)
+        for local_src in range(object_ids.numel()):
+            src_idx = int(object_ids[local_src].item())
+            for local_dst_tensor in nearest[local_src]:
+                local_dst = int(local_dst_tensor.item())
+                dst_idx = int(object_ids[local_dst].item())
+                if src_idx == dst_idx:
+                    continue
+                score = s_oo[local_src, local_dst]
+                if not bool(torch.isfinite(score).item()):
+                    continue
+                if self.graph_oo_min_score > 0.0 and float(score.detach().item()) < self.graph_oo_min_score:
+                    continue
+                for edge_src, edge_dst in ((src_idx, dst_idx), (dst_idx, src_idx)):
+                    if bool(edge_mask_dense[batch_idx, edge_src, edge_dst]):
+                        continue
+                    self._write_edge(
+                        batch_idx=batch_idx,
+                        src_idx=edge_src,
+                        dst_idx=edge_dst,
+                        score=score,
+                        edge_type=self.EDGE_OBJECT_OBJECT,
+                        boxes=boxes,
+                        labels=labels,
+                        base_feat=None,
+                        union_feat=None,
+                        edge_attr_dense=edge_attr_dense,
+                        edge_mask_dense=edge_mask_dense,
+                        edge_score_dense=edge_score_dense,
+                    )
+                    count += 1
+
+        if count == 0 and self.graph_oo_mode in {"hybrid", "text_hybrid"} and self.graph_oo_fallback_to_spatial:
+            count = self._add_spatial_edges(
+                batch_idx=batch_idx,
+                boxes=boxes,
+                labels=labels,
+                node_types=node_types,
+                node_mask=node_mask,
+                source_type=1,
+                edge_type=self.EDGE_OBJECT_OBJECT,
+                edge_attr_dense=edge_attr_dense,
+                edge_mask_dense=edge_mask_dense,
+                edge_score_dense=edge_score_dense,
+            )
+            stats["oo_fallback"] = True
+
+        stats["oo_topk_count"] = count
+        return count, stats
+
+    def _write_edge(
+        self,
+        batch_idx: int,
+        src_idx: int,
+        dst_idx: int,
+        score: Tensor,
+        edge_type: int,
+        boxes: Tensor,
+        labels: Tensor,
+        base_feat: Optional[Tensor],
+        union_feat: Optional[Tensor],
+        edge_attr_dense: Tensor,
+        edge_mask_dense: Tensor,
+        edge_score_dense: Tensor,
+    ) -> None:
+        src_box = boxes[batch_idx, src_idx]
+        dst_box = boxes[batch_idx, dst_idx]
+        geo_feat = self.encode_geometry(src_box.unsqueeze(0), dst_box.unsqueeze(0)).squeeze(0)
+        geo_emb = self.geo_mlp(geo_feat)
+        type_ids = torch.tensor(edge_type, dtype=torch.long, device=boxes.device)
+        type_emb = self.edge_type_embedding(type_ids)
+        src_class_emb = self.class_embedding(labels[batch_idx, src_idx].clamp(min=0, max=self.num_obj_classes))
+        dst_class_emb = self.class_embedding(labels[batch_idx, dst_idx].clamp(min=0, max=self.num_obj_classes))
+        if base_feat is None:
+            base_feat = geo_emb.new_zeros(self.d_model)
+        if union_feat is None:
+            union_feat = geo_emb.new_zeros(self.d_model)
+        score_feat = score.reshape(1).to(dtype=geo_emb.dtype)
+        edge_input = torch.cat([score_feat, geo_emb, type_emb, union_feat, base_feat, src_class_emb + dst_class_emb], dim=-1)
+        edge_attr = self.edge_mlp(edge_input)
+        edge_attr_dense[batch_idx, src_idx, dst_idx] = edge_attr
+        edge_mask_dense[batch_idx, src_idx, dst_idx] = True
+        edge_score_dense[batch_idx, src_idx, dst_idx] = score.to(dtype=edge_score_dense.dtype)
+
+    def _scatter_pair_delta_to_dense_edges(
+        self,
+        edge_attr_dense: Tensor,
+        pair_indices: Tensor,
+        pair_delta: Tensor,
+        valid_pair_mask: Tensor,
+        edge_mask_dense: Tensor,
+        write_reverse: bool = False,
+    ) -> Tensor:
+        new_edge_attr = edge_attr_dense.clone()
+        batch_size, num_nodes, _, _ = edge_attr_dense.shape
+        _, num_pairs, _ = pair_indices.shape
+        pair_delta = torch.nan_to_num(pair_delta.to(device=edge_attr_dense.device, dtype=edge_attr_dense.dtype), nan=0.0, posinf=0.0, neginf=0.0)
+        valid_pair_mask = valid_pair_mask.to(device=edge_attr_dense.device, dtype=torch.bool)
+        edge_mask_dense = edge_mask_dense.to(device=edge_attr_dense.device, dtype=torch.bool)
+        raw_h = pair_indices[..., 0].to(device=edge_attr_dense.device)
+        raw_o = pair_indices[..., 1].to(device=edge_attr_dense.device)
+        in_bounds = (raw_h >= 0) & (raw_o >= 0) & (raw_h < num_nodes) & (raw_o < num_nodes)
+        safe_h = raw_h.clamp(min=0, max=max(num_nodes - 1, 0))
+        safe_o = raw_o.clamp(min=0, max=max(num_nodes - 1, 0))
+        batch_idx = torch.arange(batch_size, device=edge_attr_dense.device).view(batch_size, 1).expand(batch_size, num_pairs)
+        valid_forward = valid_pair_mask & in_bounds & edge_mask_dense[batch_idx, safe_h, safe_o]
+        if bool(valid_forward.any().detach().cpu().item()):
+            new_edge_attr[batch_idx[valid_forward], safe_h[valid_forward], safe_o[valid_forward]] = (
+                new_edge_attr[batch_idx[valid_forward], safe_h[valid_forward], safe_o[valid_forward]]
+                + pair_delta[valid_forward]
+            )
+        if write_reverse:
+            valid_reverse = valid_pair_mask & in_bounds & edge_mask_dense[batch_idx, safe_o, safe_h]
+            if bool(valid_reverse.any().detach().cpu().item()):
+                new_edge_attr[batch_idx[valid_reverse], safe_o[valid_reverse], safe_h[valid_reverse]] = (
+                    new_edge_attr[batch_idx[valid_reverse], safe_o[valid_reverse], safe_h[valid_reverse]]
+                    + pair_delta[valid_reverse]
+                )
+        return torch.nan_to_num(new_edge_attr, nan=0.0, posinf=0.0, neginf=0.0)
+
+    def _gather_pair_edge_feats(self, edge_attr_dense: Tensor, pair_indices: Tensor, node_mask: Tensor) -> Tuple[Tensor, Tensor]:
+        batch_feats = []
+        valid_masks = []
+        num_nodes = edge_attr_dense.shape[1]
+        for batch_idx in range(pair_indices.shape[0]):
+            raw_src = pair_indices[batch_idx, :, 0]
+            raw_dst = pair_indices[batch_idx, :, 1]
+            valid = (raw_src >= 0) & (raw_dst >= 0) & (raw_src < num_nodes) & (raw_dst < num_nodes)
+            src = raw_src.clamp(min=0, max=num_nodes - 1)
+            dst = raw_dst.clamp(min=0, max=num_nodes - 1)
+            valid = valid & node_mask[batch_idx, src] & node_mask[batch_idx, dst]
+            batch_feats.append(edge_attr_dense[batch_idx, src, dst])
+            valid_masks.append(valid)
+        return torch.stack(batch_feats, dim=0), torch.stack(valid_masks, dim=0)
+
+    def _gather_pair_nodes(self, node_feats: Tensor, node_indices: Tensor) -> Tensor:
+        batch_feats = []
+        num_nodes = node_feats.shape[1]
+        for batch_idx in range(node_indices.shape[0]):
+            idx = node_indices[batch_idx].clamp(min=0, max=num_nodes - 1)
+            batch_feats.append(node_feats[batch_idx, idx])
+        return torch.stack(batch_feats, dim=0)
+
+    def _build_lightweight_visual_evidence_tokens(
+        self,
+        updated_node_feats: Tensor,
+        updated_edge_attr: Tensor,
+        edge_mask_dense: Tensor,
+        node_mask: Tensor,
+        pair_indices: Tensor,
+        pair_valid_mask: Tensor,
+        refined_edge: Tensor,
+        node_h: Tensor,
+        node_o: Tensor,
+    ) -> Tuple[Tensor, Tensor, Dict[str, Any]]:
+        batch_size, num_pairs, dim = refined_edge.shape
+        num_nodes = updated_node_feats.shape[1]
+        device = refined_edge.device
+
+        pair_valid_mask = pair_valid_mask.to(device=device, dtype=torch.bool)
+        raw_h_idx = pair_indices[..., 0].to(device=device)
+        raw_o_idx = pair_indices[..., 1].to(device=device)
+        in_bounds = (raw_h_idx >= 0) & (raw_o_idx >= 0) & (raw_h_idx < num_nodes) & (raw_o_idx < num_nodes)
+        safe_h = raw_h_idx.clamp(min=0, max=max(num_nodes - 1, 0))
+        safe_o = raw_o_idx.clamp(min=0, max=max(num_nodes - 1, 0))
+        batch_idx = torch.arange(batch_size, device=device).view(batch_size, 1).expand(batch_size, num_pairs)
+        if num_nodes > 0:
+            endpoint_valid = node_mask.to(device=device, dtype=torch.bool)[batch_idx, safe_h] & node_mask.to(device=device, dtype=torch.bool)[batch_idx, safe_o]
+        else:
+            endpoint_valid = torch.zeros((batch_size, num_pairs), dtype=torch.bool, device=device)
+        pair_valid = pair_valid_mask & in_bounds & endpoint_valid
+
+        base_tokens = torch.stack([refined_edge, node_h, node_o], dim=2)
+        base_mask = pair_valid.unsqueeze(-1).expand(batch_size, num_pairs, 3)
+        visual_tokens = base_tokens
+        visual_mask = base_mask
+        path_context_valid = torch.zeros((batch_size, num_pairs), dtype=torch.bool, device=device)
+        path_candidate_count_mean = 0.0
+        visual_evidence_has_nan = bool((~torch.isfinite(visual_tokens)).any().detach().cpu().item()) if visual_tokens.numel() > 0 else False
+
+        use_path_context = bool(self.graph_reciprocal_use_path_context and self.light_path_context_proj is not None)
+        if use_path_context and num_nodes > 0:
+            node_id = torch.arange(num_nodes, device=device).view(1, 1, num_nodes)
+            edge_hk = edge_mask_dense.to(device=device, dtype=torch.bool)[batch_idx, safe_h]
+            edge_ko = edge_mask_dense.to(device=device, dtype=torch.bool)[
+                batch_idx.unsqueeze(-1),
+                node_id,
+                safe_o.unsqueeze(-1),
+            ]
+            path_mask = node_mask.to(device=device, dtype=torch.bool).unsqueeze(1).expand(batch_size, num_pairs, num_nodes)
+            path_mask = path_mask & pair_valid.unsqueeze(-1)
+            path_mask = path_mask & (node_id != safe_h.unsqueeze(-1))
+            path_mask = path_mask & (node_id != safe_o.unsqueeze(-1))
+            path_mask = path_mask & (edge_hk | edge_ko)
+
+            e_hk = updated_edge_attr[batch_idx, safe_h]
+            e_ko = updated_edge_attr[
+                batch_idx.unsqueeze(-1),
+                node_id,
+                safe_o.unsqueeze(-1),
+            ]
+            x_k = updated_node_feats.unsqueeze(1).expand(batch_size, num_pairs, num_nodes, dim)
+            anchor_expanded = refined_edge.unsqueeze(2).expand(batch_size, num_pairs, num_nodes, dim)
+            path_input = torch.cat([e_hk, e_ko, x_k, anchor_expanded], dim=-1)
+            path_input = torch.nan_to_num(path_input, nan=0.0, posinf=0.0, neginf=0.0)
+            path_tokens = self.light_path_context_proj(path_input)
+            visual_evidence_has_nan = bool(
+                visual_evidence_has_nan
+                or ((~torch.isfinite(path_tokens)).any().detach().cpu().item() if path_tokens.numel() > 0 else False)
+            )
+            path_tokens = torch.nan_to_num(path_tokens, nan=0.0, posinf=0.0, neginf=0.0)
+
+            weights = path_mask.unsqueeze(-1).to(dtype=path_tokens.dtype)
+            denom = weights.sum(dim=2).clamp(min=1.0)
+            path_context = (path_tokens * weights).sum(dim=2) / denom
+            path_context_valid = path_mask.any(dim=2) & pair_valid
+            path_context = path_context * path_context_valid.unsqueeze(-1).to(dtype=path_context.dtype)
+
+            path_candidate_counts = path_mask.sum(dim=2).to(dtype=torch.float32)
+            if bool(pair_valid.any().detach().cpu().item()):
+                path_candidate_count_mean = float(path_candidate_counts[pair_valid].mean().detach().cpu().item())
+
+            visual_tokens = torch.cat([base_tokens, path_context.unsqueeze(2)], dim=2)
+            visual_mask = torch.cat([base_mask, path_context_valid.unsqueeze(-1)], dim=-1)
+            visual_evidence_has_nan = bool(
+                visual_evidence_has_nan
+                or ((~torch.isfinite(visual_tokens)).any().detach().cpu().item() if visual_tokens.numel() > 0 else False)
+            )
+        else:
+            use_path_context = False
+
+        visual_tokens = visual_tokens.masked_fill((~pair_valid).unsqueeze(-1).unsqueeze(-1), 0.0)
+        visual_mask = visual_mask & pair_valid.unsqueeze(-1)
+        visual_tokens = torch.nan_to_num(visual_tokens, nan=0.0, posinf=0.0, neginf=0.0)
+        visual_mask = visual_mask.to(dtype=torch.bool)
+
+        visual_debug_info = {
+            "reciprocal_use_path_context": use_path_context,
+            "reciprocal_visual_tokens_shape": tuple(visual_tokens.shape),
+            "reciprocal_visual_mask_shape": tuple(visual_mask.shape),
+            "reciprocal_visual_token_valid_ratio": (
+                float(visual_mask.float().mean().detach().cpu().item()) if visual_mask.numel() > 0 else 0.0
+            ),
+            "reciprocal_path_context_valid_ratio": (
+                float(path_context_valid.float().mean().detach().cpu().item()) if path_context_valid.numel() > 0 else 0.0
+            ),
+            "reciprocal_path_context_candidate_count_mean": path_candidate_count_mean,
+            "reciprocal_visual_evidence_has_nan": visual_evidence_has_nan,
+        }
+        return visual_tokens, visual_mask, visual_debug_info
+
+    def _apply_lightweight_prototype_slot_update_to_text_state(
+        self,
+        text_state: Any,
+        updated_prototype_slots: Tensor,
+        prototype_slot_mask: Tensor,
+        detach_update: bool = False,
+    ) -> Any:
+        if updated_prototype_slots.dim() != 5:
+            raise ValueError(f"updated_prototype_slots must be [B, K, R, 6, D], got {tuple(updated_prototype_slots.shape)}")
+        if prototype_slot_mask.dim() != 4:
+            raise ValueError(f"prototype_slot_mask must be [B, K, R, 6], got {tuple(prototype_slot_mask.shape)}")
+        if updated_prototype_slots.shape[:-1] != prototype_slot_mask.shape:
+            raise ValueError(
+                "updated_prototype_slots shape without D must match prototype_slot_mask, "
+                f"got {tuple(updated_prototype_slots.shape)} and {tuple(prototype_slot_mask.shape)}"
+            )
+        if updated_prototype_slots.shape[-2] != 6:
+            raise ValueError(f"updated_prototype_slots slot dimension must be 6, got {tuple(updated_prototype_slots.shape)}")
+        if text_state.node_feats.shape[:3] != updated_prototype_slots.shape[:3]:
+            raise ValueError(
+                "text_state.node_feats first three dims must match updated_prototype_slots, "
+                f"got {tuple(text_state.node_feats.shape)} and {tuple(updated_prototype_slots.shape)}"
+            )
+        if text_state.edge_attr.shape[:3] != updated_prototype_slots.shape[:3]:
+            raise ValueError(
+                "text_state.edge_attr first three dims must match updated_prototype_slots, "
+                f"got {tuple(text_state.edge_attr.shape)} and {tuple(updated_prototype_slots.shape)}"
+            )
+        if text_state.node_feats.shape[-2] < 4:
+            raise ValueError(f"text_state.node_feats must have at least 4 text nodes, got {tuple(text_state.node_feats.shape)}")
+        if text_state.edge_attr.shape[-3] < 2 or text_state.edge_attr.shape[-2] < 2:
+            raise ValueError(f"text_state.edge_attr must include anchor edge [0, 1], got {tuple(text_state.edge_attr.shape)}")
+        if text_state.raw_field_feats.shape != updated_prototype_slots.shape:
+            raise ValueError(
+                "text_state.raw_field_feats shape must match updated_prototype_slots, "
+                f"got {tuple(text_state.raw_field_feats.shape)} and {tuple(updated_prototype_slots.shape)}"
+            )
+
+        if detach_update:
+            updated_prototype_slots = updated_prototype_slots.detach()
+        updated_prototype_slots = torch.nan_to_num(updated_prototype_slots, nan=0.0, posinf=0.0, neginf=0.0)
+        prototype_slot_mask = prototype_slot_mask.to(device=updated_prototype_slots.device, dtype=torch.bool)
+
+        node_feats = text_state.node_feats.clone()
+        edge_attr = text_state.edge_attr.clone()
+        raw_field_feats = text_state.raw_field_feats.clone()
+        updated_slot_mask = torch.zeros_like(prototype_slot_mask)
+
+        def masked_replace(old: Tensor, new: Tensor, mask: Tensor) -> Tensor:
+            new = torch.nan_to_num(new.to(dtype=old.dtype), nan=0.0, posinf=0.0, neginf=0.0)
+            return torch.where(mask.unsqueeze(-1), new, old)
+
+        if self.graph_reciprocal_update_human:
+            slot_mask = prototype_slot_mask[..., 0]
+            node_feats[..., 0, :] = masked_replace(node_feats[..., 0, :], updated_prototype_slots[..., 0, :], slot_mask)
+            updated_slot_mask[..., 0] = updated_slot_mask[..., 0] | slot_mask
+        if self.graph_reciprocal_update_object:
+            slot_mask = prototype_slot_mask[..., 1]
+            node_feats[..., 1, :] = masked_replace(node_feats[..., 1, :], updated_prototype_slots[..., 1, :], slot_mask)
+            updated_slot_mask[..., 1] = updated_slot_mask[..., 1] | slot_mask
+        if self.graph_reciprocal_update_anchor:
+            slot_mask = prototype_slot_mask[..., 2]
+            edge_attr[..., 0, 1, :] = masked_replace(edge_attr[..., 0, 1, :], updated_prototype_slots[..., 2, :], slot_mask)
+            updated_slot_mask[..., 2] = updated_slot_mask[..., 2] | slot_mask
+        if self.graph_reciprocal_update_discriminative:
+            slot_mask = prototype_slot_mask[..., 3]
+            raw_field_feats[..., 3, :] = masked_replace(raw_field_feats[..., 3, :], updated_prototype_slots[..., 3, :], slot_mask)
+            updated_slot_mask[..., 3] = updated_slot_mask[..., 3] | slot_mask
+        if self.graph_reciprocal_update_scene:
+            slot_mask = prototype_slot_mask[..., 4]
+            node_feats[..., 2, :] = masked_replace(node_feats[..., 2, :], updated_prototype_slots[..., 4, :], slot_mask)
+            updated_slot_mask[..., 4] = updated_slot_mask[..., 4] | slot_mask
+        if self.graph_reciprocal_update_context:
+            slot_mask = prototype_slot_mask[..., 5]
+            node_feats[..., 3, :] = masked_replace(node_feats[..., 3, :], updated_prototype_slots[..., 5, :], slot_mask)
+            updated_slot_mask[..., 5] = updated_slot_mask[..., 5] | slot_mask
+
+        node_feats = torch.nan_to_num(node_feats, nan=0.0, posinf=0.0, neginf=0.0)
+        edge_attr = torch.nan_to_num(edge_attr, nan=0.0, posinf=0.0, neginf=0.0)
+        raw_field_feats = torch.nan_to_num(raw_field_feats, nan=0.0, posinf=0.0, neginf=0.0)
+        text_state_has_nan = bool(
+            ((~torch.isfinite(node_feats)).any().detach().cpu().item() if node_feats.numel() > 0 else False)
+            or ((~torch.isfinite(edge_attr)).any().detach().cpu().item() if edge_attr.numel() > 0 else False)
+            or ((~torch.isfinite(raw_field_feats)).any().detach().cpu().item() if raw_field_feats.numel() > 0 else False)
+        )
+
+        debug_info = dict(text_state.debug_info)
+        debug_info.update({
+            "reciprocal_text_state_updated_slot_count": int(updated_slot_mask.sum().detach().cpu().item()),
+            "reciprocal_text_state_has_nan": text_state_has_nan,
+            "reciprocal_text_update_human": bool(self.graph_reciprocal_update_human),
+            "reciprocal_text_update_object": bool(self.graph_reciprocal_update_object),
+            "reciprocal_text_update_anchor": bool(self.graph_reciprocal_update_anchor),
+            "reciprocal_text_update_scene": bool(self.graph_reciprocal_update_scene),
+            "reciprocal_text_update_context": bool(self.graph_reciprocal_update_context),
+            "reciprocal_text_update_discriminative": bool(self.graph_reciprocal_update_discriminative),
+            "reciprocal_text_state_detached": bool(detach_update),
+        })
+        return replace(
+            text_state,
+            node_feats=node_feats,
+            edge_attr=edge_attr,
+            raw_field_feats=raw_field_feats,
+            debug_info=debug_info,
+        )
+
+    def _build_text_query_feats(
+        self,
+        source: str,
+        refined_edge: Tensor,
+        base_pair_feats: Tensor,
+        union_feats: Tensor,
+    ) -> Tensor:
+        if source == "base_pair":
+            return base_pair_feats
+        if source == "refined_edge":
+            return refined_edge
+        if source == "union":
+            return union_feats if union_feats is not None else base_pair_feats
+        if source == "refined_plus_union":
+            if self.text_refined_union_query_proj is None:
+                return refined_edge
+            union_input = union_feats if union_feats is not None else torch.zeros_like(refined_edge)
+            return self.text_refined_union_query_proj(torch.cat([refined_edge, union_input], dim=-1))
+        raise ValueError(f"Unsupported graph_text_query_source: {source}")
+
+    def _gather_pair_object_labels(
+        self,
+        labels: Tensor,
+        pair_indices: Tensor,
+        node_mask: Tensor,
+    ) -> Tuple[Tensor, Tensor]:
+        batch_size, num_nodes = labels.shape
+        object_indices = pair_indices[..., 1]
+        valid = (object_indices >= 0) & (object_indices < num_nodes)
+        safe_indices = object_indices.clamp(min=0, max=max(num_nodes - 1, 0))
+        gathered = torch.gather(labels, dim=1, index=safe_indices)
+        valid = valid & torch.gather(node_mask, dim=1, index=safe_indices)
+        gathered = torch.where(valid, gathered, torch.full_like(gathered, -1))
+        return gathered, valid
+
+    def _cross_attend_text_tokens(
+        self,
+        query: Tensor,
+        text_tokens: Tensor,
+        text_token_mask: Tensor,
+        valid_pair_mask: Tensor,
+    ) -> Tensor:
+        context = query.new_zeros(query.shape)
+        if self.text_cross_attn is None or text_tokens.numel() == 0:
+            return context
+        batch_size, num_pairs, seq_len, dim = text_tokens.shape
+        if seq_len == 0:
+            return context
+        flat_query = query.reshape(batch_size * num_pairs, 1, dim)
+        flat_tokens = text_tokens.reshape(batch_size * num_pairs, seq_len, dim)
+        flat_mask = text_token_mask.reshape(batch_size * num_pairs, seq_len)
+        flat_valid_pair = valid_pair_mask.reshape(batch_size * num_pairs)
+        has_text = flat_valid_pair & flat_mask.any(dim=-1)
+        if not bool(has_text.any().detach().cpu().item()):
+            return context
+
+        attn_out, _ = self.text_cross_attn(
+            flat_query[has_text],
+            flat_tokens[has_text],
+            flat_tokens[has_text],
+            key_padding_mask=~flat_mask[has_text],
+            need_weights=False,
+        )
+        attn_out = attn_out.squeeze(1)
+        if self.text_cross_norm is not None:
+            attn_out = self.text_cross_norm(flat_query[has_text].squeeze(1) + attn_out) - flat_query[has_text].squeeze(1)
+        if self.text_context_proj is not None:
+            attn_out = self.text_context_proj(attn_out)
+        attn_out = torch.nan_to_num(attn_out, nan=0.0, posinf=0.0, neginf=0.0)
+        flat_context = context.reshape(batch_size * num_pairs, dim)
+        flat_context[has_text] = attn_out
+        flat_context = flat_context * flat_valid_pair.unsqueeze(-1).to(dtype=flat_context.dtype)
+        return flat_context.reshape(batch_size, num_pairs, dim)
+
+    def _empty_text_debug_info(self, like_tensor: Tensor) -> Dict[str, Any]:
+        return {
+            "text_graph_enabled": self.enable_text_graph,
+            "text_gate": float(torch.tanh(self.text_gate).detach().cpu().item()),
+            "text_query_source": self.graph_text_query_source,
+            "text_sync_mode": self.graph_text_sync_mode,
+            "text_layerwise_enabled": False,
+            "text_layer_count": 0,
+            "text_layer_debug": [],
+            "graph_text_dense_injection": self.graph_text_dense_injection,
+            "graph_text_final_pair_injection": self.graph_text_final_pair_injection,
+            "text_dynamic_retrieval": self.graph_text_dynamic_retrieval,
+            "text_sync_layers_with_visual": self.graph_text_sync_layers_with_visual,
+            "text_edge_inject_reverse": self.graph_text_edge_inject_reverse,
+            "text_node_scatter_reduce": self.graph_text_node_scatter_reduce,
+            **self._empty_text_prior_debug_info(),
+            "text_tokens_shape": None,
+            "text_valid_token_count_mean": 0.0,
+            "text_no_candidate_pair_count": 0,
+            "text_valid_pair_count": 0,
+            "text_selected_scores_mean": 0.0,
+            "text_selected_scores_max": 0.0,
+            "text_context_norm_mean": 0.0,
+            "text_injection_norm": 0.0,
+            "text_has_nan": bool(torch.isnan(like_tensor).any().detach().cpu().item()) if like_tensor.numel() > 0 else False,
+        }
+
+    def _build_text_layer_debug_info(
+        self,
+        layer_idx: int,
+        text_out: Any,
+        text_context: Tensor,
+        refined_edge: Tensor,
+    ) -> Dict[str, Any]:
+        selected_valid = text_out.selected_hoi_mask
+        if bool(selected_valid.any().detach().cpu().item()):
+            valid_scores = text_out.selected_scores[selected_valid].detach().float()
+            score_mean = float(valid_scores.mean().item())
+            score_max = float(valid_scores.max().item())
+        else:
+            score_mean = 0.0
+            score_max = 0.0
+        text_valid_token_count = int(text_out.text_token_mask.sum().detach().cpu().item()) if text_out.text_token_mask.numel() > 0 else 0
+        debug_info = {
+            "layer_idx": int(layer_idx),
+            "text_tokens_shape": tuple(text_out.text_tokens.shape),
+            "text_valid_token_count": text_valid_token_count,
+            "text_context_norm_mean": self._norm_mean(text_context),
+            "text_selected_scores_mean": score_mean,
+            "text_selected_scores_max": score_max,
+            "text_has_nan": bool(
+                text_out.debug_info.get("text_has_nan", text_out.debug_info.get("has_nan", False))
+                or torch.isnan(text_context).any().detach().cpu().item()
+            ),
+            "visual_refined_edge_norm_mean": self._norm_mean(refined_edge),
+        }
+        if hasattr(text_out, "debug_info"):
+            for key in (
+                "prototype_slots_shape",
+                "prototype_slot_mask_shape",
+                "prototype_slot_valid_ratio",
+                "prototype_valid_count",
+            ):
+                if key in text_out.debug_info:
+                    debug_info[key] = text_out.debug_info[key]
+        return debug_info
+
+    def _inject_text_to_visual_state(
+        self,
+        updated_node_feats: Tensor,
+        updated_edge_attr: Tensor,
+        edge_mask_dense: Tensor,
+        pair_indices: Tensor,
+        text_out: Any,
+        text_context: Tensor,
+        valid_pair_mask: Tensor,
+        layer_idx: int,
+    ) -> Tuple[Tensor, Tensor, Dict[str, Any]]:
+        debug_info = {
+            "text_dense_injection_enabled": bool(self.graph_text_dense_injection),
+            "text_dense_layer_idx": int(layer_idx),
+            "text_dense_valid_pair_count": 0,
+            "text_dense_edge_update_count": 0,
+            "text_dense_reverse_edge_update_count": 0,
+            "text_dense_human_node_update_count": 0,
+            "text_dense_object_node_update_count": 0,
+            "text_dense_edge_delta_norm_mean": 0.0,
+            "text_dense_node_delta_norm_mean": 0.0,
+            "text_dense_has_nan": False,
+            "text_dense_edge_inject_reverse": self.graph_text_edge_inject_reverse,
+            "text_dense_node_scatter_reduce": self.graph_text_node_scatter_reduce,
+        }
+        if not self.graph_text_dense_injection:
+            return updated_node_feats, updated_edge_attr, debug_info
+
+        batch_size, num_nodes, dim = updated_node_feats.shape
+        _, num_pairs, _ = pair_indices.shape
+        valid_pair_mask = valid_pair_mask.to(device=updated_node_feats.device, dtype=torch.bool)
+        valid_pair_mask = valid_pair_mask & (pair_indices[..., 0] >= 0) & (pair_indices[..., 1] >= 0)
+        valid_pair_mask = valid_pair_mask & (pair_indices[..., 0] < num_nodes) & (pair_indices[..., 1] < num_nodes)
+        debug_info["text_dense_valid_pair_count"] = int(valid_pair_mask.sum().detach().cpu().item())
+
+        delta_edge = torch.zeros_like(text_context)
+        if text_context is not None and text_context.numel() > 0:
+            delta_edge = delta_edge + torch.tanh(self.text_gate).to(dtype=text_context.dtype) * text_context
+
+        use_edges = self.graph_text_prior_injection in {"edge_only", "node_edge", "all"}
+        use_all = self.graph_text_prior_injection == "all"
+        if use_edges and self.graph_text_use_ho_edge_prior:
+            delta_edge = delta_edge + torch.tanh(self.text_ho_edge_gate).to(dtype=delta_edge.dtype) * self.text_ho_edge_proj(text_out.pooled_ho_edge)
+        if use_all and self.graph_text_use_discriminative_prior:
+            delta_edge = delta_edge + torch.tanh(self.text_discriminative_gate).to(dtype=delta_edge.dtype) * self.text_discriminative_proj(text_out.pooled_discriminative)
+        if use_all and self.graph_text_use_scene_prior:
+            delta_edge = delta_edge + torch.tanh(self.text_scene_gate).to(dtype=delta_edge.dtype) * self.text_scene_proj(text_out.pooled_scene_context)
+        if use_all and self.graph_text_use_oo_prior:
+            delta_edge = delta_edge + torch.tanh(self.text_oo_gate).to(dtype=delta_edge.dtype) * self.text_oo_proj(text_out.pooled_oo_context)
+        delta_edge = torch.nan_to_num(delta_edge, nan=0.0, posinf=0.0, neginf=0.0)
+        delta_edge = delta_edge * valid_pair_mask.unsqueeze(-1).to(dtype=delta_edge.dtype)
+
+        new_edge_attr = updated_edge_attr.clone()
+        edge_delta_values = []
+        edge_update_count = 0
+        reverse_edge_update_count = 0
+        for batch_idx in range(batch_size):
+            for pair_idx in range(num_pairs):
+                if not bool(valid_pair_mask[batch_idx, pair_idx].detach().cpu().item()):
+                    continue
+                human_idx = int(pair_indices[batch_idx, pair_idx, 0].detach().cpu().item())
+                object_idx = int(pair_indices[batch_idx, pair_idx, 1].detach().cpu().item())
+                delta = delta_edge[batch_idx, pair_idx]
+                if bool(edge_mask_dense[batch_idx, human_idx, object_idx].detach().cpu().item()):
+                    new_edge_attr[batch_idx, human_idx, object_idx] = new_edge_attr[batch_idx, human_idx, object_idx] + delta
+                    edge_delta_values.append(delta)
+                    edge_update_count += 1
+                if self.graph_text_edge_inject_reverse and bool(edge_mask_dense[batch_idx, object_idx, human_idx].detach().cpu().item()):
+                    new_edge_attr[batch_idx, object_idx, human_idx] = new_edge_attr[batch_idx, object_idx, human_idx] + delta
+                    edge_delta_values.append(delta)
+                    reverse_edge_update_count += 1
+
+        new_node_feats = updated_node_feats
+        human_node_update_count = 0
+        object_node_update_count = 0
+        node_delta_values = []
+        use_nodes = self.graph_text_prior_injection in {"node_edge", "all"}
+        if use_nodes:
+            new_node_feats = updated_node_feats.clone()
+            human_delta = torch.zeros_like(text_context)
+            object_delta = torch.zeros_like(text_context)
+            if self.graph_text_use_human_node_prior:
+                human_delta = torch.tanh(self.text_human_node_gate).to(dtype=text_context.dtype) * self.text_human_node_proj(text_out.pooled_human_node)
+            if self.graph_text_use_object_node_prior:
+                object_delta = torch.tanh(self.text_object_node_gate).to(dtype=text_context.dtype) * self.text_object_node_proj(text_out.pooled_object_node)
+            human_delta = torch.nan_to_num(human_delta, nan=0.0, posinf=0.0, neginf=0.0) * valid_pair_mask.unsqueeze(-1).to(dtype=text_context.dtype)
+            object_delta = torch.nan_to_num(object_delta, nan=0.0, posinf=0.0, neginf=0.0) * valid_pair_mask.unsqueeze(-1).to(dtype=text_context.dtype)
+            human_node_delta, human_node_mask = self._scatter_mean_pair_node_delta(
+                pair_indices=pair_indices,
+                pair_delta=human_delta,
+                valid_pair_mask=valid_pair_mask,
+                endpoint_idx=0,
+                num_nodes=num_nodes,
+                reduce=self.graph_text_node_scatter_reduce,
+            )
+            object_node_delta, object_node_mask = self._scatter_mean_pair_node_delta(
+                pair_indices=pair_indices,
+                pair_delta=object_delta,
+                valid_pair_mask=valid_pair_mask,
+                endpoint_idx=1,
+                num_nodes=num_nodes,
+                reduce=self.graph_text_node_scatter_reduce,
+            )
+            if self.graph_text_use_human_node_prior:
+                new_node_feats = new_node_feats + human_node_delta
+                human_node_update_count = int(human_node_mask.sum().detach().cpu().item())
+                if human_node_update_count > 0:
+                    node_delta_values.append(human_node_delta[human_node_mask])
+            if self.graph_text_use_object_node_prior:
+                new_node_feats = new_node_feats + object_node_delta
+                object_node_update_count = int(object_node_mask.sum().detach().cpu().item())
+                if object_node_update_count > 0:
+                    node_delta_values.append(object_node_delta[object_node_mask])
+
+        new_node_feats = torch.nan_to_num(new_node_feats, nan=0.0, posinf=0.0, neginf=0.0)
+        new_edge_attr = torch.nan_to_num(new_edge_attr, nan=0.0, posinf=0.0, neginf=0.0)
+        if edge_delta_values:
+            edge_delta_tensor = torch.stack(edge_delta_values, dim=0)
+            debug_info["text_dense_edge_delta_norm_mean"] = self._norm_mean(edge_delta_tensor)
+        if node_delta_values:
+            node_delta_tensor = torch.cat(node_delta_values, dim=0)
+            debug_info["text_dense_node_delta_norm_mean"] = self._norm_mean(node_delta_tensor)
+        debug_info.update({
+            "text_dense_edge_update_count": edge_update_count,
+            "text_dense_reverse_edge_update_count": reverse_edge_update_count,
+            "text_dense_human_node_update_count": human_node_update_count,
+            "text_dense_object_node_update_count": object_node_update_count,
+            "text_dense_has_nan": bool(
+                torch.isnan(new_node_feats).any().detach().cpu().item()
+                or torch.isnan(new_edge_attr).any().detach().cpu().item()
+            ),
+        })
+        return new_node_feats, new_edge_attr, debug_info
+
+    def _scatter_mean_pair_node_delta(
+        self,
+        pair_indices: Tensor,
+        pair_delta: Tensor,
+        valid_pair_mask: Tensor,
+        endpoint_idx: int,
+        num_nodes: int,
+        reduce: str = "mean",
+    ) -> Tuple[Tensor, Tensor]:
+        batch_size, _, dim = pair_delta.shape
+        node_delta = pair_delta.new_zeros((batch_size, num_nodes, dim))
+        node_count = pair_delta.new_zeros((batch_size, num_nodes, 1))
+        for batch_idx in range(batch_size):
+            valid = valid_pair_mask[batch_idx]
+            if not bool(valid.any().detach().cpu().item()):
+                continue
+            node_idx = pair_indices[batch_idx, :, endpoint_idx]
+            valid = valid & (node_idx >= 0) & (node_idx < num_nodes)
+            if not bool(valid.any().detach().cpu().item()):
+                continue
+            safe_node_idx = node_idx[valid].clamp(min=0, max=max(num_nodes - 1, 0))
+            node_delta[batch_idx].index_add_(0, safe_node_idx, pair_delta[batch_idx, valid])
+            node_count[batch_idx].index_add_(0, safe_node_idx, torch.ones((safe_node_idx.numel(), 1), dtype=pair_delta.dtype, device=pair_delta.device))
+        node_mask = node_count.squeeze(-1) > 0
+        if reduce == "mean":
+            node_delta = node_delta / node_count.clamp(min=1.0)
+        elif reduce != "sum":
+            raise ValueError(f"Unsupported graph_text_node_scatter_reduce: {reduce}")
+        node_delta = node_delta * node_mask.unsqueeze(-1).to(dtype=node_delta.dtype)
+        return node_delta, node_mask
+
+    def _empty_text_prior_debug_info(self) -> Dict[str, Any]:
+        return {
+            "text_prior_injection_mode": self.graph_text_prior_injection,
+            "text_human_prior_norm": 0.0,
+            "text_object_prior_norm": 0.0,
+            "text_ho_edge_prior_norm": 0.0,
+            "text_discriminative_prior_norm": 0.0,
+            "text_scene_prior_norm": 0.0,
+            "text_oo_prior_norm": 0.0,
+            "text_node_prior_injection_norm": 0.0,
+            "text_edge_prior_injection_norm": 0.0,
+            "text_scene_prior_injection_norm": 0.0,
+            "text_oo_prior_injection_norm": 0.0,
+            "text_prior_has_nan": False,
+        }
+
+    def _project_text_prior(self, pooled: Tensor, proj: nn.Module, gate: Tensor, valid_pair_mask: Tensor) -> Tuple[Tensor, Tensor]:
+        prior = proj(pooled)
+        prior = torch.nan_to_num(prior, nan=0.0, posinf=0.0, neginf=0.0)
+        injection = torch.tanh(gate).to(dtype=prior.dtype) * prior
+        pooled_valid = pooled.detach().abs().sum(dim=-1) > 0
+        prior_mask = (valid_pair_mask & pooled_valid).unsqueeze(-1).to(dtype=injection.dtype)
+        prior = prior * prior_mask
+        injection = injection * prior_mask
+        return prior, injection
+
+    def _inject_text_priors(
+        self,
+        text_out: Any,
+        node_h: Tensor,
+        node_o: Tensor,
+        refined_edge: Tensor,
+        valid_pair_mask: Tensor,
+    ) -> Tuple[Tensor, Tensor, Tensor, Dict[str, Any]]:
+        debug_info = self._empty_text_prior_debug_info()
+        if self.graph_text_prior_injection == "none":
+            return node_h, node_o, refined_edge, debug_info
+
+        node_injections = []
+        edge_injections = []
+        scene_injections = []
+        oo_injections = []
+        prior_tensors = []
+        use_nodes = self.graph_text_prior_injection in {"node_edge", "all"}
+        use_edges = self.graph_text_prior_injection in {"edge_only", "node_edge", "all"}
+        use_all = self.graph_text_prior_injection == "all"
+
+        if use_nodes and self.graph_text_use_human_node_prior:
+            prior, inj = self._project_text_prior(text_out.pooled_human_node, self.text_human_node_proj, self.text_human_node_gate, valid_pair_mask)
+            node_h = node_h + inj
+            node_injections.append(inj)
+            prior_tensors.append(prior)
+            debug_info["text_human_prior_norm"] = self._norm_mean(prior)
+        if use_nodes and self.graph_text_use_object_node_prior:
+            prior, inj = self._project_text_prior(text_out.pooled_object_node, self.text_object_node_proj, self.text_object_node_gate, valid_pair_mask)
+            node_o = node_o + inj
+            node_injections.append(inj)
+            prior_tensors.append(prior)
+            debug_info["text_object_prior_norm"] = self._norm_mean(prior)
+        if use_edges and self.graph_text_use_ho_edge_prior:
+            prior, inj = self._project_text_prior(text_out.pooled_ho_edge, self.text_ho_edge_proj, self.text_ho_edge_gate, valid_pair_mask)
+            refined_edge = refined_edge + inj
+            edge_injections.append(inj)
+            prior_tensors.append(prior)
+            debug_info["text_ho_edge_prior_norm"] = self._norm_mean(prior)
+        if use_all and self.graph_text_use_discriminative_prior:
+            prior, inj = self._project_text_prior(text_out.pooled_discriminative, self.text_discriminative_proj, self.text_discriminative_gate, valid_pair_mask)
+            refined_edge = refined_edge + inj
+            edge_injections.append(inj)
+            prior_tensors.append(prior)
+            debug_info["text_discriminative_prior_norm"] = self._norm_mean(prior)
+        if use_all and self.graph_text_use_scene_prior:
+            prior, inj = self._project_text_prior(text_out.pooled_scene_context, self.text_scene_proj, self.text_scene_gate, valid_pair_mask)
+            refined_edge = refined_edge + inj
+            scene_injections.append(inj)
+            prior_tensors.append(prior)
+            debug_info["text_scene_prior_norm"] = self._norm_mean(prior)
+        if use_all and self.graph_text_use_oo_prior:
+            prior, inj = self._project_text_prior(text_out.pooled_oo_context, self.text_oo_proj, self.text_oo_gate, valid_pair_mask)
+            refined_edge = refined_edge + inj
+            oo_injections.append(inj)
+            prior_tensors.append(prior)
+            debug_info["text_oo_prior_norm"] = self._norm_mean(prior)
+
+        debug_info["text_node_prior_injection_norm"] = self._combined_norm_mean(node_injections)
+        debug_info["text_edge_prior_injection_norm"] = self._combined_norm_mean(edge_injections)
+        debug_info["text_scene_prior_injection_norm"] = self._combined_norm_mean(scene_injections)
+        debug_info["text_oo_prior_injection_norm"] = self._combined_norm_mean(oo_injections)
+        debug_info["text_prior_has_nan"] = any(
+            bool(torch.isnan(tensor).any().detach().cpu().item()) for tensor in prior_tensors + node_injections + edge_injections + scene_injections + oo_injections
+        )
+        return node_h, node_o, refined_edge, debug_info
+
+    def _norm_mean(self, tensor: Tensor) -> float:
+        return float(tensor.detach().float().norm(dim=-1).mean().item()) if tensor.numel() > 0 else 0.0
+
+    def _combined_norm_mean(self, tensors: List[Tensor]) -> float:
+        if not tensors:
+            return 0.0
+        total = torch.stack([tensor.detach().float().norm(dim=-1) for tensor in tensors], dim=0).sum(dim=0)
+        return float(total.mean().item()) if total.numel() > 0 else 0.0
+
+    def _build_text_debug_info(
+        self,
+        text_out: Any,
+        text_context: Tensor,
+        text_injection: Tensor,
+        text_pair_valid_mask: Tensor,
+        text_prior_debug_info: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        selected_valid = text_out.selected_hoi_mask
+        if bool(selected_valid.any().detach().cpu().item()):
+            valid_scores = text_out.selected_scores[selected_valid].detach().float()
+            score_mean = float(valid_scores.mean().item())
+            score_max = float(valid_scores.max().item())
+        else:
+            score_mean = 0.0
+            score_max = 0.0
+        if text_context.numel() > 0:
+            context_norm_mean = float(text_context.detach().float().norm(dim=-1).mean().item())
+            injection_norm = float(text_injection.detach().float().norm(dim=-1).mean().item())
+        else:
+            context_norm_mean = 0.0
+            injection_norm = 0.0
+        no_candidate_pair_count = int(
+            (text_pair_valid_mask & ~text_out.selected_hoi_mask.any(dim=-1)).sum().detach().cpu().item()
+        ) if text_out.selected_hoi_mask.numel() > 0 else int(text_pair_valid_mask.sum().detach().cpu().item())
+        debug_info = {
+            "text_graph_enabled": True,
+            "text_gate": float(torch.tanh(self.text_gate).detach().cpu().item()),
+            "text_query_source": self.graph_text_query_source,
+            **text_prior_debug_info,
+            "text_tokens_shape": tuple(text_out.text_tokens.shape),
+            "text_valid_token_count_mean": text_out.debug_info.get("text_valid_token_count_mean", 0.0),
+            "text_no_candidate_pair_count": no_candidate_pair_count,
+            "text_valid_pair_count": int(text_pair_valid_mask.sum().detach().cpu().item()),
+            "text_selected_scores_mean": score_mean,
+            "text_selected_scores_max": score_max,
+            "text_context_norm_mean": context_norm_mean,
+            "text_injection_norm": injection_norm,
+            "text_has_nan": bool(
+                text_out.debug_info.get("text_has_nan", False)
+                or torch.isnan(text_context).any().detach().cpu().item()
+                or torch.isnan(text_injection).any().detach().cpu().item()
+                or text_prior_debug_info.get("text_prior_has_nan", False)
+            ),
+        }
+        if self.graph_text_debug and "selected_hoi_ids_preview" in text_out.debug_info:
+            debug_info["text_selected_hoi_ids_preview"] = text_out.debug_info["selected_hoi_ids_preview"]
+        return debug_info
+
+    def _build_pair_feats_from_endpoints(
+        self,
+        node_feats: Tensor,
+        pair_indices: Tensor,
+        pair_scores: Tensor,
+    ) -> Tensor:
+        batch_size, num_nodes, dim = node_feats.shape
+        _, num_pairs, _ = pair_indices.shape
+
+        safe_pair_indices = pair_indices.clamp(min=0, max=max(num_nodes - 1, 0))
+        gather_index = safe_pair_indices.unsqueeze(-1).expand(batch_size, num_pairs, 2, dim)
+        expanded_nodes = node_feats.unsqueeze(1).expand(batch_size, num_pairs, num_nodes, dim)
+        endpoint_feats = torch.gather(expanded_nodes, dim=2, index=gather_index)
+        human_feats = endpoint_feats[:, :, 0, :]
+        object_feats = endpoint_feats[:, :, 1, :]
+        score_feats = pair_scores.unsqueeze(-1).to(dtype=node_feats.dtype)
+
+        return self.endpoint_pair_proj(torch.cat([human_feats, object_feats, score_feats], dim=-1))
+
+    def _fuse_node_inputs(
+        self,
+        node_feats: Tensor,
+        node_blip_feats: Optional[Tensor],
+        boxes: Tensor,
+        labels: Tensor,
+        node_types: Tensor,
+    ) -> Tensor:
+        if node_blip_feats is None:
+            node_blip_feats = torch.zeros_like(node_feats)
+        label_ids = labels.clamp(min=0, max=self.num_obj_classes)
+        type_ids = node_types.clamp(min=0, max=self.num_node_types - 1)
+        class_feats = self.class_embedding(label_ids)
+        type_feats = self.node_type_embedding(type_ids)
+        box_feats = self.box_mlp(boxes.clamp(0, 1))
+        return self.node_fusion(torch.cat([node_feats, node_blip_feats, class_feats, box_feats, type_feats], dim=-1))
+
+    def encode_geometry(self, boxes_i: Tensor, boxes_j: Tensor, eps: float = 1e-6) -> Tensor:
+        xi1, yi1, xi2, yi2 = boxes_i.unbind(dim=-1)
+        xj1, yj1, xj2, yj2 = boxes_j.unbind(dim=-1)
+        wi = (xi2 - xi1).clamp(min=eps)
+        hi = (yi2 - yi1).clamp(min=eps)
+        wj = (xj2 - xj1).clamp(min=eps)
+        hj = (yj2 - yj1).clamp(min=eps)
+        cxi = (xi1 + xi2) * 0.5
+        cyi = (yi1 + yi2) * 0.5
+        cxj = (xj1 + xj2) * 0.5
+        cyj = (yj1 + yj2) * 0.5
+        dx = cxj - cxi
+        dy = cyj - cyi
+        dw = torch.log((wj + eps) / (wi + eps))
+        dh = torch.log((hj + eps) / (hi + eps))
+        center_dist = torch.sqrt(dx.square() + dy.square() + eps)
+        area_i = wi * hi
+        area_j = wj * hj
+        inter_x1 = torch.maximum(xi1, xj1)
+        inter_y1 = torch.maximum(yi1, yj1)
+        inter_x2 = torch.minimum(xi2, xj2)
+        inter_y2 = torch.minimum(yi2, yj2)
+        inter_area = (inter_x2 - inter_x1).clamp(min=0) * (inter_y2 - inter_y1).clamp(min=0)
+        union_area = area_i + area_j - inter_area
+        iou = inter_area / union_area.clamp(min=eps)
+        return torch.stack([dx, dy, dw, dh, center_dist, iou, union_area, area_i, area_j], dim=-1)
+
+    def _box_centers(self, boxes: Tensor) -> Tensor:
+        return torch.stack([(boxes[:, 0] + boxes[:, 2]) * 0.5, (boxes[:, 1] + boxes[:, 3]) * 0.5], dim=-1)
+
+    def _check_inputs(
+        self,
+        node_feats: Tensor,
+        node_blip_feats: Optional[Tensor],
+        boxes: Tensor,
+        labels: Tensor,
+        node_types: Tensor,
+        node_mask: Tensor,
+        pair_indices: Tensor,
+        pair_scores: Tensor,
+        pair_feats: Optional[Tensor],
+        union_feats: Optional[Tensor],
+        global_feat: Optional[Tensor],
+    ) -> None:
+        if node_feats.dim() != 3:
+            raise ValueError(f"node_feats must be [B, N, D], got {tuple(node_feats.shape)}")
+        batch_size, num_nodes, dim = node_feats.shape
+        if dim != self.d_model:
+            raise ValueError(f"node_feats last dim must be {self.d_model}, got {dim}")
+        if node_blip_feats is not None and node_blip_feats.shape != (batch_size, num_nodes, self.d_model):
+            raise ValueError(f"node_blip_feats must be [B, N, D], got {tuple(node_blip_feats.shape)}")
+        if boxes.shape != (batch_size, num_nodes, 4):
+            raise ValueError(f"boxes must be [B, N, 4], got {tuple(boxes.shape)}")
+        if labels.shape != (batch_size, num_nodes):
+            raise ValueError(f"labels must be [B, N], got {tuple(labels.shape)}")
+        if node_types.shape != (batch_size, num_nodes):
+            raise ValueError(f"node_types must be [B, N], got {tuple(node_types.shape)}")
+        if node_mask.shape != (batch_size, num_nodes):
+            raise ValueError(f"node_mask must be [B, N], got {tuple(node_mask.shape)}")
+        if pair_indices.dim() != 3 or pair_indices.shape[0] != batch_size or pair_indices.shape[-1] != 2:
+            raise ValueError(f"pair_indices must be [B, K, 2], got {tuple(pair_indices.shape)}")
+        num_pairs = pair_indices.shape[1]
+        if pair_scores.shape != (batch_size, num_pairs):
+            raise ValueError(f"pair_scores must be [B, K], got {tuple(pair_scores.shape)}")
+        if pair_indices.dtype != torch.long:
+            raise ValueError(f"pair_indices must be torch.long, got {pair_indices.dtype}")
+        if labels.dtype != torch.long:
+            raise ValueError(f"labels must be torch.long, got {labels.dtype}")
+        if node_types.dtype != torch.long:
+            raise ValueError(f"node_types must be torch.long, got {node_types.dtype}")
+        if node_mask.dtype != torch.bool:
+            raise ValueError(f"node_mask must be torch.bool, got {node_mask.dtype}")
+        if pair_feats is not None and pair_feats.shape != (batch_size, num_pairs, self.d_model):
+            raise ValueError(f"pair_feats must be [B, K, D], got {tuple(pair_feats.shape)}")
+        if union_feats is not None and union_feats.shape != (batch_size, num_pairs, self.d_model):
+            raise ValueError(f"union_feats must be [B, K, D], got {tuple(union_feats.shape)}")
+        if global_feat is not None and global_feat.shape != (batch_size, self.d_model):
+            raise ValueError(f"global_feat must be [B, D], got {tuple(global_feat.shape)}")
+
+
+def build_visual_scene_graph_reasoner(args=None, **kwargs) -> VisualSceneGraphReasoner:
+    if args is None:
+        return VisualSceneGraphReasoner(**kwargs)
+
+    enable_text_graph = getattr(args, "enable_text_graph", getattr(args, "graph_enable_text_graph", False))
+    required_text_paths = {
+        "graph_text_features_path": getattr(args, "text_features_path", getattr(args, "graph_text_features_path", "")),
+        "graph_text_mask_path": getattr(args, "text_mask_path", getattr(args, "graph_text_mask_path", "")),
+        "graph_text_hoi_ids_path": getattr(args, "hoi_ids_path", getattr(args, "graph_text_hoi_ids_path", "")),
+        "graph_text_object_to_hoi_indices_path": getattr(
+            args,
+            "object_to_hoi_indices_path",
+            getattr(args, "graph_text_object_to_hoi_indices_path", ""),
+        ),
+        "graph_text_field_order_path": getattr(args, "field_order_path", getattr(args, "graph_text_field_order_path", "")),
+    }
+    if enable_text_graph:
+        for name, path in required_text_paths.items():
+            if not path:
+                raise FileNotFoundError(f"{name} must be provided when graph_enable_text_graph=True")
+            if not os.path.isfile(path):
+                raise FileNotFoundError(f"{name} file not found: {path}")
+
+    graph_num_layers = getattr(args, "graph_num_layers", 2)
+    graph_text_sync_mode = getattr(args, "graph_text_sync_mode", "layerwise")
+    graph_text_sync_layers_with_visual = getattr(args, "graph_text_sync_layers_with_visual", True)
+    graph_text_num_layers_arg = getattr(args, "graph_text_num_layers", None)
+    explicit_text_num_layers = graph_text_num_layers_arg is not None
+    if explicit_text_num_layers:
+        graph_text_num_layers = graph_text_num_layers_arg
+    elif graph_text_sync_layers_with_visual:
+        graph_text_num_layers = graph_num_layers
+    else:
+        graph_text_num_layers = 0
+    graph_text_query_source_default = "base_pair" if graph_text_sync_mode == "layerwise" else "refined_edge"
+    graph_text_prior_default = "edge_only" if enable_text_graph and graph_text_sync_mode == "layerwise" else "none"
+    graph_text_query_source = getattr(args, "graph_text_query_source", None)
+    if graph_text_query_source is None:
+        graph_text_query_source = graph_text_query_source_default
+    graph_text_prior_injection = getattr(args, "graph_text_prior_injection", None)
+    if graph_text_prior_injection is None:
+        graph_text_prior_injection = graph_text_prior_default
+
+    config = {
+        "d_model": getattr(args, "hidden_dim", getattr(args, "d_model", 256)),
+        "num_obj_classes": getattr(args, "num_classes", 80),
+        "num_edge_types": getattr(args, "graph_num_edge_types", 4),
+        "num_node_types": getattr(args, "graph_num_node_types", 3),
+        "num_layers": graph_num_layers,
+        "num_heads": getattr(args, "graph_num_heads", 8),
+        "k_oo": getattr(args, "graph_k_oo", 3),
+        "enable_oo_edges": getattr(args, "graph_enable_oo_edges", True),
+        "enable_hh_edges": getattr(args, "graph_enable_hh_edges", False),
+        "dropout": getattr(args, "graph_dropout", getattr(args, "dropout", 0.1)),
+        "spatial_sigma": getattr(args, "graph_spatial_sigma", 0.5),
+        "graph_oo_mode": getattr(args, "graph_oo_mode", "spatial"),
+        "graph_oo_lambda_geo": getattr(args, "graph_oo_lambda_geo", 1.0),
+        "graph_oo_lambda_share": getattr(args, "graph_oo_lambda_share", 0.5),
+        "graph_oo_lambda_text": getattr(args, "graph_oo_lambda_text", 0.0),
+        "graph_oo_min_score": getattr(args, "graph_oo_min_score", 0.0),
+        "graph_oo_fallback_to_spatial": getattr(args, "graph_oo_fallback_to_spatial", True),
+        "graph_oo_share_eps": getattr(args, "graph_oo_share_eps", 1e-6),
+        "graph_oo_prior_path": getattr(args, "graph_oo_prior_path", ""),
+        "graph_oo_prior_normalize": getattr(args, "graph_oo_prior_normalize", "none"),
+        "graph_oo_prior_symmetric": getattr(args, "graph_oo_prior_symmetric", True),
+        "graph_oo_prior_eps": getattr(args, "graph_oo_prior_eps", 1e-6),
+        "graph_oo_prior_label_ids": getattr(args, "graph_oo_prior_label_ids", getattr(args, "valid_obj_ids", None)),
+        "enable_text_graph": enable_text_graph,
+        "text_features_path": getattr(args, "text_features_path", getattr(args, "graph_text_features_path", "")),
+        "text_mask_path": getattr(args, "text_mask_path", getattr(args, "graph_text_mask_path", "")),
+        "hoi_ids_path": getattr(args, "hoi_ids_path", getattr(args, "graph_text_hoi_ids_path", "")),
+        "object_to_hoi_indices_path": getattr(
+            args,
+            "object_to_hoi_indices_path",
+            getattr(args, "graph_text_object_to_hoi_indices_path", ""),
+        ),
+        "field_order_path": getattr(args, "field_order_path", getattr(args, "graph_text_field_order_path", "")),
+        "graph_text_human_node_features_path": getattr(args, "graph_text_human_node_features_path", ""),
+        "graph_text_object_node_features_path": getattr(args, "graph_text_object_node_features_path", ""),
+        "graph_text_ho_edge_features_path": getattr(args, "graph_text_ho_edge_features_path", ""),
+        "graph_text_discriminative_features_path": getattr(args, "graph_text_discriminative_features_path", ""),
+        "graph_text_scene_context_features_path": getattr(args, "graph_text_scene_context_features_path", ""),
+        "graph_text_oo_context_features_path": getattr(args, "graph_text_oo_context_features_path", ""),
+        "oo_affordance_prior_path": getattr(args, "oo_affordance_prior_path", getattr(args, "graph_text_oo_affordance_prior_path", "")),
+        "graph_text_topk": getattr(args, "graph_text_topk", 5),
+        "graph_text_pre_topk": getattr(args, "graph_text_pre_topk", 20),
+        "graph_text_temperature": getattr(args, "graph_text_temperature", 0.07),
+        "graph_text_rerank_weight": getattr(args, "graph_text_rerank_weight", 0.5),
+        "graph_text_use_discriminative_rerank": getattr(args, "graph_text_use_discriminative_rerank", True),
+        "graph_text_label_ids": getattr(args, "graph_text_label_ids", getattr(args, "valid_obj_ids", None)),
+        "graph_text_num_layers": graph_text_num_layers,
+        "graph_text_num_heads": getattr(args, "graph_text_num_heads", 8),
+        "graph_text_dropout": getattr(args, "graph_text_dropout", 0.1),
+        "graph_text_use_scene_token": getattr(args, "graph_text_use_scene_token", True),
+        "graph_text_use_oo_context_token": getattr(args, "graph_text_use_oo_context_token", True),
+        "graph_text_cross_num_heads": getattr(args, "graph_text_cross_num_heads", 8),
+        "graph_text_query_source": graph_text_query_source,
+        "graph_text_sync_mode": graph_text_sync_mode,
+        "graph_text_dense_injection": getattr(args, "graph_text_dense_injection", True),
+        "graph_text_final_pair_injection": getattr(args, "graph_text_final_pair_injection", False),
+        "graph_text_sync_query_source": getattr(args, "graph_text_sync_query_source", "base_pair"),
+        "graph_text_export_each_layer": getattr(args, "graph_text_export_each_layer", True),
+        "graph_text_dynamic_retrieval": getattr(args, "graph_text_dynamic_retrieval", False),
+        "graph_text_sync_layers_with_visual": graph_text_sync_layers_with_visual,
+        "graph_text_edge_inject_reverse": getattr(args, "graph_text_edge_inject_reverse", True),
+        "graph_text_node_scatter_reduce": getattr(args, "graph_text_node_scatter_reduce", "mean"),
+        "graph_text_gate_init": getattr(args, "graph_text_gate_init", 0.0),
+        "graph_text_debug": getattr(args, "graph_text_debug", getattr(args, "graph_debug", False)),
+        "graph_text_prior_injection": graph_text_prior_injection,
+        "graph_text_use_human_node_prior": getattr(args, "graph_text_use_human_node_prior", False),
+        "graph_text_use_object_node_prior": getattr(args, "graph_text_use_object_node_prior", False),
+        "graph_text_use_ho_edge_prior": getattr(args, "graph_text_use_ho_edge_prior", True),
+        "graph_text_use_discriminative_prior": getattr(args, "graph_text_use_discriminative_prior", False),
+        "graph_text_use_scene_prior": getattr(args, "graph_text_use_scene_prior", False),
+        "graph_text_use_oo_prior": getattr(args, "graph_text_use_oo_prior", False),
+        "graph_text_node_prior_gate_init": getattr(args, "graph_text_node_prior_gate_init", 0.0),
+        "graph_text_edge_prior_gate_init": getattr(args, "graph_text_edge_prior_gate_init", 0.0),
+        "graph_text_scene_prior_gate_init": getattr(args, "graph_text_scene_prior_gate_init", 0.0),
+        "graph_text_oo_prior_gate_init": getattr(args, "graph_text_oo_prior_gate_init", 0.0),
+        "graph_text_force_oov3": getattr(args, "graph_text_force_oov3", True),
+        "graph_text_prototype_slot_fallback_to_raw": getattr(args, "graph_text_prototype_slot_fallback_to_raw", True),
+        "graph_text_prototype_slot_debug": getattr(args, "graph_text_prototype_slot_debug", False),
+        "graph_enable_reciprocal_setm": getattr(args, "graph_enable_reciprocal_setm", False),
+        "graph_reciprocal_use_path_context": getattr(args, "graph_reciprocal_use_path_context", True),
+        "graph_reciprocal_write_text": getattr(args, "graph_reciprocal_write_text", True),
+        "graph_reciprocal_write_visual": getattr(args, "graph_reciprocal_write_visual", False),
+        "graph_reciprocal_update_human": getattr(args, "graph_reciprocal_update_human", True),
+        "graph_reciprocal_update_object": getattr(args, "graph_reciprocal_update_object", True),
+        "graph_reciprocal_update_anchor": getattr(args, "graph_reciprocal_update_anchor", True),
+        "graph_reciprocal_update_scene": getattr(args, "graph_reciprocal_update_scene", False),
+        "graph_reciprocal_update_context": getattr(args, "graph_reciprocal_update_context", False),
+        "graph_reciprocal_update_discriminative": getattr(args, "graph_reciprocal_update_discriminative", False),
+        "graph_reciprocal_detach_text_update": getattr(args, "graph_reciprocal_detach_text_update", False),
+        "graph_reciprocal_debug": getattr(args, "graph_reciprocal_debug", getattr(args, "graph_debug", False)),
+        "graph_sync_visual_gate_init": getattr(args, "graph_sync_visual_gate_init", 0.0),
+        "graph_sync_text_gate_init": getattr(args, "graph_sync_text_gate_init", 0.0),
+        "graph_sync_anchor_gate_init": getattr(args, "graph_sync_anchor_gate_init", 0.0),
+        "graph_sync_dropout": getattr(args, "graph_sync_dropout", None),
+        "graph_sync_debug": getattr(args, "graph_sync_debug", getattr(args, "graph_debug", False)),
+    }
+    config.update(kwargs)
+    return VisualSceneGraphReasoner(**config)
